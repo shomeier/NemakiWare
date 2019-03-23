@@ -358,8 +358,9 @@ public class Registration implements Runnable {
 			map.put(Constant.FIELD_CONTENT_ID, object.getPropertyValue(PropertyIds.CONTENT_STREAM_ID));
 			map.put(Constant.FIELD_CONTENT_NAME, object.getPropertyValue(PropertyIds.CONTENT_STREAM_FILE_NAME));
 			map.put(Constant.FIELD_CONTENT_MIMETYPE, object.getPropertyValue(PropertyIds.CONTENT_STREAM_MIME_TYPE));
-			map.put(Constant.FIELD_CONTENT_LENGTH,
-					object.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH).toString());
+            String contentStreamLength = (object.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null) ? null
+                    : object.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH).toString();
+			map.put(Constant.FIELD_CONTENT_LENGTH, contentStreamLength);
 			map.put(Constant.FIELD_VERSION_LABEL, object.getPropertyValue(PropertyIds.VERSION_LABEL));
 			String isMajorVersion = (object.getPropertyValue(PropertyIds.IS_MAJOR_VERSION) == null) ? null
 					: object.getPropertyValue(PropertyIds.IS_MAJOR_VERSION).toString();
