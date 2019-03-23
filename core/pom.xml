@@ -459,11 +459,12 @@
 					<webAppConfig>
 						<contextPath>/core</contextPath>
 					</webAppConfig>
-					<connectors>
-						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+					<!-- <connectors> -->
+						<!-- <httpConnector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector"> -->
+						<httpConnector>
 							<port>8080</port>
-						</connector>
-					</connectors>
+						</httpConnector>
+					<!-- </connectors> -->
 					<scanTargets>
 						<scanTarget>src/main/webapp</scanTarget>
 					</scanTargets>

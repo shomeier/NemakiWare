@@ -211,11 +211,12 @@
 						<contextPath>/solr</contextPath>
 						<tempDirectory>./tmp</tempDirectory>
 					</webAppConfig>
-					<connectors>
-						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+					<!-- <connectors> -->
+						<!-- <httpConnector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector"> -->
+						<httpConnector>
 							<port>8983</port>
-						</connector>
-					</connectors>
+						</httpConnector>
+					<!-- </connectors> -->
 					<scanTargets>
 						<scanTarget>src/main/webapp</scanTarget>
 					</scanTargets>
