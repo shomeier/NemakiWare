@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.aegif.nemaki.bjornloka.custom.CustomEktorpFactory;
 import jp.aegif.nemaki.bjornloka.dump.DumpAction;
 import jp.aegif.nemaki.bjornloka.model.Entry;
 import jp.aegif.nemaki.bjornloka.proxy.CloudantFactory;
 import jp.aegif.nemaki.bjornloka.proxy.CloudantProxy;
 import jp.aegif.nemaki.bjornloka.proxy.CouchProxy;
-import jp.aegif.nemaki.bjornloka.proxy.EktorpFactory;
 import jp.aegif.nemaki.bjornloka.proxy.EktorpProxy;
 import jp.aegif.nemaki.bjornloka.util.Indicator;
 import jp.aegif.nemaki.bjornloka.util.Util;
@@ -123,7 +123,11 @@ public class Dump {
 	public static String dumpEktorp(String url, String repositoryId,
 			File file, boolean omitTimestamp) throws JsonParseException,
 			JsonMappingException, IOException {
-		EktorpProxy proxy = EktorpFactory.getInstance().createProxy(url, repositoryId);
+		EktorpProxy proxy = CustomEktorpFactory.getInstance().createProxy(url, repositoryId);
+		// EktorpFactory.getInstance().createProxy().
+	//	CouchDbInstance dbInstance = createCouchDbInstance(url);
+	//	CouchDbConnector dbConnector = new CustomCouchDbConnector(repositoryId, dbInstance);
+	//	EktorpProxy proxy = new EktorpProxy(dbInstance, dbConnector);
 		return dump(proxy, file, omitTimestamp);
 	}
 
@@ -133,5 +137,4 @@ public class Dump {
 		CloudantProxy proxy = CloudantFactory.getInstance().createProxy(url, repositoryId);
 		return dump(proxy, file, omitTimestamp);
 	}
-	
 }
