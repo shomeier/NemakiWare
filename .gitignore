@@ -2,9 +2,6 @@
 *~
 nohup.out
 jetty.log
-.classpath
-.project
-.settings
 !.gitkeep
 setup/installer/*/log
 target
