@@ -34,7 +34,7 @@ public class DeleteTmpFiles {
 		deleteNode(path);
 	}
 
-	public static void deleteNode(String path){
+	public static void deleteNode(String path) {
 		FileUtil.deleteNode(path);
 	}
 }

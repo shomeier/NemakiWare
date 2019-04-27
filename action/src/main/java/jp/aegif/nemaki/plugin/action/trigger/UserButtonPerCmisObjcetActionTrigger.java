@@ -2,30 +2,31 @@ package jp.aegif.nemaki.plugin.action.trigger;
 
 public class UserButtonPerCmisObjcetActionTrigger extends ActionTriggerBase {
 
-
-	public UserButtonPerCmisObjcetActionTrigger(String displayName){
+	public UserButtonPerCmisObjcetActionTrigger(String displayName) {
 		this._displayName = displayName;
 
 	}
 
 	private String _displayName;
-	public String getDisplayName(){
+
+	public String getDisplayName() {
 		return _displayName;
 	}
 
 	private String _fontAwesomeName = "fa fa-fire";
-	public String getFontAwesomeName(){
+
+	public String getFontAwesomeName() {
 		return _fontAwesomeName;
 	}
 
-
 	private String _formHtml;
-	public String getFormHtml(){
+
+	public String getFormHtml() {
 		return _formHtml;
 	}
-	public void setFormHtml(String value){
-		 _formHtml = value;
-	}
 
+	public void setFormHtml(String value) {
+		_formHtml = value;
+	}
 
 }

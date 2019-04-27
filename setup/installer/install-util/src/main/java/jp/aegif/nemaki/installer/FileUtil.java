@@ -33,47 +33,45 @@ import java.util.List;
 import java.util.Properties;
 
 public class FileUtil {
-	public static String replaceAllKeys(File templateFile, List<File> propertiesFiles, String pattern){
-		//Read and override properties key-value
+	public static String replaceAllKeys(File templateFile, List<File> propertiesFiles, String pattern) {
+		// Read and override properties key-value
 		Properties config = new Properties();
-		for(File propertiesFile : propertiesFiles){
+		for (File propertiesFile : propertiesFiles) {
 			System.out.println("Read config from " + propertiesFile.getAbsolutePath());
 			Properties _config = readProperties(propertiesFile);
-			for(Object _key : _config.keySet()){
-				String key = (String)_key;
+			for (Object _key : _config.keySet()) {
+				String key = (String) _key;
 				String value = _config.getProperty(key);
 				config.setProperty(key, value);
 			}
 		}
 
-		//Replace place holders in template file
+		// Replace place holders in template file
 		String body = readFile(templateFile);
 		String replaced = body;
 
-		if(config != null && config.keySet() != null){
-			for(Object _key : config.keySet()){
-				String key = (String)_key;
+		if (config != null && config.keySet() != null) {
+			for (Object _key : config.keySet()) {
+				String key = (String) _key;
 				replaced = replaceWithKey(config, replaced, key, pattern);
 			}
 		}
 
-		//Write to new file
+		// Write to new file
 		String newFilePath = addSuffix(templateFile.getAbsolutePath());
 		writeFile(newFilePath, replaced);
 
 		return newFilePath;
 	}
 
-	public static String replaceWithKey(Properties config, String body,
-			String key, String pattern) {
+	public static String replaceWithKey(Properties config, String body, String key, String pattern) {
 		// Read proeprties file
 		String value = config.getProperty(key);
 
 		// Substitute variables in template file
 		String replaced = body;
-		if(StringPool.PATTERN_USER_INPUT_SPEC.equals(pattern)){
-			replaced = body.replaceAll("\\Qset=\"${" + key + "}\"\\E",
-					"set=\"" + value + "\"");
+		if (StringPool.PATTERN_USER_INPUT_SPEC.equals(pattern)) {
+			replaced = body.replaceAll("\\Qset=\"${" + key + "}\"\\E", "set=\"" + value + "\"");
 		}
 
 		return replaced;
@@ -99,11 +97,11 @@ public class FileUtil {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
-			if(inputStream != null){
-				try{
+		} finally {
+			if (inputStream != null) {
+				try {
 					inputStream.close();
-				}catch(Exception e){
+				} catch (Exception e) {
 
 				}
 			}
@@ -111,7 +109,7 @@ public class FileUtil {
 		return config;
 	}
 
-	public static String readFile(String filePath){
+	public static String readFile(String filePath) {
 		File file = new File(filePath);
 		return readFile(file);
 	}
@@ -155,32 +153,33 @@ public class FileUtil {
 		}
 	}
 
-	public static void deleteNode(String path){
+	public static void deleteNode(String path) {
 		File node = new File(path);
-		if(node.exists()){
+		if (node.exists()) {
 			deleteNode(node);
-		}else{
+		} else {
 			System.out.println("path=" + path + " does not exist");
 		}
 	}
 
 	/**
 	 * Delete node(file/folder including its descendants)
+	 * 
 	 * @param node
 	 * @return
 	 */
-	public static boolean deleteNode(File node){
-        if (node.isDirectory()) {
-            String[] children = node.list();
-            for (int i=0; i<children.length; i++) {
-                boolean success = deleteNode(new File(node, children[i]));
-                if (!success) {
-                	System.out.println("path=" + node.getAbsolutePath() + " failed to delete");
-                    return false;
-                }
-            }
-        }
-        return node.delete();
+	public static boolean deleteNode(File node) {
+		if (node.isDirectory()) {
+			String[] children = node.list();
+			for (int i = 0; i < children.length; i++) {
+				boolean success = deleteNode(new File(node, children[i]));
+				if (!success) {
+					System.out.println("path=" + node.getAbsolutePath() + " failed to delete");
+					return false;
+				}
+			}
+		}
+		return node.delete();
 	}
 
 	public static String addSuffix(String filePath) {
@@ -190,7 +189,7 @@ public class FileUtil {
 		if (point != -1) {
 			String extension = filePath.substring(point + 1);
 			String body = filePath.substring(0, point);
-			result =  body + "_modified." + extension;
+			result = body + "_modified." + extension;
 		}
 
 		return result;

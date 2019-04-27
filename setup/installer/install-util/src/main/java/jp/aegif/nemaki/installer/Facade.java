@@ -32,7 +32,7 @@ public class Facade {
 		final String ACTION_CONFIG_SHARE = "config-share";
 		final String ACTION_DELETE_TMP_FILES = "delete-tmp-files";
 
-		//Check arguments
+		// Check arguments
 		if (args.length < 1) {
 			String msg = "At least specify an action:";
 			msg += ACTION_PROCESS_TEMPLATE + " | ";
@@ -44,28 +44,28 @@ public class Facade {
 
 		String action = args[0];
 
-		//Dispatch
+		// Dispatch
 		String[] _args = shiftArray(args);
-		if(ACTION_PROCESS_TEMPLATE.equals(action)){
+		if (ACTION_PROCESS_TEMPLATE.equals(action)) {
 			ProcessTemplate.main(_args);
-		}else if(ACTION_CONFIG_TOMCAT.equals(action)){
+		} else if (ACTION_CONFIG_TOMCAT.equals(action)) {
 			ConfigTomcat.main(_args);
-		}else if(ACTION_CONFIG_SHARE.equals(action)){
+		} else if (ACTION_CONFIG_SHARE.equals(action)) {
 			ConfigShare.main(_args);
-		}else if(ACTION_DELETE_TMP_FILES.equals(action)){
+		} else if (ACTION_DELETE_TMP_FILES.equals(action)) {
 			DeleteTmpFiles.main(_args);
-		}else{
+		} else {
 			System.out.println("Such action does not exist");
 			return;
 		}
 	}
 
-	public static String[] shiftArray(String[] array){
-		if(array.length < 2){
+	public static String[] shiftArray(String[] array) {
+		if (array.length < 2) {
 			return null;
-		}else{
+		} else {
 			List<String> list = new ArrayList<String>();
-			for(int i=1; i < array.length; i++){
+			for (int i = 1; i < array.length; i++) {
 				list.add(array[i]);
 			}
 			String[] result = list.toArray(new String[list.size()]);

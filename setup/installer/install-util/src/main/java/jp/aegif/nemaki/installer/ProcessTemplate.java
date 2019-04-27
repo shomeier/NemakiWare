@@ -46,7 +46,6 @@ public class ProcessTemplate {
 			}
 		}
 
-		FileUtil.replaceAllKeys(templateFile,
-				propertiesFiles, StringPool.PATTERN_USER_INPUT_SPEC);
+		FileUtil.replaceAllKeys(templateFile, propertiesFiles, StringPool.PATTERN_USER_INPUT_SPEC);
 	}
 }

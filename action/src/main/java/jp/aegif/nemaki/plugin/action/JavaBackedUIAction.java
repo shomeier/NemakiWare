@@ -1,12 +1,10 @@
 package jp.aegif.nemaki.plugin.action;
 
-
 import org.springframework.plugin.core.Plugin;
 
 import jp.aegif.nemaki.plugin.action.trigger.ActionTriggerBase;
 
-
-public interface JavaBackedUIAction extends Plugin<String>{
+public interface JavaBackedUIAction extends Plugin<String> {
 
 	public String getActionTitle();
 

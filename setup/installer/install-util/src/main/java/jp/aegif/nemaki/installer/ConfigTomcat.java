@@ -54,8 +54,7 @@ public class ConfigTomcat {
 		String filePath = catalinaBase + "/conf/catalina.properties";
 		String body = FileUtil.readFile(filePath);
 
-		String replaced = body.replaceAll("\\Qshared.loader=\\E",
-				"shared.loader=\\${catalina.base}/shared/classes");
+		String replaced = body.replaceAll("\\Qshared.loader=\\E", "shared.loader=\\${catalina.base}/shared/classes");
 		FileUtil.writeFile(filePath, replaced);
 	}
 
@@ -69,24 +68,18 @@ public class ConfigTomcat {
 		String replaced = FileUtil.readFile(filePath);
 
 		// Modify server port
-		if (serverPort != null && checkInt(serverPort)
-				&& !serverPort.equals("8080")) {
-			replaced = replaced.replaceAll("port=\"8080\"", "port=\"" + serverPort
-					+ "\"");
+		if (serverPort != null && checkInt(serverPort) && !serverPort.equals("8080")) {
+			replaced = replaced.replaceAll("port=\"8080\"", "port=\"" + serverPort + "\"");
 		}
 
 		// Modify server shutdown port
-		if (serverShutdownPort != null && checkInt(serverShutdownPort)
-				&& !serverShutdownPort.equals("8005")) {
-			replaced = replaced.replaceAll("port=\"8005\"", "port=\""
-					+ serverShutdownPort + "\"");
+		if (serverShutdownPort != null && checkInt(serverShutdownPort) && !serverShutdownPort.equals("8005")) {
+			replaced = replaced.replaceAll("port=\"8005\"", "port=\"" + serverShutdownPort + "\"");
 		}
 
 		// Modify server shutdown port
-		if (serverAjpPort != null && checkInt(serverAjpPort)
-				&& !serverAjpPort.equals("8009")) {
-			replaced = replaced.replaceAll("port=\"8009\"", "port=\""
-					+ serverShutdownPort + "\"");
+		if (serverAjpPort != null && checkInt(serverAjpPort) && !serverAjpPort.equals("8009")) {
+			replaced = replaced.replaceAll("port=\"8009\"", "port=\"" + serverShutdownPort + "\"");
 		}
 
 		FileUtil.writeFile(filePath, replaced);
