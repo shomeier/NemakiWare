@@ -30,8 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jp.aegif.nemaki.util.constant.NodeType;
 
 /**
- * CMIS folder object
- * This can file folder/document object.
+ * CMIS folder object This can file folder/document object.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Folder extends Content {
@@ -39,13 +38,12 @@ public class Folder extends Content {
 	private List<String> allowedChildTypeIds;
 	private List<String> renditionIds;
 
-
-	public Folder(){
+	public Folder() {
 		super();
 		setType(NodeType.CMIS_FOLDER.value());
 	}
 
-	public Folder(Content c){
+	public Folder(Content c) {
 		super(c);
 		setName(c.getName());
 		setDescription(c.getDescription());
@@ -67,10 +65,12 @@ public class Folder extends Content {
 		this.allowedChildTypeIds = allowedChildTypeIds;
 	}
 
+	@Override
 	public List<String> getRenditionIds() {
 		return renditionIds;
 	}
 
+	@Override
 	public void setRenditionIds(List<String> renditionIds) {
 		this.renditionIds = renditionIds;
 	}

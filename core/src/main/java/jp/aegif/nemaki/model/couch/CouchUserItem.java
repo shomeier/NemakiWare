@@ -23,19 +23,19 @@ package jp.aegif.nemaki.model.couch;
 
 import jp.aegif.nemaki.model.UserItem;
 
-public class CouchUserItem extends CouchItem{
-	
+public class CouchUserItem extends CouchItem {
+
 	private static final long serialVersionUID = 3294975060332894322L;
 
 	private String userId;
 	private String password;
 	private Boolean admin = false;
-	
-	public CouchUserItem(){
+
+	public CouchUserItem() {
 		super();
 	}
-	
-	public CouchUserItem(UserItem userItem){
+
+	public CouchUserItem(UserItem userItem) {
 		super(userItem);
 		setUserId(userItem.getUserId());
 		setPassword(userItem.getPassowrd());
@@ -57,7 +57,7 @@ public class CouchUserItem extends CouchItem{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public Boolean isAdmin() {
 		return admin;
 	}
@@ -66,12 +66,13 @@ public class CouchUserItem extends CouchItem{
 		this.admin = isAdmin;
 	}
 
-	public UserItem convert(){
+	@Override
+	public UserItem convert() {
 		UserItem userItem = new UserItem(super.convert());
 		userItem.setUserId(getUserId());
 		userItem.setPassowrd(getPassword());
 		userItem.setAdmin(isAdmin());
-		
+
 		return userItem;
 	}
 }

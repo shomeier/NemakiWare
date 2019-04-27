@@ -24,6 +24,10 @@ package jp.aegif.nemaki.dao.impl.couch;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.ektorp.ViewQuery;
+import org.springframework.stereotype.Component;
+
 import jp.aegif.nemaki.dao.PrincipalDaoService;
 import jp.aegif.nemaki.dao.impl.couch.connector.ConnectorPool;
 import jp.aegif.nemaki.model.Group;
@@ -32,18 +36,13 @@ import jp.aegif.nemaki.model.couch.CouchGroup;
 import jp.aegif.nemaki.model.couch.CouchNodeBase;
 import jp.aegif.nemaki.model.couch.CouchUser;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.ektorp.ViewQuery;
-import org.springframework.stereotype.Component;
-
 /**
  * Dao Service for Principal(User/Group) Implementation for CouchDB
  *
  * @author linzhixing
  */
 @Component
-public class PrincipalDaoServiceImpl implements
-		PrincipalDaoService {
+public class PrincipalDaoServiceImpl implements PrincipalDaoService {
 
 	private ConnectorPool connectorPool;
 	private static final String DESIGN_DOCUMENT = "_design/_repo";
@@ -52,11 +51,9 @@ public class PrincipalDaoServiceImpl implements
 
 	}
 
-
 	@Override
 	public User getUser(String repositoryId, String nodeId) {
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT)
-				.viewName("users").key(nodeId);
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("users").key(nodeId);
 		List<CouchUser> l = connectorPool.get(repositoryId).queryView(query, CouchUser.class);
 
 		if (CollectionUtils.isEmpty(l))
@@ -76,8 +73,7 @@ public class PrincipalDaoServiceImpl implements
 	}
 
 	private CouchUser getUserByIdInternal(String repositoryId, String userId) {
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT)
-				.viewName("usersById").key(userId);
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("usersById").key(userId);
 		List<CouchUser> l = connectorPool.get(repositoryId).queryView(query, CouchUser.class);
 
 		if (CollectionUtils.isEmpty(l))
@@ -89,8 +85,7 @@ public class PrincipalDaoServiceImpl implements
 	public List<User> getUsers(String repositoryId) {
 		List<User> users = new ArrayList<User>();
 
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT)
-				.viewName("usersById");
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("usersById");
 		List<CouchUser> l = connectorPool.get(repositoryId).queryView(query, CouchUser.class);
 
 		for (CouchUser c : l) {
@@ -104,9 +99,8 @@ public class PrincipalDaoServiceImpl implements
 	@Override
 	public List<User> getAdmins(String repositoryId) {
 		List<User> admins = new ArrayList<User>();
-		
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT)
-				.viewName("admin");
+
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("admin");
 		List<CouchUser> l = connectorPool.get(repositoryId).queryView(query, CouchUser.class);
 
 		if (CollectionUtils.isEmpty(l))
@@ -116,15 +110,12 @@ public class PrincipalDaoServiceImpl implements
 			admins.add(u);
 		}
 
-		
 		return admins;
 	}
 
-
 	@Override
 	public Group getGroup(String repositoryId, String nodeId) {
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT)
-				.viewName("groups").key(nodeId);
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("groups").key(nodeId);
 		List<CouchGroup> l = connectorPool.get(repositoryId).queryView(query, CouchGroup.class);
 
 		if (CollectionUtils.isEmpty(l))
@@ -144,8 +135,7 @@ public class PrincipalDaoServiceImpl implements
 	}
 
 	private CouchGroup getGroupByIdInternal(String repositoryId, String groupId) {
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT)
-				.viewName("groupsById").key(groupId);
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("groupsById").key(groupId);
 		List<CouchGroup> l = connectorPool.get(repositoryId).queryView(query, CouchGroup.class);
 
 		if (CollectionUtils.isEmpty(l))
@@ -157,8 +147,7 @@ public class PrincipalDaoServiceImpl implements
 	public List<Group> getGroups(String repositoryId) {
 		List<Group> groups = new ArrayList<Group>();
 
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT)
-				.viewName("groupsById");
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("groupsById");
 
 		List<CouchGroup> l = connectorPool.get(repositoryId).queryView(query, CouchGroup.class);
 
@@ -215,7 +204,7 @@ public class PrincipalDaoServiceImpl implements
 	}
 
 	@Override
-	public void delete(String repositoryId, Class<?> clazz, String principalId){
+	public void delete(String repositoryId, Class<?> clazz, String principalId) {
 		CouchNodeBase cnb = connectorPool.get(repositoryId).get(CouchNodeBase.class, principalId);
 		connectorPool.get(repositoryId).delete(cnb);
 	}

@@ -24,13 +24,6 @@ package jp.aegif.nemaki.cmis.service.impl;
 import java.math.BigInteger;
 import java.util.List;
 
-import jp.aegif.nemaki.businesslogic.ContentService;
-import jp.aegif.nemaki.cmis.aspect.CompileService;
-import jp.aegif.nemaki.cmis.aspect.ExceptionService;
-import jp.aegif.nemaki.cmis.aspect.query.QueryProcessor;
-import jp.aegif.nemaki.cmis.service.DiscoveryService;
-import jp.aegif.nemaki.model.Change;
-
 import org.apache.chemistry.opencmis.commons.data.ExtensionsData;
 import org.apache.chemistry.opencmis.commons.data.ObjectList;
 import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
@@ -38,6 +31,13 @@ import org.apache.chemistry.opencmis.commons.server.CallContext;
 import org.apache.chemistry.opencmis.commons.spi.Holder;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+
+import jp.aegif.nemaki.businesslogic.ContentService;
+import jp.aegif.nemaki.cmis.aspect.CompileService;
+import jp.aegif.nemaki.cmis.aspect.ExceptionService;
+import jp.aegif.nemaki.cmis.aspect.query.QueryProcessor;
+import jp.aegif.nemaki.cmis.service.DiscoveryService;
+import jp.aegif.nemaki.model.Change;
 
 /**
  * Discovery Service implementation for CouchDB.
@@ -50,10 +50,9 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 	private ExceptionService exceptionService;
 	private CompileService compileService;
 
-	public ObjectList query(CallContext context, String repositoryId,
-			String statement, Boolean searchAllVersions,
-			Boolean includeAllowableActions,
-			IncludeRelationships includeRelationships, String renditionFilter,
+	@Override
+	public ObjectList query(CallContext context, String repositoryId, String statement, Boolean searchAllVersions,
+			Boolean includeAllowableActions, IncludeRelationships includeRelationships, String renditionFilter,
 			BigInteger maxItems, BigInteger skipCount, ExtensionsData extension) {
 		// //////////////////
 		// General Exception
@@ -67,19 +66,18 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
 		// //////////////////
 		// Body of the method
-		return queryProcessor.query(context, repositoryId, statement,
-				searchAllVersions, includeAllowableActions, includeRelationships,
-				renditionFilter, maxItems, skipCount, extension);
+		return queryProcessor.query(context, repositoryId, statement, searchAllVersions, includeAllowableActions,
+				includeRelationships, renditionFilter, maxItems, skipCount, extension);
 	}
 
 	/**
 	 * Return ChangeLog just for Documents & Folder type, and Not for their
 	 * attachments TODO includeAcl,includePolicyIds is not valid
 	 */
-	public ObjectList getContentChanges(CallContext callContext,
-			String repositoryId, Holder<String> changeLogToken,
-			Boolean includeProperties, String filter, Boolean includePolicyIds,
-			Boolean includeAcl, BigInteger maxItems, ExtensionsData extension) {
+	@Override
+	public ObjectList getContentChanges(CallContext callContext, String repositoryId, Holder<String> changeLogToken,
+			Boolean includeProperties, String filter, Boolean includePolicyIds, Boolean includeAcl, BigInteger maxItems,
+			ExtensionsData extension) {
 		// //////////////////
 		// General Exception
 		// //////////////////
@@ -88,28 +86,24 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 		// //////////////////
 		// Specific Exception
 		// //////////////////
-		if (changeLogToken == null || 
-				changeLogToken == null && StringUtils.isBlank(changeLogToken.getValue())) {
+		if (changeLogToken == null || changeLogToken == null && StringUtils.isBlank(changeLogToken.getValue())) {
 			// If changelogToken is not specified, return the first in the
 			// repository
-			exceptionService
-					.invalidArgumentChangeEventNotAvailable(repositoryId, changeLogToken);
+			exceptionService.invalidArgumentChangeEventNotAvailable(repositoryId, changeLogToken);
 		}
 
 		// //////////////////
 		// Body of the method
 		// //////////////////
-		List<Change> changes = contentService.getLatestChanges(repositoryId,
-				callContext, changeLogToken, includeProperties, filter,
-				includePolicyIds, includeAcl, maxItems, extension);
+		List<Change> changes = contentService.getLatestChanges(repositoryId, callContext, changeLogToken,
+				includeProperties, filter, includePolicyIds, includeAcl, maxItems, extension);
 		if (!CollectionUtils.isEmpty(changes)) {
 			Change latestInResults = changes.get(changes.size() - 1);
 			changeLogToken.setValue(latestInResults.getId());
 		}
 
-		return compileService.compileChangeDataList(callContext, repositoryId,
-				changes, changeLogToken, includeProperties, filter,
-				includePolicyIds, includeAcl);
+		return compileService.compileChangeDataList(callContext, repositoryId, changes, changeLogToken,
+				includeProperties, filter, includePolicyIds, includeAcl);
 	}
 
 	public void setQueryProcessor(QueryProcessor queryProcessor) {

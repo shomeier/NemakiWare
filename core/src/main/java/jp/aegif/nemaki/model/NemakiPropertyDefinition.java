@@ -26,14 +26,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.aegif.nemaki.util.constant.NodeType;
-
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.Cardinality;
 import org.apache.chemistry.opencmis.commons.enums.DecimalPrecision;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 import org.apache.chemistry.opencmis.commons.enums.Updatability;
 import org.apache.lucene.document.DateTools.Resolution;
+
+import jp.aegif.nemaki.util.constant.NodeType;
 
 public class NemakiPropertyDefinition extends NodeBase {
 	private String detailNodeId;
@@ -84,8 +84,8 @@ public class NemakiPropertyDefinition extends NodeBase {
 		setModifier(n.getModifier());
 	}
 
-	public NemakiPropertyDefinition(NemakiPropertyDefinitionCore core, NemakiPropertyDefinitionDetail detail){
-		//TODO Output error when core and detail don't match
+	public NemakiPropertyDefinition(NemakiPropertyDefinitionCore core, NemakiPropertyDefinitionDetail detail) {
+		// TODO Output error when core and detail don't match
 
 		setId(detail.getId());
 		setType(NodeType.TYPE_DEFINITION.value());
@@ -136,13 +136,12 @@ public class NemakiPropertyDefinition extends NodeBase {
 		setOpenChoice(propertyDefinition.isOpenChoice());
 		setDefaultValue(new ArrayList<Object>(propertyDefinition.getDefaultValue()));
 
-
 	}
 
-	private <T> List<Choice> buildChoices(List<org.apache.chemistry.opencmis.commons.definitions.Choice<T>> choices){
+	private <T> List<Choice> buildChoices(List<org.apache.chemistry.opencmis.commons.definitions.Choice<T>> choices) {
 		List<Choice> list = new ArrayList<Choice>();
-		if(org.apache.commons.collections.CollectionUtils.isNotEmpty(choices)){
-			for(org.apache.chemistry.opencmis.commons.definitions.Choice<T> choice : choices){
+		if (org.apache.commons.collections.CollectionUtils.isNotEmpty(choices)) {
+			for (org.apache.chemistry.opencmis.commons.definitions.Choice<T> choice : choices) {
 				List<Object> values = new ArrayList<Object>(choice.getValue());
 				Choice c = new Choice(choice.getDisplayName(), values, buildChoices(choice.getChoice()));
 				list.add(c);
@@ -273,11 +272,11 @@ public class NemakiPropertyDefinition extends NodeBase {
 	public void setOpenChoice(boolean openChoice) {
 		this.openChoice = openChoice;
 	}
+
 	/*
-	public void setOpenChoice(Boolean openChoice) {
-		this.openChoice = (openChoice == null) ? true: false;
-	}
-*/
+	 * public void setOpenChoice(Boolean openChoice) { this.openChoice = (openChoice
+	 * == null) ? true: false; }
+	 */
 	public List<Object> getDefaultValue() {
 		return defaultValue;
 	}

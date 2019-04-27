@@ -24,12 +24,12 @@ package jp.aegif.nemaki.cmis.aspect;
 import java.util.List;
 import java.util.Set;
 
-import jp.aegif.nemaki.model.Acl;
-import jp.aegif.nemaki.model.Content;
-
 import org.apache.chemistry.opencmis.commons.data.ObjectData;
 import org.apache.chemistry.opencmis.commons.enums.Action;
 import org.apache.chemistry.opencmis.commons.server.CallContext;
+
+import jp.aegif.nemaki.model.Acl;
+import jp.aegif.nemaki.model.Content;
 
 /**
  * Permission Service interface.
@@ -37,17 +37,19 @@ import org.apache.chemistry.opencmis.commons.server.CallContext;
 public interface PermissionService {
 
 	/**
-	 * permissionDenied Exception check 
+	 * permissionDenied Exception check
+	 * 
 	 * @param repositoryId TODO
-	 * @param content TODO
+	 * @param content      TODO
 	 * @return
 	 */
-	public Boolean checkPermission(CallContext context, String repositoryId, String key, Acl acl, String baseObjectType, Content content);
-	
+	public Boolean checkPermission(CallContext context, String repositoryId, String key, Acl acl, String baseObjectType,
+			Content content);
+
 	public boolean checkPermission(CallContext callContext, Action action, ObjectData objectData);
-	
+
 	public boolean checkPermissionAtTopLevel(CallContext context, String repositoryId, String key, Content content);
-	
+
 	/**
 	 * 
 	 * @param callContext
@@ -55,7 +57,7 @@ public interface PermissionService {
 	 * @param contents
 	 * @return
 	 */
-	public <T> List<T> getFiltered(CallContext callContext,String repositoryId, List<T>contents);
+	public <T> List<T> getFiltered(CallContext callContext, String repositoryId, List<T> contents);
 
 	Boolean checkPermissionWithGivenList(CallContext callContext, String repositoryId, String key, Acl acl,
 			String baseType, Content content, String userName, Set<String> groups);

@@ -21,7 +21,6 @@
  ******************************************************************************/
 package jp.aegif.nemaki.model;
 
-import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jp.aegif.nemaki.util.DataUtil;
-import jp.aegif.nemaki.util.constant.DomainType;
 import jp.aegif.nemaki.util.constant.NodeType;
-import jp.aegif.nemaki.util.constant.SystemConst;
 
 /**
  * As of now, this class holds the minimum data to create ChangeEvent of a
@@ -54,15 +51,14 @@ public class Archive extends NodeBase {
 	private Boolean latestVersion;
 	private String mimeType;
 
-
 	public Archive() {
 		super();
 	}
 
-	public Archive(String originalId, String lastRevision, String name,
-			String type, String parentId,Boolean deletedWithParent,String path,
-			String attachmentNodeId, List<String> nemakiAttachments,String versionSeriesId,
-			Boolean isLatestVersion, GregorianCalendar created, String creator, String mimeType) {
+	public Archive(String originalId, String lastRevision, String name, String type, String parentId,
+			Boolean deletedWithParent, String path, String attachmentNodeId, List<String> nemakiAttachments,
+			String versionSeriesId, Boolean isLatestVersion, GregorianCalendar created, String creator,
+			String mimeType) {
 		super();
 		this.originalId = originalId;
 		this.lastRevision = lastRevision;
@@ -78,7 +74,7 @@ public class Archive extends NodeBase {
 		this.mimeType = mimeType;
 	}
 
-	public Archive(NodeBase n){
+	public Archive(NodeBase n) {
 		setId(n.getId());
 		setType(n.getType());
 		setCreated(n.getCreated());
@@ -176,27 +172,36 @@ public class Archive extends NodeBase {
 		@SuppressWarnings("serial")
 		Map<String, Object> m = new HashMap<String, Object>() {
 			{
-				if(getId() != null) put("id", getId());
-				if(getOriginalId() != null) put("originalId", getOriginalId());
-				if(getLastRevision() != null) put("lastRevision", getLastRevision());
-				if(getName() != null) put("name", getName());
-				if(getType() != null) put("type", getType());
-				if(getParentId() != null) put("parentId", getParentId());
-				if(getAttachmentNodeId() != null) put("nemakiAttachments", getAttachmentNodeId().toString());
-				if(getVersionSeriesId() != null) put("versionSeriesId", getVersionSeriesId());
-				if(isLatestVersion() != null) put("isLatestVersion", isLatestVersion());
-				if(getCreated() != null) put("created", DataUtil.convertToDateFormat(getCreated()));
-				if(getCreator() != null) put("creator", getCreator());
+				if (getId() != null)
+					put("id", getId());
+				if (getOriginalId() != null)
+					put("originalId", getOriginalId());
+				if (getLastRevision() != null)
+					put("lastRevision", getLastRevision());
+				if (getName() != null)
+					put("name", getName());
+				if (getType() != null)
+					put("type", getType());
+				if (getParentId() != null)
+					put("parentId", getParentId());
+				if (getAttachmentNodeId() != null)
+					put("nemakiAttachments", getAttachmentNodeId().toString());
+				if (getVersionSeriesId() != null)
+					put("versionSeriesId", getVersionSeriesId());
+				if (isLatestVersion() != null)
+					put("isLatestVersion", isLatestVersion());
+				if (getCreated() != null)
+					put("created", DataUtil.convertToDateFormat(getCreated()));
+				if (getCreator() != null)
+					put("creator", getCreator());
 			}
 		};
 		return m.toString();
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
-		return obj != null && obj instanceof Content
-				&& ((Content) obj).getId().equals(this.getId());
+		return obj != null && obj instanceof Content && ((Content) obj).getId().equals(this.getId());
 	}
 
 	@Override
@@ -204,27 +209,32 @@ public class Archive extends NodeBase {
 		return this.getId().hashCode();
 	}
 
+	@Override
 	@JsonIgnore
-	public Boolean isFolder(){
-		if(NodeType.CMIS_FOLDER.value().equals(type)){
+	public Boolean isFolder() {
+		if (NodeType.CMIS_FOLDER.value().equals(type)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
+
+	@Override
 	@JsonIgnore
-	public Boolean isDocument(){
-		if(NodeType.CMIS_DOCUMENT.value().equals(type)){
+	public Boolean isDocument() {
+		if (NodeType.CMIS_DOCUMENT.value().equals(type)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
+
+	@Override
 	@JsonIgnore
-	public Boolean isAttachment(){
-		if("attachment".equals(type)){
+	public Boolean isAttachment() {
+		if ("attachment".equals(type)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

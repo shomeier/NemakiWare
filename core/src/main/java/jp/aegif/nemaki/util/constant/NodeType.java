@@ -24,40 +24,30 @@ package jp.aegif.nemaki.util.constant;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 
 public enum NodeType {
-	TYPE_DEFINITION("typeDefinition"),
-	PROPERTY_DEFINITION_CORE("propertyDefinitionCore"),
-	PROPERTY_DEFINITION_DETAIL("propertyDefinitionDetail"),
-	CMIS_DOCUMENT(BaseTypeId.CMIS_DOCUMENT.value()),
-	CMIS_FOLDER(BaseTypeId.CMIS_FOLDER.value()),
-	CMIS_RELATIONSHIP(BaseTypeId.CMIS_RELATIONSHIP.value()),
-	CMIS_POLICY(BaseTypeId.CMIS_POLICY.value()),
-	CMIS_ITEM(BaseTypeId.CMIS_ITEM.value()),
-	ATTACHMENT("attachment"),
-	RENDITION("rendition"),
-	VERSION_SERIES("versionSeries"),
-	CHANGE("change"),
-	USER("user"),
-	GROUP("group"),
+	TYPE_DEFINITION("typeDefinition"), PROPERTY_DEFINITION_CORE("propertyDefinitionCore"),
+	PROPERTY_DEFINITION_DETAIL("propertyDefinitionDetail"), CMIS_DOCUMENT(BaseTypeId.CMIS_DOCUMENT.value()),
+	CMIS_FOLDER(BaseTypeId.CMIS_FOLDER.value()), CMIS_RELATIONSHIP(BaseTypeId.CMIS_RELATIONSHIP.value()),
+	CMIS_POLICY(BaseTypeId.CMIS_POLICY.value()), CMIS_ITEM(BaseTypeId.CMIS_ITEM.value()), ATTACHMENT("attachment"),
+	RENDITION("rendition"), VERSION_SERIES("versionSeries"), CHANGE("change"), USER("user"), GROUP("group"),
 	PATCH("patch");
-
 
 	private final String value;
 
 	NodeType(String v) {
-        value = v;
-    }
+		value = v;
+	}
 
-    public String value() {
-        return value;
-    }
+	public String value() {
+		return value;
+	}
 
-    public static NodeType fromValue(String v) {
-        for (NodeType ot : NodeType.values()) {
-            if (ot.value.equals(v)) {
-                return ot;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+	public static NodeType fromValue(String v) {
+		for (NodeType ot : NodeType.values()) {
+			if (ot.value.equals(v)) {
+				return ot;
+			}
+		}
+		throw new IllegalArgumentException(v);
+	}
 
 }

@@ -42,36 +42,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 
-import jp.aegif.nemaki.util.constant.NodeType;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jp.aegif.nemaki.util.constant.NodeType;
 
 /**
  * CMIS content stream (attachment for document)
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AttachmentNode extends NodeBase {
-	
-	private static final Log log = LogFactory
-			.getLog(AttachmentNode.class);
+
+	private static final Log log = LogFactory.getLog(AttachmentNode.class);
 
 	private String name;
 	private long length;
 	private String mimeType;
 	private InputStream inputStream;
-	
+
 	private BigInteger rangeOffset;
 	private BigInteger rangeLength;
-	
-	public AttachmentNode(){
+
+	public AttachmentNode() {
 		super();
 		setType(NodeType.ATTACHMENT.value());
 	}
-	
-	public AttachmentNode(NodeBase n){
+
+	public AttachmentNode(NodeBase n) {
 		setId(n.getId());
 		setType(n.getType());
 		setCreated(n.getCreated());
@@ -79,14 +78,14 @@ public class AttachmentNode extends NodeBase {
 		setModified(n.getModified());
 		setModifier(n.getModifier());
 	}
-	
+
 	/**
 	 * Getter & Setter
 	 */
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -108,27 +107,29 @@ public class AttachmentNode extends NodeBase {
 	}
 
 	public InputStream getInputStream() {
-		if(rangeOffset == null && rangeLength == null){
+		if (rangeOffset == null && rangeLength == null) {
 			return inputStream;
-		}else{
-			if (rangeLength == null){
+		} else {
+			if (rangeLength == null) {
 				rangeLength = BigInteger.valueOf(length);
 			}
-			
-			if(rangeLength.intValue() + rangeOffset.intValue() > length){
+
+			if (rangeLength.intValue() + rangeOffset.intValue() > length) {
 				rangeLength = BigInteger.valueOf(length - rangeOffset.intValue());
 			}
-			
-			byte[]bytes = new byte[1024];
+
+			byte[] bytes = new byte[1024];
 			try {
 				inputStream.read(bytes);
-				ByteArrayInputStream result = new ByteArrayInputStream(bytes, rangeOffset.intValue(), rangeLength.intValue());
+				ByteArrayInputStream result = new ByteArrayInputStream(bytes, rangeOffset.intValue(),
+						rangeLength.intValue());
 				return result;
 			} catch (IOException e) {
-				log.error("[attachment id=" + getId() + "]getInputStream with rangeOffset=" + rangeLength.toString() + " rangeLength=" + rangeLength.toString() + " failed.", e);
+				log.error("[attachment id=" + getId() + "]getInputStream with rangeOffset=" + rangeLength.toString()
+						+ " rangeLength=" + rangeLength.toString() + " failed.", e);
 			}
 		}
-		
+
 		return null;
 	}
 

@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import jp.aegif.nemaki.cmis.tck.TckSuite;
 
-public class ControlTestGroup extends TckSuite{
+public class ControlTestGroup extends TckSuite {
 	@Test
-	public void aclSmokeTest() throws Exception{
+	public void aclSmokeTest() throws Exception {
 		ACLSmokeTest test = new ACLSmokeTest();
 		run(test);
 	}

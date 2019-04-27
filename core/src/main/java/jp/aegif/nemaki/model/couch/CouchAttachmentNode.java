@@ -23,37 +23,37 @@ package jp.aegif.nemaki.model.couch;
 
 import jp.aegif.nemaki.model.AttachmentNode;
 
-public class CouchAttachmentNode extends CouchNodeBase{
-	
+public class CouchAttachmentNode extends CouchNodeBase {
+
 	private static final long serialVersionUID = 1984059866949665299L;
-	public static final String TYPE = "attachment"; 
+	public static final String TYPE = "attachment";
 
 	private String name;
 	private long length;
 	private String mimeType;
-	
-	public CouchAttachmentNode(){
+
+	public CouchAttachmentNode() {
 		super();
 	}
-	
-	public CouchAttachmentNode(AttachmentNode a){
+
+	public CouchAttachmentNode(AttachmentNode a) {
 		super(a);
 		setName(a.getName());
 		setMimeType(a.getMimeType());
 		setLength(a.getLength());
 	}
-	
+
 	/**
-	 *Getter & Setter 
+	 * Getter & Setter
 	 */
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public long getLength() {
 		return length;
 	}
@@ -70,11 +70,12 @@ public class CouchAttachmentNode extends CouchNodeBase{
 		this.mimeType = mimeType;
 	}
 
-	public AttachmentNode convert(){
+	@Override
+	public AttachmentNode convert() {
 		AttachmentNode a = new AttachmentNode(super.convert());
-		
+
 		a.setName(getName());
-	
+
 		return a;
 	}
 }

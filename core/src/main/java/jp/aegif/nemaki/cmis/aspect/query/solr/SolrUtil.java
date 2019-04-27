@@ -34,12 +34,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.util.constant.PropertyKey;
-import jp.aegif.nemaki.model.NemakiPropertyDefinition;
-import jp.aegif.nemaki.model.NemakiPropertyDefinitionCore;
-import jp.aegif.nemaki.businesslogic.TypeService;
-
 import org.antlr.runtime.tree.Tree;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
@@ -48,6 +42,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+
+import jp.aegif.nemaki.businesslogic.TypeService;
+import jp.aegif.nemaki.model.NemakiPropertyDefinitionCore;
+import jp.aegif.nemaki.util.PropertyManager;
+import jp.aegif.nemaki.util.constant.PropertyKey;
 
 /**
  * Common utility class for Solr query
@@ -74,8 +73,7 @@ public class SolrUtil {
 		map.put(PropertyIds.CREATED_BY, "creator");
 		map.put(PropertyIds.LAST_MODIFICATION_DATE, "modified");
 		map.put(PropertyIds.LAST_MODIFIED_BY, "modifier");
-		map.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
-				"secondary_object_type_ids");
+		map.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, "secondary_object_type_ids");
 
 		map.put(PropertyIds.IS_LATEST_VERSION, "is_latest_version");
 		map.put(PropertyIds.IS_MAJOR_VERSION, "is_major_version");
@@ -111,19 +109,19 @@ public class SolrUtil {
 	 * @param cmisColName
 	 * @return
 	 */
-	public String getPropertyNameInSolr(String repositoryId,String cmisColName) {
-		
-	//TODO: secondary types
+	public String getPropertyNameInSolr(String repositoryId, String cmisColName) {
+
+		// TODO: secondary types
 		String val = map.get(cmisColName);
 		NemakiPropertyDefinitionCore pd = typeService.getPropertyDefinitionCoreByPropertyId(repositoryId, cmisColName);
 		if (val == null) {
-			if(pd.getPropertyType().equals(PropertyType.DATETIME)){
+			if (pd.getPropertyType().equals(PropertyType.DATETIME)) {
 				val = "dynamicDate.property." + cmisColName;
-			}else{
+			} else {
 				// case for STRING
-				val = "dynamic.property." + cmisColName.replace(":", "\\:").replace("\\\\:", "\\:");				
+				val = "dynamic.property." + cmisColName.replace(":", "\\:").replace("\\\\:", "\\:");
 			}
-			
+
 		}
 
 		return val;
@@ -138,8 +136,7 @@ public class SolrUtil {
 	}
 
 	public void callSolrIndexing(String repositoryId) {
-		String _force = propertyManager
-				.readValue(PropertyKey.SOLR_INDEXING_FORCE);
+		String _force = propertyManager.readValue(PropertyKey.SOLR_INDEXING_FORCE);
 		boolean force = (Boolean.TRUE.toString().equals(_force)) ? true : false;
 
 		if (!force)
@@ -148,12 +145,10 @@ public class SolrUtil {
 		String url = getSolrUrl();
 
 		Client client = ClientBuilder.newClient();
-		WebTarget webTarget = client.target(url
-				+ "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
-		Invocation.Builder invocationBuilder =  webTarget.request();
+		WebTarget webTarget = client
+				.target(url + "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
+		Invocation.Builder invocationBuilder = webTarget.request();
 		Response response = invocationBuilder.accept(MediaType.APPLICATION_XML_TYPE).get();
-
-
 
 //		Client client = Client.create();
 //		// TODO Regardless a slash on the last, build the correct URL
@@ -161,15 +156,14 @@ public class SolrUtil {
 //				+ "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
 
 		String xml = response.readEntity(String.class);
-				//String xml = webResource.accept("application/xml").get(String.class);
+		// String xml = webResource.accept("application/xml").get(String.class);
 		// TODO log according to the response status
 	}
 
-	public String getSolrUrl(){
+	public String getSolrUrl() {
 		String protocol = propertyManager.readValue(PropertyKey.SOLR_PROTOCOL);
 		String host = propertyManager.readValue(PropertyKey.SOLR_HOST);
-		int port = Integer.valueOf(propertyManager
-				.readValue(PropertyKey.SOLR_PORT));
+		int port = Integer.valueOf(propertyManager.readValue(PropertyKey.SOLR_PORT));
 		String context = propertyManager.readValue(PropertyKey.SOLR_CONTEXT);
 
 		String url = null;
@@ -187,6 +181,7 @@ public class SolrUtil {
 	public void setPropertyManager(PropertyManager propertyManager) {
 		this.propertyManager = propertyManager;
 	}
+
 	public void setTypeService(TypeService typeService) {
 		this.typeService = typeService;
 	}

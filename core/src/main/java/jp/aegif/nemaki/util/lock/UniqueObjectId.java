@@ -3,22 +3,25 @@ package jp.aegif.nemaki.util.lock;
 public class UniqueObjectId {
 	private String repositoryId;
 	private String objectId;
-	
+
 	public UniqueObjectId(String repositoryId, String objectId) {
 		super();
 		this.repositoryId = repositoryId;
 		this.objectId = objectId;
 	}
-	
+
 	public String getRepositoryId() {
 		return repositoryId;
 	}
+
 	public void setRepositoryId(String repositoryId) {
 		this.repositoryId = repositoryId;
 	}
+
 	public String getObjectId() {
 		return objectId;
 	}
+
 	public void setObjectId(String objectId) {
 		this.objectId = objectId;
 	}
@@ -53,6 +56,5 @@ public class UniqueObjectId {
 			return false;
 		return true;
 	}
-	
-	
+
 }

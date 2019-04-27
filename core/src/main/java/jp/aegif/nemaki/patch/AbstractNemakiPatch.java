@@ -15,29 +15,31 @@ public abstract class AbstractNemakiPatch {
 	@Autowired
 	protected PrincipalService principalService;
 
-
-	public void apply(){
+	public void apply() {
 		applySystemPatch();
 
-		for(String repositoryId : patchUtil.getRepositoryInfoMap().keys()){
+		for (String repositoryId : patchUtil.getRepositoryInfoMap().keys()) {
 			boolean isApplied = patchUtil.isApplied(repositoryId, getName());
-			if(isApplied){
-				log.info("[patch=" + getName() + ", repositoryId=" + repositoryId + "]" +  "already applied, skipped");
+			if (isApplied) {
+				log.info("[patch=" + getName() + ", repositoryId=" + repositoryId + "]" + "already applied, skipped");
 				continue;
-			}else{
-				try{
+			} else {
+				try {
 					applyPerRepositoryPatch(repositoryId);
 
 					patchUtil.createPathHistory(repositoryId, getName());
-					log.info("[patch=" + getName() + ", repositoryId=" + repositoryId + "]" +  "applied");
-				}catch(Exception e){
-					log.error("[patch=" + getName() + ", repositoryId=" + repositoryId + "]" +  "failed", e);
+					log.info("[patch=" + getName() + ", repositoryId=" + repositoryId + "]" + "applied");
+				} catch (Exception e) {
+					log.error("[patch=" + getName() + ", repositoryId=" + repositoryId + "]" + "failed", e);
 				}
 			}
 		}
 	}
+
 	protected abstract void applySystemPatch();
+
 	protected abstract void applyPerRepositoryPatch(String repositoryId);
+
 	public abstract String getName();
 
 	public void setPatchUtil(PatchUtil patchUtil) {

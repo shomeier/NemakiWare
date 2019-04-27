@@ -35,11 +35,11 @@ public class YamlManager {
 	private String baseModelFile = null;
 	private static final Log log = LogFactory.getLog(YamlManager.class);
 
-	public YamlManager(String baseModelFile){
+	public YamlManager(String baseModelFile) {
 		this.baseModelFile = baseModelFile;
 	}
 
-	public Object loadYml(){
+	public Object loadYml() {
 		InputStream is = getClass().getClassLoader().getResourceAsStream(baseModelFile);
 		if (is == null) {
 			log.error("yaml file not found");
@@ -49,15 +49,15 @@ public class YamlManager {
 		try {
 			reader = new InputStreamReader(is, "UTF-8");
 
-	        reader = new BufferedReader(reader);
-	        StringBuffer buf = new StringBuffer();
-	        int ch;
-	        while ((ch = reader.read()) >= 0)
-	            buf.append((char)ch);
-	        reader.close();
-	        Object ydoc = YAML.load(buf.toString());
+			reader = new BufferedReader(reader);
+			StringBuffer buf = new StringBuffer();
+			int ch;
+			while ((ch = reader.read()) >= 0)
+				buf.append((char) ch);
+			reader.close();
+			Object ydoc = YAML.load(buf.toString());
 
-	        return ydoc;
+			return ydoc;
 		} catch (Exception e) {
 			log.error(baseModelFile + " load failed", e);
 

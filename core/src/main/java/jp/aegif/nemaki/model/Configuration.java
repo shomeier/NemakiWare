@@ -3,14 +3,14 @@ package jp.aegif.nemaki.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Configuration extends NodeBase{
+public class Configuration extends NodeBase {
 	private Map<String, Object> configuration = new HashMap<>();
 
-	public Configuration(){
+	public Configuration() {
 		setType("configuration");
 	}
-	
-	public Configuration(NodeBase n){
+
+	public Configuration(NodeBase n) {
 		this();
 		setId(n.getId());
 		setType(n.getType());
@@ -19,7 +19,7 @@ public class Configuration extends NodeBase{
 		setModified(n.getModified());
 		setModifier(n.getModifier());
 	}
-	
+
 	public Map<String, Object> getConfiguration() {
 		return configuration;
 	}

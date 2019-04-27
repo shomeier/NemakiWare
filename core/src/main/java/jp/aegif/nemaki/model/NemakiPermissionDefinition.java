@@ -28,51 +28,59 @@ public class NemakiPermissionDefinition {
 	String id;
 	String description;
 	List<String> base;
-	Map<String,Boolean> permissionMapping;
+	Map<String, Boolean> permissionMapping;
 	String asCmisBasicPermission;
-	
-	public NemakiPermissionDefinition(){
-		
+
+	public NemakiPermissionDefinition() {
+
 	}
-	
-	public NemakiPermissionDefinition(Map<String, Object> map){
-		//TODO try-catch
-		//TODO externamlize
-		this.setId((String)map.get("id"));
-		this.setDescription((String)map.get("description"));
-		this.setBase((List<String>)map.get("base"));
-		this.setPermissionMapping((Map<String,Boolean>)map.get("permissionMapping"));
-		this.setAsCmisBasicPermission((String)map.get("asCmisBasic"));
+
+	public NemakiPermissionDefinition(Map<String, Object> map) {
+		// TODO try-catch
+		// TODO externamlize
+		this.setId((String) map.get("id"));
+		this.setDescription((String) map.get("description"));
+		this.setBase((List<String>) map.get("base"));
+		this.setPermissionMapping((Map<String, Boolean>) map.get("permissionMapping"));
+		this.setAsCmisBasicPermission((String) map.get("asCmisBasic"));
 	}
-	
+
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public List<String> getBase() {
 		return base;
 	}
+
 	public void setBase(List<String> base) {
 		this.base = base;
 	}
+
 	public Map<String, Boolean> getPermissionMapping() {
 		return permissionMapping;
 	}
-	public void setPermissionMapping(
-			Map<String, Boolean> permissionMapping) {
+
+	public void setPermissionMapping(Map<String, Boolean> permissionMapping) {
 		this.permissionMapping = permissionMapping;
 	}
+
 	public String getAsCmisBasicPermission() {
 		return asCmisBasicPermission;
 	}
+
 	public void setAsCmisBasicPermission(String asCmisBasicPermission) {
 		this.asCmisBasicPermission = asCmisBasicPermission;
 	}

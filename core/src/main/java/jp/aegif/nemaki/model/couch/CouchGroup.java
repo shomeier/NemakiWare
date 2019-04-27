@@ -25,26 +25,26 @@ import java.util.List;
 
 import jp.aegif.nemaki.model.Group;
 
-public class CouchGroup  extends CouchNodeBase{
-	
+public class CouchGroup extends CouchNodeBase {
+
 	private static final long serialVersionUID = -5513898484272039889L;
 	private String groupId;
 	private String name;
 	private List<String> users;
 	private List<String> groups;
-	
-	public CouchGroup(){
+
+	public CouchGroup() {
 		super();
 	}
 
-	public CouchGroup(Group g){
+	public CouchGroup(Group g) {
 		super(g);
 		setGroupId(g.getGroupId());
 		setName(g.getName());
 		setUsers(g.getUsers());
 		setGroups(g.getGroups());
 	}
-	
+
 	public String getGroupId() {
 		return groupId;
 	}
@@ -77,7 +77,8 @@ public class CouchGroup  extends CouchNodeBase{
 		this.groups = groups;
 	}
 
-	public Group convert(){
+	@Override
+	public Group convert() {
 		Group g = new Group(super.convert());
 		g.setGroupId(getGroupId());
 		g.setName(getName());

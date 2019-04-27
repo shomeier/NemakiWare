@@ -23,117 +23,118 @@ import org.junit.Test;
 
 import jp.aegif.nemaki.cmis.tck.TckSuite;
 
-public class CrudTestGroup extends TckSuite{
-	
+public class CrudTestGroup extends TckSuite {
+
 	@Test
-	public void createAndDeleteFolderTest() throws Exception{
+	public void createAndDeleteFolderTest() throws Exception {
 		CreateAndDeleteFolderTest test = new CreateAndDeleteFolderTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void createAndDeleteDocumentTest() throws Exception{
+	public void createAndDeleteDocumentTest() throws Exception {
 		CreateAndDeleteDocumentTest test = new CreateAndDeleteDocumentTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void createBigDocument() throws Exception{
+	public void createBigDocument() throws Exception {
 		CreateBigDocument test = new CreateBigDocument();
 		run(test);
 	}
-	
+
 	@Test
-	public void createDocumentWithoutContent() throws Exception{
+	public void createDocumentWithoutContent() throws Exception {
 		CreateDocumentWithoutContent test = new CreateDocumentWithoutContent();
 		run(test);
 	}
-	
+
 	@Test
-	public void createInvalidTypeTest() throws Exception{
+	public void createInvalidTypeTest() throws Exception {
 		CreateInvalidTypeTest test = new CreateInvalidTypeTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void nameCharsetTest() throws Exception{
+	public void nameCharsetTest() throws Exception {
 		NameCharsetTest test = new NameCharsetTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void whitespaceInNameTest() throws Exception{
+	public void whitespaceInNameTest() throws Exception {
 		WhitespaceInNameTest test = new WhitespaceInNameTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void createAndDeleteRelationshipTest() throws Exception{
+	public void createAndDeleteRelationshipTest() throws Exception {
 		CreateAndDeleteRelationshipTest test = new CreateAndDeleteRelationshipTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void createAndDeleteItemTest() throws Exception{
+	public void createAndDeleteItemTest() throws Exception {
 		CreateAndDeleteItemTest test = new CreateAndDeleteItemTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void propertyFilterTest() throws Exception{
+	public void propertyFilterTest() throws Exception {
 		PropertyFilterTest test = new PropertyFilterTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void updateSmokeTest() throws Exception{
+	public void updateSmokeTest() throws Exception {
 		UpdateSmokeTest test = new UpdateSmokeTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void bulkUpdatePropertiesTest() throws Exception{
+	public void bulkUpdatePropertiesTest() throws Exception {
 		BulkUpdatePropertiesTest test = new BulkUpdatePropertiesTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void setAndDeleteContentTest() throws Exception{
+	public void setAndDeleteContentTest() throws Exception {
 		SetAndDeleteContentTest test = new SetAndDeleteContentTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void changeTokenTest() throws Exception{
+	public void changeTokenTest() throws Exception {
 		ChangeTokenTest test = new ChangeTokenTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void contentRangesTest() throws Exception{
+	public void contentRangesTest() throws Exception {
 		ContentRangesTest test = new ContentRangesTest();
 		run(test);
 	}
+
 	@Test
-	public void copyTest() throws Exception{
+	public void copyTest() throws Exception {
 		CopyTest test = new CopyTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void moveTest() throws Exception{
+	public void moveTest() throws Exception {
 		MoveTest test = new MoveTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void deleteTreeTest() throws Exception{
+	public void deleteTreeTest() throws Exception {
 		DeleteTreeTest test = new DeleteTreeTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void operationContextTest() throws Exception{
+	public void operationContextTest() throws Exception {
 		OperationContextTest test = new OperationContextTest();
 		run(test);
 	}

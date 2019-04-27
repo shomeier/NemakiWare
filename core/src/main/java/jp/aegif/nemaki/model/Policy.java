@@ -36,12 +36,12 @@ public class Policy extends Content {
 	private String policyText;
 	private List<String> appliedIds;
 
-	public Policy(){
+	public Policy() {
 		super();
 		setType(NodeType.CMIS_POLICY.value());
 	}
-	
-	public Policy(Content c){
+
+	public Policy(Content c) {
 		super(c);
 		setName(c.getName());
 		setDescription(c.getDescription());
@@ -54,7 +54,7 @@ public class Policy extends Content {
 		setObjectType(c.getObjectType());
 		setChangeToken(c.getChangeToken());
 	}
-	
+
 	public String getPolicyText() {
 		return policyText;
 	}
@@ -70,5 +70,5 @@ public class Policy extends Content {
 	public void setAppliedIds(List<String> appliedIds) {
 		this.appliedIds = appliedIds;
 	}
-	
+
 }

@@ -21,7 +21,6 @@
  ******************************************************************************/
 package jp.aegif.nemaki.rest;
 
-import jp.aegif.nemaki.common.ErrorCode;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -34,23 +33,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import jp.aegif.nemaki.businesslogic.ContentService;
-import jp.aegif.nemaki.model.Archive;
-import jp.aegif.nemaki.model.exception.ParentNoLongerExistException;
-import jp.aegif.nemaki.util.DataUtil;
-import jp.aegif.nemaki.util.constant.NodeType;
-import jp.aegif.nemaki.util.constant.SystemConst;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import jp.aegif.nemaki.businesslogic.ContentService;
+import jp.aegif.nemaki.common.ErrorCode;
+import jp.aegif.nemaki.model.Archive;
+import jp.aegif.nemaki.model.exception.ParentNoLongerExistException;
+import jp.aegif.nemaki.util.constant.NodeType;
+import jp.aegif.nemaki.util.constant.SystemConst;
+
 @Path("/repo/{repositoryId}/archive")
 public class ArchiveResource extends ResourceBase {
 
-	private static final Log log = LogFactory
-            .getLog(ArchiveResource.class);
+	private static final Log log = LogFactory.getLog(ArchiveResource.class);
 
 	private ContentService contentService;
 
@@ -58,42 +56,40 @@ public class ArchiveResource extends ResourceBase {
 		this.contentService = contentService;
 	}
 
-	//FIXME Attachment should always be got out of the output on this layer
+	// FIXME Attachment should always be got out of the output on this layer
 	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/index")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String index(
-			@PathParam("repositoryId") String repositoryId,
-			@QueryParam("skip") Integer skip,
-			@QueryParam("limit") Integer limit,
-			@QueryParam("desc") Boolean desc){
+	public String index(@PathParam("repositoryId") String repositoryId, @QueryParam("skip") Integer skip,
+			@QueryParam("limit") Integer limit, @QueryParam("desc") Boolean desc) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray list = new JSONArray();
 		JSONArray errMsg = new JSONArray();
 
-		try{
+		try {
 			List<Archive> archives = contentService.getArchives(repositoryId, skip, limit, desc);
-			for(Archive a : archives){
-				//Filter out Attachment & old Versions
-				if (NodeType.ATTACHMENT.value().equals(a.getType())){
+			for (Archive a : archives) {
+				// Filter out Attachment & old Versions
+				if (NodeType.ATTACHMENT.value().equals(a.getType())) {
 					continue;
-				}else if (NodeType.CMIS_DOCUMENT.value().equals(a.getType())){
+				} else if (NodeType.CMIS_DOCUMENT.value().equals(a.getType())) {
 					boolean ilv = (a.isLatestVersion() != null) ? a.isLatestVersion() : false;
-					if (!ilv) continue;
+					if (!ilv)
+						continue;
 				}
 
 				JSONObject o = buildArchiveJson(a);
 
-				if(a.isDocument()){
+				if (a.isDocument()) {
 					o.put("mimeType", a.getMimeType());
 				}
 
 				list.add(o);
 			}
 			result.put("archives", list);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			status = false;
 			addErrMsg(errMsg, ITEM_ARCHIVE, ErrorCode.ERR_GET_ARCHIVES);
@@ -105,14 +101,14 @@ public class ArchiveResource extends ResourceBase {
 	@PUT
 	@Path("/restore/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String restore(@PathParam("repositoryId") String repositoryId, @PathParam("id") String id){
+	public String restore(@PathParam("repositoryId") String repositoryId, @PathParam("id") String id) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
-		try{
+		try {
 			contentService.restoreArchive(repositoryId, id);
-		}catch(ParentNoLongerExistException e){
+		} catch (ParentNoLongerExistException e) {
 			log.error(e, e);
 			status = false;
 			addErrMsg(errMsg, ITEM_ARCHIVE, ErrorCode.ERR_RESTORE_BECAUSE_PARENT_NO_LONGER_EXISTS);
@@ -124,14 +120,14 @@ public class ArchiveResource extends ResourceBase {
 	@DELETE
 	@Path("/destroy/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String destroy(@PathParam("repositoryId") String repositoryId, @PathParam("id") String id){
+	public String destroy(@PathParam("repositoryId") String repositoryId, @PathParam("id") String id) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
-		try{
+		try {
 			contentService.destroyArchive(repositoryId, id);
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.error(e, e);
 			status = false;
 			addErrMsg(errMsg, ITEM_ARCHIVE, ErrorCode.ERR_DESTROY);
@@ -141,7 +137,7 @@ public class ArchiveResource extends ResourceBase {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private JSONObject buildArchiveJson(Archive archive){
+	private JSONObject buildArchiveJson(Archive archive) {
 
 		JSONObject archiveJson = new JSONObject();
 		archiveJson.put("id", archive.getId());
@@ -150,10 +146,10 @@ public class ArchiveResource extends ResourceBase {
 		archiveJson.put("originalId", archive.getOriginalId());
 		archiveJson.put("parentId", archive.getParentId());
 		archiveJson.put("isDeletedWithParent", archive.isDeletedWithParent());
-		try{
+		try {
 			String _created = new SimpleDateFormat(SystemConst.DATETIME_FORMAT).format(archive.getCreated().getTime());
 			archiveJson.put("created", _created);
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.warn(String.format("Archive(%s) 'created' property is broken.", archive.getId()));
 		}
 		archiveJson.put("creator", archive.getCreator());

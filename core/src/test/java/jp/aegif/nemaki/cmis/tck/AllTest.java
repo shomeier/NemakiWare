@@ -11,16 +11,9 @@ import jp.aegif.nemaki.cmis.tck.tests.QueryTestGroup;
 import jp.aegif.nemaki.cmis.tck.tests.TypesTestGroup;
 import jp.aegif.nemaki.cmis.tck.tests.VersioningTestGroup;
 
-@RunWith( Suite.class )
-@Suite.SuiteClasses( { 
-    BasicsTestGroup.class,
-    ControlTestGroup.class,
-    CrudTestGroup.class,
-    FilingTestGroup.class,
-    QueryTestGroup.class,
-    TypesTestGroup.class,
-    VersioningTestGroup.class,
-} )
-public class AllTest extends TckSuite{
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ BasicsTestGroup.class, ControlTestGroup.class, CrudTestGroup.class, FilingTestGroup.class,
+		QueryTestGroup.class, TypesTestGroup.class, VersioningTestGroup.class, })
+public class AllTest extends TckSuite {
 
 }

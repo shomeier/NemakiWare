@@ -24,16 +24,16 @@ package jp.aegif.nemaki.model.couch;
 import java.util.List;
 import java.util.Map;
 
-import jp.aegif.nemaki.model.Ace;
-import jp.aegif.nemaki.model.Acl;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import jp.aegif.nemaki.model.Ace;
+import jp.aegif.nemaki.model.Acl;
 
 public class CouchAcl {
 	private JSONArray entries;
 
-	public CouchAcl(){
+	public CouchAcl() {
 		entries = new JSONArray();
 	}
 
@@ -48,17 +48,18 @@ public class CouchAcl {
 		this.entries = acl;
 	}
 
-	public Acl convertToNemakiAcl(){
+	public Acl convertToNemakiAcl() {
 		JSONArray entries = this.getEntries();
-		if(entries == null) return null;
+		if (entries == null)
+			return null;
 
 		Acl acl = new Acl();
-		for(Object o : entries){
-			Map<String,Object>entry = (Map<String, Object>) o;
+		for (Object o : entries) {
+			Map<String, Object> entry = (Map<String, Object>) o;
 			String principal = entry.get("principal").toString();
 			List<String> permissions = (List<String>) entry.get("permissions");
 
-			//DB-stored ACL is only localACE(direct = true)
+			// DB-stored ACL is only localACE(direct = true)
 			Ace ace = new Ace(principal, permissions, true);
 			acl.getLocalAces().add(ace);
 		}

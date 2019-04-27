@@ -30,8 +30,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jp.aegif.nemaki.util.constant.NodeType;
 
 /**
- * Nemaki group.
- * This class is deprecated and remains for backward compatiblity (patch)
+ * Nemaki group. This class is deprecated and remains for backward compatiblity
+ * (patch)
+ * 
  * @see jp.aegif.nemaki.model.GroupItem
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -45,12 +46,12 @@ public class Group extends NodeBase {
 	private List<String> users;
 	private List<String> groups;
 
-	public Group(){
+	public Group() {
 		super();
 		setType(NodeType.GROUP.value());
 	}
 
-	public Group(NodeBase n){
+	public Group(NodeBase n) {
 		super();
 		setId(n.getId());
 		setType(n.getType());
@@ -60,8 +61,7 @@ public class Group extends NodeBase {
 		setModifier(n.getModifier());
 	}
 
-	public Group(String groupId, String name, List<String> users,
-			List<String> groups) {
+	public Group(String groupId, String name, List<String> users, List<String> groups) {
 		super();
 		setType(NodeType.GROUP.value());
 		this.groupId = groupId;

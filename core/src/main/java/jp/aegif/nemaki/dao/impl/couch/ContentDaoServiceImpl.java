@@ -156,8 +156,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	@Override
 	public List<NemakiPropertyDefinitionCore> getPropertyDefinitionCores(String repositoryId) {
 		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("propertyDefinitionCores");
-		List<CouchPropertyDefinitionCore> l = connectorPool.get(repositoryId)
-				.queryView(query, CouchPropertyDefinitionCore.class);
+		List<CouchPropertyDefinitionCore> l = connectorPool.get(repositoryId).queryView(query,
+				CouchPropertyDefinitionCore.class);
 
 		if (CollectionUtils.isEmpty(l)) {
 			return null;
@@ -173,8 +173,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	@Override
 	public NemakiPropertyDefinitionCore getPropertyDefinitionCore(String repositoryId, String nodeId) {
 		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("propertyDefinitionCores").key(nodeId);
-		List<CouchPropertyDefinitionCore> l = connectorPool.get(repositoryId)
-				.queryView(query, CouchPropertyDefinitionCore.class);
+		List<CouchPropertyDefinitionCore> l = connectorPool.get(repositoryId).queryView(query,
+				CouchPropertyDefinitionCore.class);
 
 		if (CollectionUtils.isEmpty(l)) {
 			return null;
@@ -187,8 +187,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	public NemakiPropertyDefinitionCore getPropertyDefinitionCoreByPropertyId(String repositoryId, String propertyId) {
 		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("propertyDefinitionCoresByPropertyId")
 				.key(propertyId);
-		List<CouchPropertyDefinitionCore> l = connectorPool.get(repositoryId)
-				.queryView(query, CouchPropertyDefinitionCore.class);
+		List<CouchPropertyDefinitionCore> l = connectorPool.get(repositoryId).queryView(query,
+				CouchPropertyDefinitionCore.class);
 
 		if (CollectionUtils.isEmpty(l)) {
 			return null;
@@ -201,8 +201,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	public NemakiPropertyDefinitionDetail getPropertyDefinitionDetail(String repositoryId, String nodeId) {
 		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("propertyDefinitionDetails")
 				.key(nodeId);
-		List<CouchPropertyDefinitionDetail> l = connectorPool.get(repositoryId)
-				.queryView(query, CouchPropertyDefinitionDetail.class);
+		List<CouchPropertyDefinitionDetail> l = connectorPool.get(repositoryId).queryView(query,
+				CouchPropertyDefinitionDetail.class);
 
 		if (CollectionUtils.isEmpty(l)) {
 			return null;
@@ -216,8 +216,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 			String coreNodeId) {
 		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("propertyDefinitionDetailsByCoreNodeId")
 				.key(coreNodeId);
-		List<CouchPropertyDefinitionDetail> l = connectorPool.get(repositoryId)
-				.queryView(query, CouchPropertyDefinitionDetail.class);
+		List<CouchPropertyDefinitionDetail> l = connectorPool.get(repositoryId).queryView(query,
+				CouchPropertyDefinitionDetail.class);
 
 		if (CollectionUtils.isEmpty(l)) {
 			return null;
@@ -250,8 +250,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	public NemakiPropertyDefinitionDetail updatePropertyDefinitionDetail(String repositoryId,
 			NemakiPropertyDefinitionDetail propertyDefinitionDetail) {
 
-		CouchPropertyDefinitionDetail cpd = connectorPool.get(repositoryId)
-				.get(CouchPropertyDefinitionDetail.class, propertyDefinitionDetail.getId());
+		CouchPropertyDefinitionDetail cpd = connectorPool.get(repositoryId).get(CouchPropertyDefinitionDetail.class,
+				propertyDefinitionDetail.getId());
 
 		CouchPropertyDefinitionDetail update = new CouchPropertyDefinitionDetail(propertyDefinitionDetail);
 		update.setRevision(cpd.getRevision());
@@ -448,7 +448,7 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("children").key(parentId);
 		List<CouchContent> list = connectorPool.get(repositoryId).queryView(query, CouchContent.class);
 		if (CollectionUtils.isNotEmpty(list)) {
-			for(CouchContent c : list){
+			for (CouchContent c : list) {
 				contents.add(c.convert());
 			}
 		}
@@ -483,17 +483,17 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		return convertJsonToEachBaeType(result);
 	}
 
-	public List<String> getChildrenNames(String repositoryId, String parentId){
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("childrenNames")
-				.key(parentId);
+	@Override
+	public List<String> getChildrenNames(String repositoryId, String parentId) {
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("childrenNames").key(parentId);
 		ViewResult result = connectorPool.get(repositoryId).queryView(query);
 
-		List<String>list =  new ArrayList<String>();
-		if(result == null || result.isEmpty()){
+		List<String> list = new ArrayList<String>();
+		if (result == null || result.isEmpty()) {
 			return new ArrayList<String>();
-		}else{
+		} else {
 			Iterator<Row> itr = result.iterator();
-			while(itr.hasNext()){
+			while (itr.hasNext()) {
 				list.add(itr.next().getValue());
 			}
 		}
@@ -596,12 +596,12 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	}
 
 	@Override
-	public List<UserItem> getUserItems(String repositoryId){
+	public List<UserItem> getUserItems(String repositoryId) {
 		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("userItemsById");
 		List<CouchUserItem> couchUserItems = connectorPool.get(repositoryId).queryView(query, CouchUserItem.class);
 		List<UserItem> list = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(couchUserItems)) {
-			for(CouchUserItem couchUserItem : couchUserItems){
+			for (CouchUserItem couchUserItem : couchUserItems) {
 				list.add(couchUserItem.convert());
 			}
 		}
@@ -636,35 +636,36 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		List<CouchGroupItem> couchGroupItems = connectorPool.get(repositoryId).queryView(query, CouchGroupItem.class);
 		List<GroupItem> list = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(couchGroupItems)) {
-			for(CouchGroupItem couchGroupItem : couchGroupItems){
+			for (CouchGroupItem couchGroupItem : couchGroupItems) {
 				list.add(couchGroupItem.convert());
 			}
 		}
 		return list;
 	}
 
+	@Override
 	public List<String> getJoinedGroupByUserId(String repositoryId, String userId) {
 		List<GroupItem> list = new ArrayList<>();
 
-		//first get directory joined groups
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("joinedDirectGroupsByUserId").key(userId);
+		// first get directory joined groups
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("joinedDirectGroupsByUserId")
+				.key(userId);
 		List<CouchGroupItem> couchGroupItems = connectorPool.get(repositoryId).queryView(query, CouchGroupItem.class);
 
-		//get indirect joined group using above results
+		// get indirect joined group using above results
 		List<String> groupIdsToCheck = new ArrayList<String>();
 		List<String> resultGroupIds = new ArrayList<String>();
-		for(CouchGroupItem item : couchGroupItems) {
+		for (CouchGroupItem item : couchGroupItems) {
 			groupIdsToCheck.add(item.getGroupId());
 			resultGroupIds.add(item.getGroupId());
 		}
 
-		while(groupIdsToCheck.size() > 0) {
+		while (groupIdsToCheck.size() > 0) {
 			groupIdsToCheck = this.checkIndirectGroup(repositoryId, groupIdsToCheck);
 			resultGroupIds.addAll(groupIdsToCheck);
 		}
 
-		//unique result
-
+		// unique result
 
 		return resultGroupIds;
 	}
@@ -675,25 +676,24 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 
 		int batchSize = 20;
 		ArrayList<ArrayList<String>> params = new ArrayList<ArrayList<String>>();
-		for(int i = 0 ; i < groupIdsToCheck.size() ; i ++ ) {
+		for (int i = 0; i < groupIdsToCheck.size(); i++) {
 
 			ArrayList<String> param = new ArrayList<String>();
 			param.add(String.valueOf(i % 20));
 			param.add(groupIdsToCheck.get(0));
 			groupIdsToCheck.remove(0);
 
-			//divide into 20 param
-			if ( (i % batchSize) == batchSize - 1 || i == groupIdsToCheck.size() - 1 ) {
-				//query
-				ViewQuery query =
-						new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("joinedDirectGroupsByGroupId");
+			// divide into 20 param
+			if ((i % batchSize) == batchSize - 1 || i == groupIdsToCheck.size() - 1) {
+				// query
+				ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("joinedDirectGroupsByGroupId");
 				query.keys(params);
-				List<CouchGroupItem> couchGroupItems =
-						connectorPool.get(repositoryId).queryView(query, CouchGroupItem.class);
-				for(CouchGroupItem item : couchGroupItems) {
+				List<CouchGroupItem> couchGroupItems = connectorPool.get(repositoryId).queryView(query,
+						CouchGroupItem.class);
+				for (CouchGroupItem item : couchGroupItems) {
 					resultGroupIds.add(item.getGroupId());
 				}
-				//after query, clear params
+				// after query, clear params
 				params = new ArrayList<ArrayList<String>>();
 			}
 		}
@@ -813,7 +813,7 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	}
 
 	@Override
-	public Document move(String repositoryId, Document document, String sourceId){
+	public Document move(String repositoryId, Document document, String sourceId) {
 		return update(repositoryId, document);
 	}
 
@@ -842,7 +842,7 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	}
 
 	@Override
-	public Folder move(String repositoryId, Folder folder, String sourceId){
+	public Folder move(String repositoryId, Folder folder, String sourceId) {
 		return update(repositoryId, folder);
 	}
 
@@ -957,7 +957,7 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 			an.setId(can.getId());
 			an.setMimeType(a.getContentType());
 			an.setLength(a.getContentLength());
-			if(can.getName() != null && !can.getName().isEmpty()){
+			if (can.getName() != null && !can.getName().isEmpty()) {
 				an.setName(can.getName());
 			}
 
@@ -967,8 +967,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 
 	@Override
 	public void setStream(String repositoryId, AttachmentNode attachmentNode) {
-		AttachmentInputStream ais = connectorPool.get(repositoryId)
-				.getAttachment(attachmentNode.getId(), ATTACHMENT_NAME);
+		AttachmentInputStream ais = connectorPool.get(repositoryId).getAttachment(attachmentNode.getId(),
+				ATTACHMENT_NAME);
 		attachmentNode.setInputStream(ais);
 	}
 
@@ -994,9 +994,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 
 			/*
 			 * try { BufferedImage bimg = ImageIO.read(ais); if (bimg != null) {
-			 * rd.setWidth(bimg.getWidth()); rd.setHeight(bimg.getHeight());
-			 * bimg.flush(); } } catch (IOException e) { // TODO logging // do
-			 * nothing }
+			 * rd.setWidth(bimg.getWidth()); rd.setHeight(bimg.getHeight()); bimg.flush(); }
+			 * } catch (IOException e) { // TODO logging // do nothing }
 			 */
 
 			return rd;
@@ -1008,8 +1007,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		CouchAttachmentNode ca = new CouchAttachmentNode(attachment);
 		connectorPool.get(repositoryId).create(ca);
 
-		AttachmentInputStream ais = new AttachmentInputStream(ATTACHMENT_NAME, contentStream.getStream(), contentStream
-				.getMimeType(), contentStream.getLength());
+		AttachmentInputStream ais = new AttachmentInputStream(ATTACHMENT_NAME, contentStream.getStream(),
+				contentStream.getMimeType(), contentStream.getLength());
 		connectorPool.get(repositoryId).createAttachment(ca.getId(), ca.getRevision(), ais);
 
 		return ca.getId();
@@ -1020,8 +1019,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		CouchRendition cr = new CouchRendition(rendition);
 		connectorPool.get(repositoryId).create(cr);
 
-		AttachmentInputStream ais = new AttachmentInputStream(ATTACHMENT_NAME, contentStream.getStream(), contentStream
-				.getMimeType(), contentStream.getLength());
+		AttachmentInputStream ais = new AttachmentInputStream(ATTACHMENT_NAME, contentStream.getStream(),
+				contentStream.getMimeType(), contentStream.getLength());
 		connectorPool.get(repositoryId).createAttachment(cr.getId(), cr.getRevision(), ais);
 
 		return cr.getId();
@@ -1034,11 +1033,11 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		// Set the latest revision for avoid conflict
 		update.setRevision(ca.getRevision());
 
-		String revisionAfterDeleted = connectorPool.get(repositoryId)
-				.deleteAttachment(ca.getId(), ca.getRevision(), ATTACHMENT_NAME);
+		String revisionAfterDeleted = connectorPool.get(repositoryId).deleteAttachment(ca.getId(), ca.getRevision(),
+				ATTACHMENT_NAME);
 
-		AttachmentInputStream ais = new AttachmentInputStream(ATTACHMENT_NAME, contentStream.getStream(), contentStream
-				.getMimeType());
+		AttachmentInputStream ais = new AttachmentInputStream(ATTACHMENT_NAME, contentStream.getStream(),
+				contentStream.getMimeType());
 		connectorPool.get(repositoryId).createAttachment(attachment.getId(), revisionAfterDeleted, ais);
 	}
 
@@ -1079,7 +1078,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 				Long startKey = startChange.getToken();
 				query.startKey(startKey);
 			} catch (org.ektorp.DocumentNotFoundException ex) {
-				log.warn(MessageFormat.format("CouchChange is not found : Repo={0}, StartToken={1}",  repositoryId,  startToken));
+				log.warn(MessageFormat.format("CouchChange is not found : Repo={0}, StartToken={1}", repositoryId,
+						startToken));
 
 				return null;
 			}
@@ -1095,15 +1095,15 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		for (CouchChange cc : l) {
 			result.add(cc.convert());
 		}
-		log.info(MessageFormat.format("Repo={0} Get change success : {1}",repositoryId, result.size()));
+		log.info(MessageFormat.format("Repo={0} Get change success : {1}", repositoryId, result.size()));
 		return result;
 	}
 
 	@Override
 	public List<Change> getObjectChanges(String repositoryId, String objectId) {
 		List<Change> result = new ArrayList<Change>();
-		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("changesByObjectId")
-				.key(objectId).descending(false);
+		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("changesByObjectId").key(objectId)
+				.descending(false);
 
 		List<CouchChange> l = connectorPool.get(repositoryId).queryView(query, CouchChange.class);
 		for (CouchChange cc : l) {
@@ -1112,7 +1112,6 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		return result;
 
 	}
-
 
 	@Override
 	public Change create(String repositoryId, Change change) {
@@ -1218,15 +1217,15 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		String archiveId = repositoryInfoMap.getArchiveId(repositoryId);
 
 		ViewQuery query = new ViewQuery().designDocId(DESIGN_DOCUMENT).viewName("allByCreated");
-		if(skip != null){
+		if (skip != null) {
 			query.skip(skip);
 		}
-		if(limit != null){
+		if (limit != null) {
 			query.limit(limit);
 		}
-		if(desc == null){
+		if (desc == null) {
 			query.descending(true);
-		}else{
+		} else {
 			query.descending(desc);
 		}
 
@@ -1293,13 +1292,13 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 	public void restoreContent(String repositoryId, Archive archive) {
 		if (archive.isDocument()) {
 			// Restore a content
-			CouchDocument cd = connectorPool.get(repositoryId)
-					.get(CouchDocument.class, archive.getOriginalId(), archive.getLastRevision());
+			CouchDocument cd = connectorPool.get(repositoryId).get(CouchDocument.class, archive.getOriginalId(),
+					archive.getLastRevision());
 			cd.setRevision(null);
 			connectorPool.get(repositoryId).update(cd);
 		} else if (archive.isFolder()) {
-			CouchFolder cf = connectorPool.get(repositoryId)
-					.get(CouchFolder.class, archive.getOriginalId(), archive.getLastRevision());
+			CouchFolder cf = connectorPool.get(repositoryId).get(CouchFolder.class, archive.getOriginalId(),
+					archive.getLastRevision());
 			cf.setRevision(null);
 			connectorPool.get(repositoryId).update(cf);
 		} else {
@@ -1313,8 +1312,8 @@ public class ContentDaoServiceImpl implements ContentDaoService {
 		CouchDbConnector connector = connectorPool.get(repositoryId);
 
 		// Restore its attachment
-		CouchAttachmentNode can = connector
-				.get(CouchAttachmentNode.class, archive.getOriginalId(), archive.getLastRevision());
+		CouchAttachmentNode can = connector.get(CouchAttachmentNode.class, archive.getOriginalId(),
+				archive.getLastRevision());
 		can.setRevision(null);
 		AttachmentInputStream is = connector.getAttachment(can.getId(), ATTACHMENT_NAME, archive.getLastRevision());
 		connector.createAttachment(can.getId(), can.getRevision(), is);

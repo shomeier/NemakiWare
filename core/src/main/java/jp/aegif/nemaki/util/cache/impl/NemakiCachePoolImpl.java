@@ -4,38 +4,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
-import jp.aegif.nemaki.util.PropertyManager;
 import jp.aegif.nemaki.util.SpringPropertyManager;
 import jp.aegif.nemaki.util.cache.CacheService;
 import jp.aegif.nemaki.util.cache.NemakiCachePool;
 
-public class NemakiCachePoolImpl implements NemakiCachePool{
+public class NemakiCachePoolImpl implements NemakiCachePool {
 
 	private Map<String, CacheService> pool = new HashMap<String, CacheService>();
 	private CacheService nullCache;
-	
+
 	private RepositoryInfoMap repositoryInfoMap;
 	private SpringPropertyManager propertyManager;
-	
+
 	public NemakiCachePoolImpl() {
-		
+
 	}
-	
-	public void init(){
-		for(String key : repositoryInfoMap.keys()){
+
+	public void init() {
+		for (String key : repositoryInfoMap.keys()) {
 			add(key);
 		}
-		
+
 		nullCache = new CacheService(null, propertyManager);
 	}
-	
+
 	@Override
 	public CacheService get(String repositoryId) {
 		CacheService cache = pool.get(repositoryId);
-		
-		if (cache == null){
+
+		if (cache == null) {
 			return nullCache;
-		}else{
+		} else {
 			return cache;
 		}
 	}
@@ -62,7 +61,7 @@ public class NemakiCachePoolImpl implements NemakiCachePool{
 
 	@Override
 	public void clearAll() {
-		for(String key : pool.keySet()){
+		for (String key : pool.keySet()) {
 			pool.put(key, new CacheService(key, propertyManager));
 		}
 	}

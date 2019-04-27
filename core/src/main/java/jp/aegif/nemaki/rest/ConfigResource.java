@@ -11,26 +11,20 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.stereotype.Component;
-
-
 
 import jp.aegif.nemaki.common.ErrorCode;
 import jp.aegif.nemaki.dao.ContentDaoService;
 import jp.aegif.nemaki.model.Configuration;
-import jp.aegif.nemaki.model.User;
 import jp.aegif.nemaki.util.PropertyManager;
 import jp.aegif.nemaki.util.lock.ThreadLockService;
 
 @Path("/repo/{repositoryId}/config")
-public class ConfigResource extends ResourceBase{
+public class ConfigResource extends ResourceBase {
 	private ContentDaoService contentDaoService;
 	private ThreadLockService threadLockService;
 	private PropertyManager propertyManager;
@@ -39,8 +33,7 @@ public class ConfigResource extends ResourceBase{
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String list(@PathParam("repositoryId") String repositoryId,
-			@Context HttpServletRequest httpRequest) {
+	public String list(@PathParam("repositoryId") String repositoryId, @Context HttpServletRequest httpRequest) {
 
 		boolean status = true;
 		JSONObject result = new JSONObject();
@@ -49,7 +42,7 @@ public class ConfigResource extends ResourceBase{
 
 		try {
 			Set<String> keys = propertyManager.getKeys();
-			for(String configKey : keys){
+			for (String configKey : keys) {
 				JSONObject config = createConfig(repositoryId, configKey);
 				configs.add(config);
 			}
@@ -88,29 +81,27 @@ public class ConfigResource extends ResourceBase{
 		return config;
 	}
 
-
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public String update(@PathParam("repositoryId") String repositoryId,
-			@FormParam("key") String key, @FormParam("value") String value,
-			@Context HttpServletRequest httpRequest) {
+	public String update(@PathParam("repositoryId") String repositoryId, @FormParam("key") String key,
+			@FormParam("value") String value, @Context HttpServletRequest httpRequest) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
 		Lock lock = threadLockService.getWriteLock(repositoryId, "configuration");
 		lock.lock();
-		try{
+		try {
 			Configuration conf = contentDaoService.getConfiguration(repositoryId);
 			Map<String, Object> map = conf.getConfiguration();
 			map.put(key, value);
 			conf.setConfiguration(map);
 			contentDaoService.update(repositoryId, conf);
-		}catch(Exception e){
+		} catch (Exception e) {
 			status = false;
 			e.printStackTrace();
 			addErrMsg(errMsg, ITEM_ERROR, ErrorCode.ERR_LIST);
-		}finally{
+		} finally {
 			lock.unlock();
 		}
 

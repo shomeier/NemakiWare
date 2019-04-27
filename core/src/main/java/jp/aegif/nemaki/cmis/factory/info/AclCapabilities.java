@@ -30,12 +30,6 @@ import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 
-import jp.aegif.nemaki.model.NemakiPermissionDefinition;
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.util.SpringPropertyManager;
-import jp.aegif.nemaki.util.YamlManager;
-import jp.aegif.nemaki.util.constant.PropertyKey;
-
 import org.apache.chemistry.opencmis.commons.data.PermissionMapping;
 import org.apache.chemistry.opencmis.commons.definitions.PermissionDefinition;
 import org.apache.chemistry.opencmis.commons.enums.AclPropagation;
@@ -46,6 +40,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import jp.aegif.nemaki.model.NemakiPermissionDefinition;
+import jp.aegif.nemaki.util.SpringPropertyManager;
+import jp.aegif.nemaki.util.YamlManager;
+import jp.aegif.nemaki.util.constant.PropertyKey;
+
 public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.dataobjects.AclCapabilitiesDataImpl {
 
 	private static final long serialVersionUID = 8654484629504222836L;
@@ -53,18 +52,17 @@ public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.
 
 	private List<NemakiPermissionDefinition> nemakiPermissions;
 	private SpringPropertyManager propertyManager;
-	
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		nemakiPermissions = readPermissionDefinitions();
-		
+
 		setSupportedPermissions(SupportedPermissions.BOTH);
 		setAclPropagation(AclPropagation.PROPAGATE);
 		setPermissionDefinitionData(buildPermissionDefinitions());
 		setPermissionMappingData(buildPermissionMaps());
 	}
 
-	
 	// //////////////////////////////////////////////////////////////////////////
 	// Permission Definitions
 	// //////////////////////////////////////////////////////////////////////////
@@ -72,7 +70,7 @@ public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.
 	private List<NemakiPermissionDefinition> readPermissionDefinitions() {
 		List<NemakiPermissionDefinition> results = new ArrayList<NemakiPermissionDefinition>();
 
-		//Get definition file
+		// Get definition file
 		String definitionFile = "";
 		try {
 			definitionFile = propertyManager.readValue(PropertyKey.PERMISSION_DEFINITION);
@@ -80,10 +78,9 @@ public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.
 			log.error("Cannot read a permission definition file", e);
 		}
 
-		//Parse definition file
+		// Parse definition file
 		YamlManager manager = new YamlManager(definitionFile);
-		List<Map<String, Object>> yml = (List<Map<String, Object>>) manager
-				.loadYml();
+		List<Map<String, Object>> yml = (List<Map<String, Object>>) manager.loadYml();
 		for (Map<String, Object> y : yml) {
 			NemakiPermissionDefinition cp = new NemakiPermissionDefinition(y);
 			results.add(cp);
@@ -91,7 +88,7 @@ public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.
 
 		return results;
 	}
-	
+
 	private List<PermissionDefinition> buildPermissionDefinitions() {
 		List<PermissionDefinition> permissions = new ArrayList<PermissionDefinition>();
 		for (NemakiPermissionDefinition np : nemakiPermissions) {
@@ -99,36 +96,34 @@ public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.
 		}
 		return permissions;
 	}
-	
-	public HashMap<String, String> getBasicPermissionConversion (){
+
+	public HashMap<String, String> getBasicPermissionConversion() {
 		HashMap<String, String> result = new HashMap<String, String>();
-		for(NemakiPermissionDefinition np : nemakiPermissions){
+		for (NemakiPermissionDefinition np : nemakiPermissions) {
 			result.put(np.getId(), np.getAsCmisBasicPermission());
 		}
 		return result;
 	}
-	
-	private PermissionDefinition createPermission(String permission,
-			String description) {
+
+	private PermissionDefinition createPermission(String permission, String description) {
 		PermissionDefinitionDataImpl pd = new PermissionDefinitionDataImpl();
 		pd.setId(permission);
 		pd.setDescription(description);
 		return pd;
 	}
-	
+
 	// //////////////////////////////////////////////////////////////////////////
 	// Permission Mappings
 	// //////////////////////////////////////////////////////////////////////////
 	private LinkedHashMap<String, PermissionMapping> buildPermissionMaps() {
-		LinkedHashMap<String, PermissionMapping> table
-			= new LinkedHashMap<String, PermissionMapping>();
+		LinkedHashMap<String, PermissionMapping> table = new LinkedHashMap<String, PermissionMapping>();
 
 		HashMap<String, ArrayList<String>> map = readPermissionMappingDefinitions();
 
-		//Build table
-		for(Entry<String, ArrayList<String>> entry : map.entrySet()){
-			//FIXME WORKAROUND: skip canCreatePolicy.Folder
-			if(PermissionMapping.CAN_CREATE_POLICY_FOLDER.equals(entry.getKey())){
+		// Build table
+		for (Entry<String, ArrayList<String>> entry : map.entrySet()) {
+			// FIXME WORKAROUND: skip canCreatePolicy.Folder
+			if (PermissionMapping.CAN_CREATE_POLICY_FOLDER.equals(entry.getKey())) {
 				continue;
 			}
 
@@ -139,42 +134,42 @@ public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.
 			table.put(mapping.getKey(), mapping);
 		}
 
-		//Add customized permissions to table
-		for(NemakiPermissionDefinition custom : nemakiPermissions){
+		// Add customized permissions to table
+		for (NemakiPermissionDefinition custom : nemakiPermissions) {
 			customizeTable(custom, table);
 		}
 
 		return table;
 	}
 
-	private  void customizeTable(NemakiPermissionDefinition custom, LinkedHashMap<String, PermissionMapping> table){
-		for(Entry<String, PermissionMapping> entry : table.entrySet()){
+	private void customizeTable(NemakiPermissionDefinition custom, LinkedHashMap<String, PermissionMapping> table) {
+		for (Entry<String, PermissionMapping> entry : table.entrySet()) {
 			String k = entry.getKey();
 			PermissionMapping pm = entry.getValue();
 
-			//Add where base exists
-			if(CollectionUtils.isNotEmpty(custom.getBase())){
-				//Check if any base is contained
+			// Add where base exists
+			if (CollectionUtils.isNotEmpty(custom.getBase())) {
+				// Check if any base is contained
 				boolean baseContained = false;
-				for(String base : custom.getBase()){
-					if(pm.getPermissions().contains(base)){
+				for (String base : custom.getBase()) {
+					if (pm.getPermissions().contains(base)) {
 						baseContained = true;
 						break;
 					}
 				}
 
-				//Check mapped flag
+				// Check mapped flag
 				Boolean mapped = custom.getPermissionMapping().get(k);
-				//Default to true
-				if(custom.getPermissionMapping().containsKey(k) && mapped == null){
+				// Default to true
+				if (custom.getPermissionMapping().containsKey(k) && mapped == null) {
 					mapped = true;
 				}
 
-				//Customize table
-				if(Boolean.TRUE == mapped || ((mapped == null) && baseContained)){
-					//Add without duplicate
+				// Customize table
+				if (Boolean.TRUE == mapped || ((mapped == null) && baseContained)) {
+					// Add without duplicate
 					boolean duplicate = pm.getPermissions().contains(custom.getId());
-					if(!duplicate){
+					if (!duplicate) {
 						List<String> permissions = new ArrayList<String>(pm.getPermissions());
 						permissions.add(custom.getId());
 
@@ -189,10 +184,10 @@ public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.
 
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private HashMap<String, ArrayList<String>> readPermissionMappingDefinitions(){
-		//Decide base definition file
+	private HashMap<String, ArrayList<String>> readPermissionMappingDefinitions() {
+		// Decide base definition file
 		String definitionFile = "";
 		try {
 			definitionFile = propertyManager.readValue(PropertyKey.PERMISSION_MAPPING_DEFINITION);
@@ -200,14 +195,14 @@ public class AclCapabilities extends org.apache.chemistry.opencmis.commons.impl.
 			log.error("Cannot read a permission mapping definition file", e);
 		}
 
-		//Get mapping info
+		// Get mapping info
 		YamlManager ymgr = new YamlManager(definitionFile);
 		Object yaml = ymgr.loadYml();
 
 		HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
-		try{
+		try {
 			map = (HashMap<String, ArrayList<String>>) yaml;
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.error(definitionFile + " is not well-formatted.", e);
 		}
 

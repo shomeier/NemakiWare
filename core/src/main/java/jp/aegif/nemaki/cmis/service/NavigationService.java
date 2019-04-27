@@ -41,18 +41,12 @@ public interface NavigationService {
 	/**
 	 * Gets the list of child objects contained in the specified folder.
 	 * 
-	 * @param repositoryId
-	 *            TODO
-	 * @param orderBy
-	 *            TODO
-	 * @param includeRelationships
-	 *            TODO
-	 * @param renditionFilter
-	 *            TODO
-	 * @param parentObjectData
-	 *            TODO
-	 * @param extension
-	 *            TODO
+	 * @param repositoryId         TODO
+	 * @param orderBy              TODO
+	 * @param includeRelationships TODO
+	 * @param renditionFilter      TODO
+	 * @param parentObjectData     TODO
+	 * @param extension            TODO
 	 */
 	public abstract ObjectInFolderList getChildren(@LogParam("callContext") CallContext callContext,
 			@LogParam("repositoryId") String repositoryId, @LogParam("folderId") String folderId,
@@ -66,32 +60,30 @@ public interface NavigationService {
 			@LogParam("extension") ExtensionsData extension);
 
 	/**
-	 * Gets the set of descendant objects contained in the specified folder or
-	 * any of its child folders.
+	 * Gets the set of descendant objects contained in the specified folder or any
+	 * of its child folders.
 	 * 
-	 * @param repositoryId
-	 *            TODO
-	 * @param includeRelationships
-	 *            TODO
-	 * @param renditionFilter
-	 *            TODO
-	 * @param extension
-	 *            TODO
-	 * @param anscestorObjectData
-	 *            TODO
+	 * @param repositoryId         TODO
+	 * @param includeRelationships TODO
+	 * @param renditionFilter      TODO
+	 * @param extension            TODO
+	 * @param anscestorObjectData  TODO
 	 */
 	public abstract List<ObjectInFolderContainer> getDescendants(@LogParam("callContext") CallContext callContext,
-			@LogParam("repositoryId") String repositoryId, @LogParam("folderId") String folderId, @LogParam("depth") BigInteger depth,
-			@LogParam("filter") String filter, @LogParam("includeAllowableActions") Boolean includeAllowableActions,
-			@LogParam("includeRelationships") IncludeRelationships includeRelationships, @LogParam("renditionFilter") String renditionFilter,
+			@LogParam("repositoryId") String repositoryId, @LogParam("folderId") String folderId,
+			@LogParam("depth") BigInteger depth, @LogParam("filter") String filter,
+			@LogParam("includeAllowableActions") Boolean includeAllowableActions,
+			@LogParam("includeRelationships") IncludeRelationships includeRelationships,
+			@LogParam("renditionFilter") String renditionFilter,
 			@LogParam("includePathSegment") Boolean includePathSegment, @LogParam("foldersOnly") boolean foldersOnly,
-			@LogParam("anscestorObjectData") Holder<ObjectData> anscestorObjectData, @LogParam("extension") ExtensionsData extension);
+			@LogParam("anscestorObjectData") Holder<ObjectData> anscestorObjectData,
+			@LogParam("extension") ExtensionsData extension);
 
 	/**
 	 * Gets the parent folder object for the specified folder object.
-	 * @param repositoryId
-	 *            TODO
-	 * @param extension TODO
+	 * 
+	 * @param repositoryId TODO
+	 * @param extension    TODO
 	 */
 	public abstract ObjectData getFolderParent(@LogParam("callContext") CallContext callContext,
 			@LogParam("repositoryId") String repositoryId, @LogParam("folderId") String folderId,
@@ -100,14 +92,10 @@ public interface NavigationService {
 	/**
 	 * Gets the parent folder(s) for the specified non-folder, fileable object.
 	 * 
-	 * @param repositoryId
-	 *            TODO
-	 * @param includeRelationships
-	 *            TODO
-	 * @param renditionFilter
-	 *            TODO
-	 * @param extension
-	 *            TODO
+	 * @param repositoryId         TODO
+	 * @param includeRelationships TODO
+	 * @param renditionFilter      TODO
+	 * @param extension            TODO
 	 */
 	public abstract List<ObjectParentData> getObjectParents(@LogParam("callContext") CallContext callContext,
 			@LogParam("repositoryId") String repositoryId, @LogParam("objectId") String objectId,

@@ -23,6 +23,8 @@ package jp.aegif.nemaki.dao;
 
 import java.util.List;
 
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
+
 import jp.aegif.nemaki.model.Archive;
 import jp.aegif.nemaki.model.AttachmentNode;
 import jp.aegif.nemaki.model.Change;
@@ -43,8 +45,6 @@ import jp.aegif.nemaki.model.Rendition;
 import jp.aegif.nemaki.model.UserItem;
 import jp.aegif.nemaki.model.VersionSeries;
 
-import org.apache.chemistry.opencmis.commons.data.ContentStream;
-
 /**
  * Dao Service implementation for CouchDB.
  *
@@ -57,6 +57,7 @@ public interface ContentDaoService {
 	// ///////////////////////////////////////
 	/**
 	 * Get user-defined type definitions
+	 * 
 	 * @param repositoryId TODO
 	 *
 	 * @return if nothing found, return null
@@ -64,8 +65,8 @@ public interface ContentDaoService {
 	List<NemakiTypeDefinition> getTypeDefinitions(String repositoryId);
 
 	/**
-	 * Get user-defined type definition
-	 * for internal use(cached service) only
+	 * Get user-defined type definition for internal use(cached service) only
+	 * 
 	 * @param repositoryId TODO
 	 * @param typeId
 	 * @return
@@ -74,7 +75,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Create a user-defined type definition
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId   TODO
 	 * @param typeDefinition
 	 * @return
 	 */
@@ -82,7 +84,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Update a user-defined type definition
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId   TODO
 	 * @param typeDefinition
 	 *
 	 * @return
@@ -91,7 +94,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Delete a user-defined type definition
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId   TODO
 	 * @param typeDefinition
 	 *
 	 * @return
@@ -100,14 +104,16 @@ public interface ContentDaoService {
 
 	/**
 	 * List up user-defined property definitions
+	 * 
 	 * @param repositoryId TODO
 	 * @return
 	 */
 	List<NemakiPropertyDefinitionCore> getPropertyDefinitionCores(String repositoryId);
 
 	/**
-	 * Get the core of user-defined property definition
-	 * That is, propertyId, proeprtyType, queryName, cardinality
+	 * Get the core of user-defined property definition That is, propertyId,
+	 * proeprtyType, queryName, cardinality
+	 * 
 	 * @param repositoryId TODO
 	 * @param nodeId
 	 * @return
@@ -115,8 +121,9 @@ public interface ContentDaoService {
 	NemakiPropertyDefinitionCore getPropertyDefinitionCore(String repositoryId, String nodeId);
 
 	/**
-	 * Get the core of user-defined property definition by proeprtyId
-	 * That is, propertyId, proeprtyType, queryName, cardinality
+	 * Get the core of user-defined property definition by proeprtyId That is,
+	 * propertyId, proeprtyType, queryName, cardinality
+	 * 
 	 * @param repositoryId TODO
 	 * @param nodeId
 	 * @return
@@ -124,8 +131,9 @@ public interface ContentDaoService {
 	NemakiPropertyDefinitionCore getPropertyDefinitionCoreByPropertyId(String repositoryId, String propertyId);
 
 	/**
-	 * Get a user-defined property definition detail
-	 * That is, all the other attributes than core
+	 * Get a user-defined property definition detail That is, all the other
+	 * attributes than core
+	 * 
 	 * @param repositoryId TODO
 	 * @param nodeId
 	 * @return if nothing found, return null
@@ -133,44 +141,53 @@ public interface ContentDaoService {
 	NemakiPropertyDefinitionDetail getPropertyDefinitionDetail(String repositoryId, String nodeId);
 
 	/**
-	 * Get a user-defined property definition detail by coreNodeId
-	 * That is, all the other attributes than core
+	 * Get a user-defined property definition detail by coreNodeId That is, all the
+	 * other attributes than core
+	 * 
 	 * @param repositoryId TODO
 	 * @param nodeId
 	 * @return if nothing found, return null
 	 */
-	List<NemakiPropertyDefinitionDetail> getPropertyDefinitionDetailByCoreNodeId(String repositoryId, String coreNodeId);
+	List<NemakiPropertyDefinitionDetail> getPropertyDefinitionDetailByCoreNodeId(String repositoryId,
+			String coreNodeId);
 
 	/**
 	 * Create a user-defined property definition core
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId           TODO
 	 * @param propertyDefinitionCore
 	 * @return
 	 */
-	NemakiPropertyDefinitionCore createPropertyDefinitionCore(String repositoryId, NemakiPropertyDefinitionCore propertyDefinitionCore);
+	NemakiPropertyDefinitionCore createPropertyDefinitionCore(String repositoryId,
+			NemakiPropertyDefinitionCore propertyDefinitionCore);
 
 	/**
 	 * Create a user-defined property definition detail
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId             TODO
 	 * @param propertyDefinitionDetail
 	 * @return
 	 */
-	NemakiPropertyDefinitionDetail createPropertyDefinitionDetail(String repositoryId, NemakiPropertyDefinitionDetail propertyDefinitionDetail);
+	NemakiPropertyDefinitionDetail createPropertyDefinitionDetail(String repositoryId,
+			NemakiPropertyDefinitionDetail propertyDefinitionDetail);
 
 	/**
 	 * Update a user-defined property definition
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId       TODO
 	 * @param propertyDefinition
 	 *
 	 * @return
 	 */
-	NemakiPropertyDefinitionDetail updatePropertyDefinitionDetail(String repositoryId, NemakiPropertyDefinitionDetail propertyDefinitionDetail);
+	NemakiPropertyDefinitionDetail updatePropertyDefinitionDetail(String repositoryId,
+			NemakiPropertyDefinitionDetail propertyDefinitionDetail);
 
 	// ///////////////////////////////////////
 	// Content
 	// ///////////////////////////////////////
 	/**
 	 * Get a node
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -180,6 +197,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a content Result will be return as Content class
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -189,6 +207,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Check if there are any object of the specified object type
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectTypeId
 	 * @return
@@ -197,6 +216,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a document
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -206,7 +226,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a list of checked out documents in a folder
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId   TODO
 	 * @param parentFolderId
 	 *
 	 * @return if nothing found, return null
@@ -215,6 +236,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a version series
+	 * 
 	 * @param repositoryId TODO
 	 * @param nodeId
 	 *
@@ -224,7 +246,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Get the latest version of a document
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId    TODO
 	 * @param versionSeriesId
 	 *
 	 * @return if nothing found, return null
@@ -233,7 +256,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Get the latest major version of a document
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId    TODO
 	 * @param versionSeriesId
 	 *
 	 * @return if nothing found, return null
@@ -242,7 +266,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Get all the version series
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId    TODO
 	 * @param versionSeriesId
 	 *
 	 * @return
@@ -251,6 +276,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a folder
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -260,6 +286,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a folder by path
+	 * 
 	 * @param repositoryId TODO
 	 * @param path
 	 *
@@ -268,8 +295,9 @@ public interface ContentDaoService {
 	Folder getFolderByPath(String repositoryId, String path);
 
 	/**
-	 * Get all the contents in a folder (as contents, that is, as indices)
-	 * Documents are limited to the latest versions
+	 * Get all the contents in a folder (as contents, that is, as indices) Documents
+	 * are limited to the latest versions
+	 * 
 	 * @param repositoryId TODO
 	 * @param parentId
 	 *
@@ -279,6 +307,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a child content by name
+	 * 
 	 * @param repositoryId TODO
 	 * @param parentId
 	 * @param name
@@ -289,6 +318,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get children name index in a folder
+	 * 
 	 * @param repositoryId
 	 * @param parentId
 	 * @return
@@ -297,6 +327,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a relationship
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -306,6 +337,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a relationship by Source ID
+	 * 
 	 * @param repositoryId TODO
 	 * @param sourceId
 	 *
@@ -315,6 +347,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a relationship by Target ID
+	 * 
 	 * @param repositoryId TODO
 	 * @param targetId
 	 *
@@ -324,6 +357,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a policy
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -333,6 +367,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get a policy applied to an object
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -342,6 +377,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get an item
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -350,19 +386,26 @@ public interface ContentDaoService {
 	Item getItem(String repositoryId, String objectId);
 
 	UserItem getUserItem(String repositoryId, String objectId);
+
 	UserItem getUserItemById(String repositoryId, String userId);
+
 	List<UserItem> getUserItems(String repositoryId);
 
 	GroupItem getGroupItem(String repositoryId, String objectId);
+
 	GroupItem getGroupItemById(String repositoryId, String userId);
+
 	List<GroupItem> getGroupItems(String repositoryId);
+
 	List<String> getJoinedGroupByUserId(String repositoryId, String userId);
 
 	PatchHistory getPatchHistoryByName(String repositoryId, String name);
+
 	Configuration getConfiguration(String repositoryId);
 
 	/**
 	 * Create a document
+	 * 
 	 * @param repositoryId TODO
 	 * @param document
 	 *
@@ -372,7 +415,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Create a version series
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId  TODO
 	 * @param versionSeries
 	 *
 	 * @return the newly created version series
@@ -381,6 +425,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Create a folder
+	 * 
 	 * @param repositoryId TODO
 	 * @param folder
 	 *
@@ -390,6 +435,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Create a relationship
+	 * 
 	 * @param repositoryId TODO
 	 * @param relationship
 	 *
@@ -399,6 +445,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Create a policy
+	 * 
 	 * @param repositoryId TODO
 	 * @param policy
 	 *
@@ -408,6 +455,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Create an item
+	 * 
 	 * @param repositoryId TODO
 	 * @param policy
 	 *
@@ -416,15 +464,18 @@ public interface ContentDaoService {
 	Item create(String repositoryId, Item item);
 
 	UserItem create(String repositoryId, UserItem userItem);
+
 	GroupItem create(String repositoryId, GroupItem groupItem);
 
 	PatchHistory create(String repositoryId, PatchHistory patchHistory);
+
 	Configuration create(String repositoryId, Configuration configuration);
 
 	NodeBase create(String repositoryId, NodeBase nodeBase);
 
 	/**
 	 * Update a document
+	 * 
 	 * @param repositoryId TODO
 	 * @param document
 	 *
@@ -436,7 +487,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Update a version series
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId  TODO
 	 * @param versionSeries
 	 *
 	 * @return the newly updated version series
@@ -445,6 +497,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Update a folder
+	 * 
 	 * @param repositoryId TODO
 	 * @param folder
 	 *
@@ -456,6 +509,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Update a relationship
+	 * 
 	 * @param repositoryId TODO
 	 * @param relationship
 	 *
@@ -465,6 +519,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Update a relationship
+	 * 
 	 * @param repositoryId TODO
 	 * @param relationship
 	 *
@@ -474,6 +529,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Update an item
+	 * 
 	 * @param repositoryId TODO
 	 * @param policy
 	 *
@@ -482,6 +538,7 @@ public interface ContentDaoService {
 	Item update(String repositoryId, Item item);
 
 	UserItem update(String repositoryId, UserItem userItem);
+
 	GroupItem update(String repositoryId, GroupItem groupItem);
 
 	PatchHistory update(String repositoryId, PatchHistory patchHistory);
@@ -492,6 +549,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Delete a content
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 */
@@ -501,8 +559,8 @@ public interface ContentDaoService {
 	// Attachment
 	// ///////////////////////////////////////
 	/**
-	 * Get an attachment(without InputStream)
-	 * for non-cached service only
+	 * Get an attachment(without InputStream) for non-cached service only
+	 * 
 	 * @param repositoryId TODO
 	 * @param attachmentId
 	 * @return if nothing found, return null
@@ -510,15 +568,16 @@ public interface ContentDaoService {
 	AttachmentNode getAttachment(String repositoryId, String attachmentId);
 
 	/**
-	 * Set InputStream
-	 * for non-cached service only
-	 * @param repositoryId TODO
+	 * Set InputStream for non-cached service only
+	 * 
+	 * @param repositoryId   TODO
 	 * @param attachmentNode
 	 */
 	void setStream(String repositoryId, AttachmentNode attachmentNode);
 
 	/**
 	 * Get a rendition
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -528,7 +587,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Create a rendition
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId  TODO
 	 * @param rendition
 	 * @param contentStream
 	 * @return
@@ -537,7 +597,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Create an attachment
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId  TODO
 	 * @param attachment
 	 * @param contentStream
 	 *
@@ -546,9 +607,9 @@ public interface ContentDaoService {
 	String createAttachment(String repositoryId, AttachmentNode attachment, ContentStream cs);
 
 	/**
-	 * Update an attachment
-	 * (replace an existing attachment)
-	 * @param repositoryId TODO
+	 * Update an attachment (replace an existing attachment)
+	 * 
+	 * @param repositoryId  TODO
 	 * @param attachment
 	 * @param contentStream
 	 */
@@ -559,7 +620,8 @@ public interface ContentDaoService {
 	// ///////////////////////////////////////
 	/**
 	 * Get a change event
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId  TODO
 	 * @param changeTokenId
 	 *
 	 * @return if nothing found, return null
@@ -568,6 +630,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get the latest change event in the repository
+	 * 
 	 * @param repositoryId TODO
 	 *
 	 * @return if nothing found, return null
@@ -576,11 +639,10 @@ public interface ContentDaoService {
 
 	/**
 	 * Get latest change events
-	 * @param repositoryId TODO
-	 * @param maxItems
-	 *            "<= 0" means "infinite"
-	 * @param latestChangeToken
-	 *            "<= 0" means "From the beginning"
+	 * 
+	 * @param repositoryId      TODO
+	 * @param maxItems          "<= 0" means "infinite"
+	 * @param latestChangeToken "<= 0" means "From the beginning"
 	 *
 	 * @return Return results with descending order by time
 	 */
@@ -596,6 +658,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Create a change event
+	 * 
 	 * @param repositoryId TODO
 	 * @param change
 	 *
@@ -608,6 +671,7 @@ public interface ContentDaoService {
 	// ///////////////////////////////////////
 	/**
 	 * Get an archive
+	 * 
 	 * @param repositoryId TODO
 	 * @param archiveId
 	 *
@@ -617,6 +681,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get an archive by its original content's object ID
+	 * 
 	 * @param repositoryId TODO
 	 * @param originalId
 	 *
@@ -626,6 +691,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get an archive of an attachment
+	 * 
 	 * @param repositoryId TODO
 	 * @param archive
 	 *
@@ -635,6 +701,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get archives of the children of the original folder
+	 * 
 	 * @param repositoryId TODO
 	 * @param archive
 	 *
@@ -644,7 +711,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Get an archive of a version series
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId    TODO
 	 * @param versionSeriesId
 	 *
 	 * @return if nothing found, return null
@@ -653,6 +721,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Get all the archives in the repository
+	 * 
 	 * @param repositoryId TODO
 	 *
 	 * @return if nothing found, return null
@@ -663,7 +732,8 @@ public interface ContentDaoService {
 
 	/**
 	 * Create an archive of a content
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId     TODO
 	 * @param archive
 	 * @param deleteWithParent
 	 *
@@ -673,6 +743,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Create an archive of an attachment
+	 * 
 	 * @param repositoryId TODO
 	 * @param archive
 	 *
@@ -682,6 +753,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Delete an archive
+	 * 
 	 * @param repositoryId TODO
 	 * @param archiveId
 	 */
@@ -693,6 +765,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Restore a content from its archive
+	 * 
 	 * @param repositoryId TODO
 	 * @param archive
 	 */
@@ -700,6 +773,7 @@ public interface ContentDaoService {
 
 	/**
 	 * Restore an attachment from its archive
+	 * 
 	 * @param repositoryId TODO
 	 * @param archive
 	 */

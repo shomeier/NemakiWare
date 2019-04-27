@@ -22,12 +22,12 @@
 
 package jp.aegif.nemaki.model;
 
-import jp.aegif.nemaki.util.constant.NodeType;
-
 import org.apache.chemistry.opencmis.commons.enums.Cardinality;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 
-public class NemakiPropertyDefinitionCore extends NodeBase{
+import jp.aegif.nemaki.util.constant.NodeType;
+
+public class NemakiPropertyDefinitionCore extends NodeBase {
 	private String propertyId;
 	private PropertyType propertyType;
 	private String queryName;
@@ -47,7 +47,7 @@ public class NemakiPropertyDefinitionCore extends NodeBase{
 		setModifier(n.getModifier());
 	}
 
-	public NemakiPropertyDefinitionCore(NemakiPropertyDefinition p){
+	public NemakiPropertyDefinitionCore(NemakiPropertyDefinition p) {
 		setType(NodeType.PROPERTY_DEFINITION_CORE.value());
 		setPropertyId(p.getPropertyId());
 		setPropertyType(p.getPropertyType());
@@ -58,24 +58,31 @@ public class NemakiPropertyDefinitionCore extends NodeBase{
 	public String getPropertyId() {
 		return propertyId;
 	}
+
 	public void setPropertyId(String propertyId) {
 		this.propertyId = propertyId;
 	}
+
 	public PropertyType getPropertyType() {
 		return propertyType;
 	}
+
 	public void setPropertyType(PropertyType propertyType) {
 		this.propertyType = propertyType;
 	}
+
 	public String getQueryName() {
 		return queryName;
 	}
+
 	public void setQueryName(String queryName) {
 		this.queryName = queryName;
 	}
+
 	public Cardinality getCardinality() {
 		return cardinality;
 	}
+
 	public void setCardinality(Cardinality cardinality) {
 		this.cardinality = cardinality;
 	}

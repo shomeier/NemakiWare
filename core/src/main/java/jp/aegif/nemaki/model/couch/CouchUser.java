@@ -21,13 +21,11 @@
  ******************************************************************************/
 package jp.aegif.nemaki.model.couch;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import jp.aegif.nemaki.model.User;
 
-public class CouchUser extends CouchNodeBase{
+public class CouchUser extends CouchNodeBase {
 
 	private static final long serialVersionUID = -77254842849407974L;
 	private String userId;
@@ -43,7 +41,7 @@ public class CouchUser extends CouchNodeBase{
 		super();
 	}
 
-	public CouchUser(User u){
+	public CouchUser(User u) {
 		super(u);
 		setUserId(u.getUserId());
 		setName(u.getName());
@@ -120,7 +118,7 @@ public class CouchUser extends CouchNodeBase{
 	}
 
 	@Override
-	public User convert(){
+	public User convert() {
 		User u = new User(super.convert());
 		u.setUserId(getUserId());
 		u.setName(getName());

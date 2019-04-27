@@ -19,68 +19,68 @@ import jp.aegif.nemaki.model.User;
 import jp.aegif.nemaki.util.PropertyManager;
 import jp.aegif.nemaki.util.constant.PropertyKey;
 
-public class TokenServiceImpl implements TokenService{
-	
-	private static final Log log = LogFactory
-             .getLog(TokenServiceImpl.class);
+public class TokenServiceImpl implements TokenService {
+
+	private static final Log log = LogFactory.getLog(TokenServiceImpl.class);
 	private PropertyManager propertyManager;
 	private ContentService contentService;
 	private PrincipalService principalService;
 	private RepositoryInfoMap repositoryInfoMap;
-	
+
 	private TokenMap tokenMap = new TokenMap();
 	private Map<String, List<String>> admins = new HashMap<String, List<String>>();
-	
+
 	private class TokenMap {
-		private Map<String, Map<String, Map<String, Token>>> map = new HashMap<String, Map<String,Map<String,Token>>>();
-		
-		private Token get(String app, String repositoryId, String userName){
+		private Map<String, Map<String, Map<String, Token>>> map = new HashMap<String, Map<String, Map<String, Token>>>();
+
+		private Token get(String app, String repositoryId, String userName) {
 			Map<String, Map<String, Token>> appMap = map.get(app);
-			if(appMap == null){
+			if (appMap == null) {
 				log.warn(String.format("No such app(%s) registered for AuthToken", app));
 				return null;
-			}else{
-				 Map<String, Token> repoMap = appMap.get(repositoryId);
-				 if(repoMap == null){
-					 log.warn(String.format("No such repositoryId(%s) registered for AuthToken", repositoryId));
-					 log.warn("app: " + app + " user: " + userName);
-					 log.warn("appMap: "+appMap.toString());
-					 return null;
-				 }else{
-					 return repoMap.get(userName);
-				 }
+			} else {
+				Map<String, Token> repoMap = appMap.get(repositoryId);
+				if (repoMap == null) {
+					log.warn(String.format("No such repositoryId(%s) registered for AuthToken", repositoryId));
+					log.warn("app: " + app + " user: " + userName);
+					log.warn("appMap: " + appMap.toString());
+					return null;
+				} else {
+					return repoMap.get(userName);
+				}
 			}
 		}
-		
-		private Token set(String app, String repositoryId, String userName){
+
+		private Token set(String app, String repositoryId, String userName) {
 			Map<String, Map<String, Token>> appMap = map.get(app);
-			if(appMap == null){
+			if (appMap == null) {
 				map.put(app, new HashMap<String, Map<String, Token>>());
 				appMap = map.get(app);
 			}
-			
+
 			Map<String, Token> repoMap = appMap.get(repositoryId);
-			if(repoMap == null){
+			if (repoMap == null) {
 				appMap.put(repositoryId, new HashMap<String, Token>());
 				repoMap = appMap.get(repositoryId);
 			}
-			
+
 			String token = UUID.randomUUID().toString();
-			
-			long expiration = System.currentTimeMillis() + Long.valueOf(propertyManager.readValue(PropertyKey.AUTH_TOKEN_EXPIRATION));
+
+			long expiration = System.currentTimeMillis()
+					+ Long.valueOf(propertyManager.readValue(PropertyKey.AUTH_TOKEN_EXPIRATION));
 			repoMap.put(userName, new Token(userName, token, expiration));
-			
+
 			return repoMap.get(userName);
 		}
 	}
-	
+
 	public void init() {
-		for(String key : repositoryInfoMap.keys()){
-			//extract admin ids
-			List<User>admins = principalService.getAdmins(key);
-			List<String>userIds = new ArrayList<String>();
-			if(CollectionUtils.isNotEmpty(admins)){
-				for(User admin : admins){
+		for (String key : repositoryInfoMap.keys()) {
+			// extract admin ids
+			List<User> admins = principalService.getAdmins(key);
+			List<String> userIds = new ArrayList<String>();
+			if (CollectionUtils.isNotEmpty(admins)) {
+				for (User admin : admins) {
 					userIds.add(admin.getUserId());
 				}
 			}
@@ -96,18 +96,18 @@ public class TokenServiceImpl implements TokenService{
 
 	@Override
 	public Token setToken(String app, String repositoryId, String userId) {
-		return tokenMap.set(app,repositoryId,  userId);
+		return tokenMap.set(app, repositoryId, userId);
 	}
-	
+
 	@Override
-	public boolean isAdmin(String repositoryId, String userId){
+	public boolean isAdmin(String repositoryId, String userId) {
 		return admins.get(repositoryId).contains(userId);
 	}
-	
+
 	public void setPropertyManager(PropertyManager propertyManager) {
 		this.propertyManager = propertyManager;
 	}
-	
+
 	public void setContentService(ContentService contentService) {
 		this.contentService = contentService;
 	}

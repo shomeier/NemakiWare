@@ -64,7 +64,7 @@ public class CouchConnector {
 	private int connectionTimeout;
 
 	private int socketTimeout;
-	
+
 	private boolean authEnabled;
 	private String authUserName;
 	private String authPassword;
@@ -73,21 +73,16 @@ public class CouchConnector {
 	 * Initialize this class with host, maxConnections.
 	 */
 	public void init() {
-		Builder builder = new StdHttpClient.Builder()
-		.host(host)
-		.port(port)
-		.maxConnections(maxConnections)
-		.connectionTimeout(connectionTimeout)
-		.socketTimeout(socketTimeout)
-		.cleanupIdleConnections(true);
-		
-		if(authEnabled){
+		Builder builder = new StdHttpClient.Builder().host(host).port(port).maxConnections(maxConnections)
+				.connectionTimeout(connectionTimeout).socketTimeout(socketTimeout).cleanupIdleConnections(true);
+
+		if (authEnabled) {
 			builder.username(authUserName).password(authPassword);
 		}
-		
+
 		HttpClient httpClient = builder.build();
 		CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-		
+
 		String repo = "";
 		try {
 			repo = repositoryId;
@@ -100,7 +95,7 @@ public class CouchConnector {
 	public CouchDbConnector getConnection() {
 		return connector;
 	}
-	
+
 	public void setRepositoryId(String repositoryId) {
 		this.repositoryId = repositoryId;
 	}
@@ -136,5 +131,5 @@ public class CouchConnector {
 	public void setAuthPassword(String authPassword) {
 		this.authPassword = authPassword;
 	}
-	
+
 }

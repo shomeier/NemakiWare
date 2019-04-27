@@ -60,9 +60,8 @@ import jp.aegif.nemaki.model.GroupItem;
 import jp.aegif.nemaki.model.UserItem;
 import jp.aegif.nemaki.util.constant.SystemConst;
 
-
 @Path("/repo/{repositoryId}/group")
-public class GroupItemResource extends ResourceBase{
+public class GroupItemResource extends ResourceBase {
 
 	private ContentService contentService;
 
@@ -70,30 +69,30 @@ public class GroupItemResource extends ResourceBase{
 	@GET
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String search(@PathParam("repositoryId") String repositoryId, @QueryParam("query") String query){
+	public String search(@PathParam("repositoryId") String repositoryId, @QueryParam("query") String query) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
 		List<GroupItem> groups = contentService.getGroupItems(repositoryId);
-		if(groups == null) groups = new ArrayList<>();
+		if (groups == null)
+			groups = new ArrayList<>();
 		JSONArray queriedGroups = new JSONArray();
 
-		for(GroupItem g : groups) {
-			if ( g.getGroupId().contains(query)|| g.getName().contains(query)) {
-				if(queriedGroups.size()<50){
+		for (GroupItem g : groups) {
+			if (g.getGroupId().contains(query) || g.getName().contains(query)) {
+				if (queriedGroups.size() < 50) {
 					queriedGroups.add(this.convertGroupToJson(g));
-				}else{
+				} else {
 					break;
 				}
 			}
 		}
 
-		if( queriedGroups.size() == 0 ){
+		if (queriedGroups.size() == 0) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_NOTFOUND);
-		}
-		else {
+		} else {
 			result.put("result", queriedGroups);
 		}
 
@@ -105,21 +104,21 @@ public class GroupItemResource extends ResourceBase{
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String list(@PathParam("repositoryId") String repositoryId){
+	public String list(@PathParam("repositoryId") String repositoryId) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray listJSON = new JSONArray();
 		JSONArray errMsg = new JSONArray();
 
 		List<GroupItem> groupList;
-		try{
+		try {
 			groupList = contentService.getGroupItems(repositoryId);
-			for(GroupItem group : groupList){
+			for (GroupItem group : groupList) {
 				JSONObject groupJSON = convertGroupToJson(group);
 				listJSON.add(groupJSON);
 			}
 			result.put(ITEM_ALLGROUPS, listJSON);
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			addErrMsg(errMsg, ITEM_ALLGROUPS, ErrorCode.ERR_LIST);
 		}
@@ -131,16 +130,16 @@ public class GroupItemResource extends ResourceBase{
 	@GET
 	@Path("/show/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String show(@PathParam("repositoryId") String repositoryId, @PathParam("id") String groupId){
+	public String show(@PathParam("repositoryId") String repositoryId, @PathParam("id") String groupId) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
 		GroupItem group = contentService.getGroupItemById(repositoryId, groupId);
-		if(group == null){
+		if (group == null) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_NOTFOUND);
-		}else{
+		} else {
 			result.put("group", convertGroupToJson(group));
 		}
 		makeResult(status, result, errMsg);
@@ -152,35 +151,31 @@ public class GroupItemResource extends ResourceBase{
 	@Path("/create/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String create(@PathParam("repositoryId") String repositoryId,
-						 @PathParam("id") String groupId,
-						 @FormParam(FORM_GROUPNAME) String name,
-						 @FormParam(FORM_MEMBER_USERS) String users,
-						 @FormParam(FORM_MEMBER_GROUPS) String groups,
-						 @Context HttpServletRequest httpRequest
-						 ){
+	public String create(@PathParam("repositoryId") String repositoryId, @PathParam("id") String groupId,
+			@FormParam(FORM_GROUPNAME) String name, @FormParam(FORM_MEMBER_USERS) String users,
+			@FormParam(FORM_MEMBER_GROUPS) String groups, @Context HttpServletRequest httpRequest) {
 
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
-		//Validation
+		// Validation
 		status = validateNewGroup(repositoryId, status, errMsg, groupId, name);
 
-		//Create a group
-		if(status){
-			try{
-				//Edit group info
+		// Create a group
+		if (status) {
+			try {
+				// Edit group info
 				JSONArray _users = StringUtils.isBlank(users) ? new JSONArray() : parseJsonArray(users);
-				JSONArray _groups = StringUtils.isBlank(groups) ? new JSONArray() :  parseJsonArray(groups);
+				JSONArray _groups = StringUtils.isBlank(groups) ? new JSONArray() : parseJsonArray(groups);
 
-				GroupItem group = new GroupItem(null, NemakiObjectType.nemakiGroup, groupId,  name, _users, _groups);
+				GroupItem group = new GroupItem(null, NemakiObjectType.nemakiGroup, groupId, name, _users, _groups);
 				final Folder groupsFolder = getOrCreateSystemSubFolder(repositoryId, "groups");
 				group.setParentId(groupsFolder.getId());
 				setFirstSignature(httpRequest, group);
 
 				contentService.createGroupItem(new SystemCallContext(repositoryId), repositoryId, group);
-			}catch(Exception ex){
+			} catch (Exception ex) {
 				ex.printStackTrace();
 				status = false;
 				addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_CREATE);
@@ -190,16 +185,16 @@ public class GroupItemResource extends ResourceBase{
 		return result.toString();
 	}
 
-	//TODO this is a copy & paste method.
-	private Folder getOrCreateSystemSubFolder(String repositoryId, String name){
+	// TODO this is a copy & paste method.
+	private Folder getOrCreateSystemSubFolder(String repositoryId, String name) {
 		Folder systemFolder = contentService.getSystemFolder(repositoryId);
 
 		// check existing folder
 		List<Content> children = contentService.getChildren(repositoryId, systemFolder.getId());
-		if(CollectionUtils.isNotEmpty(children)){
-			for(Content child : children){
-				if(ObjectUtils.equals(name, child.getName())){
-					return (Folder)child;
+		if (CollectionUtils.isNotEmpty(children)) {
+			for (Content child : children) {
+				if (ObjectUtils.equals(name, child.getName())) {
+					return (Folder) child;
 				}
 			}
 		}
@@ -209,7 +204,8 @@ public class GroupItemResource extends ResourceBase{
 		properties.addProperty(new PropertyStringImpl("cmis:name", name));
 		properties.addProperty(new PropertyIdImpl("cmis:objectTypeId", "cmis:folder"));
 		properties.addProperty(new PropertyIdImpl("cmis:baseTypeId", "cmis:folder"));
-		Folder _target = contentService.createFolder(new SystemCallContext(repositoryId), repositoryId, properties, systemFolder, null, null, null, null);
+		Folder _target = contentService.createFolder(new SystemCallContext(repositoryId), repositoryId, properties,
+				systemFolder, null, null, null, null);
 		return _target;
 	}
 
@@ -217,40 +213,37 @@ public class GroupItemResource extends ResourceBase{
 	@Path("/update/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String update(@PathParam("repositoryId") String repositoryId,
-						 @PathParam("id") String groupId,
-						 @FormParam(FORM_GROUPNAME) String name,
-						 @FormParam(FORM_MEMBER_USERS) String users,
-						 @FormParam(FORM_MEMBER_GROUPS) String groups,
-						 @Context HttpServletRequest httpRequest){
+	public String update(@PathParam("repositoryId") String repositoryId, @PathParam("id") String groupId,
+			@FormParam(FORM_GROUPNAME) String name, @FormParam(FORM_MEMBER_USERS) String users,
+			@FormParam(FORM_MEMBER_GROUPS) String groups, @Context HttpServletRequest httpRequest) {
 
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
-		//Existing group
+		// Existing group
 		GroupItem group = contentService.getGroupItemById(repositoryId, groupId);
 		if (group == null) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_NOTFOUND);
 		}
 
-		//Validation
+		// Validation
 		status = validateGroup(status, errMsg, groupId, name);
 
-		//Edit & Update
-		if(status){
-			//Edit group info
-			//if a parameter is not input, it won't be modified.
+		// Edit & Update
+		if (status) {
+			// Edit group info
+			// if a parameter is not input, it won't be modified.
 			group.setGroupId(groupId);
 			group.setName(name);
-			group.setUsers(users == null ? new JSONArray() :  parseJsonArray(users));
-			group.setGroups(groups  == null ? new JSONArray() : parseJsonArray(groups));
+			group.setUsers(users == null ? new JSONArray() : parseJsonArray(users));
+			group.setGroups(groups == null ? new JSONArray() : parseJsonArray(groups));
 			setModifiedSignature(httpRequest, group);
 
-			try{
+			try {
 				contentService.update(new SystemCallContext(repositoryId), repositoryId, group);
-			}catch(Exception ex){
+			} catch (Exception ex) {
 				ex.printStackTrace();
 				status = false;
 				addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_UPDATE);
@@ -264,25 +257,24 @@ public class GroupItemResource extends ResourceBase{
 	@Path("/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String delete(@PathParam("repositoryId") String repositoryId,
-			@PathParam("id") String groupId){
+	public String delete(@PathParam("repositoryId") String repositoryId, @PathParam("id") String groupId) {
 
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
-		//Existing group
+		// Existing group
 		GroupItem group = contentService.getGroupItemById(repositoryId, groupId);
-		if(group == null){
+		if (group == null) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_NOTFOUND);
 		}
 
-		//Delete the group
-		if(status){
-			try{
+		// Delete the group
+		if (status) {
+			try {
 				contentService.delete(new SystemCallContext(repositoryId), repositoryId, group.getId(), false);
-			}catch(Exception ex){
+			} catch (Exception ex) {
 				addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_DELETE);
 			}
 		}
@@ -294,52 +286,49 @@ public class GroupItemResource extends ResourceBase{
 	@Path("/{apiType: add|remove}/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String updateMembers(@PathParam("repositoryId") String repositoryId,
-					  @PathParam("id") String groupId,
-				      @PathParam("apiType") String apiType,
-					  @FormParam(FORM_MEMBER_USERS) String users,
-					  @FormParam(FORM_MEMBER_GROUPS) String groups,
-					  @Context HttpServletRequest httpRequest){
+	public String updateMembers(@PathParam("repositoryId") String repositoryId, @PathParam("id") String groupId,
+			@PathParam("apiType") String apiType, @FormParam(FORM_MEMBER_USERS) String users,
+			@FormParam(FORM_MEMBER_GROUPS) String groups, @Context HttpServletRequest httpRequest) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
-		//Existing Group
+		// Existing Group
 		GroupItem group = contentService.getGroupItemById(repositoryId, groupId);
-		if(group == null){
+		if (group == null) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_NOTFOUND);
 		}
 
-		//Edit members info of the group
-		if(status){
-			JSONArray usersAry = users == null ? new JSONArray() :  parseJsonArray(users);
-			JSONArray groupsAry = groups == null ? new JSONArray() :  parseJsonArray(groups);
+		// Edit members info of the group
+		if (status) {
+			JSONArray usersAry = users == null ? new JSONArray() : parseJsonArray(users);
+			JSONArray groupsAry = groups == null ? new JSONArray() : parseJsonArray(groups);
 
-			//Group info
+			// Group info
 			setModifiedSignature(httpRequest, group);
 
-			//Member(User) info
+			// Member(User) info
 			List<String> usersList = editUserMembers(repositoryId, usersAry, errMsg, apiType, group);
 			group.setUsers(usersList);
 
-			//Member(Group) info
+			// Member(Group) info
 			List<String> groupsList = editGroupMembers(repositoryId, groupsAry, errMsg, apiType, group);
 			group.setGroups(groupsList);
 
-			//Update
-			if(apiType.equals(API_ADD)){
-				try{
+			// Update
+			if (apiType.equals(API_ADD)) {
+				try {
 					contentService.update(new SystemCallContext(repositoryId), repositoryId, group);
-				}catch(Exception ex){
+				} catch (Exception ex) {
 					ex.printStackTrace();
 					status = false;
 					addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_UPDATEMEMBERS);
 				}
-			}else if(apiType.equals(API_REMOVE)){
-				try{
+			} else if (apiType.equals(API_REMOVE)) {
+				try {
 					contentService.update(new SystemCallContext(repositoryId), repositoryId, group);
-				}catch(Exception ex){
+				} catch (Exception ex) {
 					ex.printStackTrace();
 					status = false;
 					addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_UPDATEMEMBERS);
@@ -352,17 +341,18 @@ public class GroupItemResource extends ResourceBase{
 	}
 
 	/**
-	 *if list is null, return true.
+	 * if list is null, return true.
+	 * 
 	 * @param errMsg
 	 * @param id
 	 * @param list
 	 * @return
 	 */
-	private boolean isNewRecord(JSONArray errMsg, String id, List<String> list){
+	private boolean isNewRecord(JSONArray errMsg, String id, List<String> list) {
 		boolean status = true;
-		if(list != null){
-			for (String s : list){
-				if(id.equals(s)){
+		if (list != null) {
+			for (String s : list) {
+				if (id.equals(s)) {
 					status = false;
 					break;
 				}
@@ -373,44 +363,47 @@ public class GroupItemResource extends ResourceBase{
 
 	/**
 	 * edit group's members(users)
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId  TODO
 	 * @param targetUserIds
 	 * @param errMsg
 	 * @param apiType
 	 * @param group
 	 * @return
 	 */
-	private List<String> editUserMembers(String repositoryId, JSONArray targetUserIds, JSONArray errMsg, String apiType, GroupItem group){
+	private List<String> editUserMembers(String repositoryId, JSONArray targetUserIds, JSONArray errMsg, String apiType,
+			GroupItem group) {
 		List<String> usersList = new ArrayList<String>();
 		List<String> ul = group.getUsers();
-		if(ul != null) usersList = ul;
+		if (ul != null)
+			usersList = ul;
 
 		for (int i = 0; i < targetUserIds.size(); i++) {
 			String userId = targetUserIds.get(i).toString();
 			boolean notSkip = true;
 
-			//check only when "add" API
-			if(apiType.equals(API_ADD)){
+			// check only when "add" API
+			if (apiType.equals(API_ADD)) {
 				UserItem existingUser = contentService.getUserItemById(repositoryId, userId);
-				if(existingUser == null){
+				if (existingUser == null) {
 					notSkip = false;
 					addErrMsg(errMsg, ITEM_USER + ":" + userId, ErrorCode.ERR_NOTFOUND);
 				}
 			}
 
-			if(notSkip){
-				//"add" method
-				if(apiType.equals(API_ADD)){
-					if(isNewRecord(errMsg, userId, usersList)){
+			if (notSkip) {
+				// "add" method
+				if (apiType.equals(API_ADD)) {
+					if (isNewRecord(errMsg, userId, usersList)) {
 						usersList.add(userId);
-					}else{
+					} else {
 						addErrMsg(errMsg, ITEM_USER + ":" + userId, ErrorCode.ERR_ALREADYMEMBER);
 					}
-				//"remove" method
-				}else if(apiType.equals(API_REMOVE)){
-					if(!isNewRecord(errMsg, userId, usersList)){
+					// "remove" method
+				} else if (apiType.equals(API_REMOVE)) {
+					if (!isNewRecord(errMsg, userId, usersList)) {
 						usersList.remove(userId);
-					}else{
+					} else {
 						addErrMsg(errMsg, ITEM_USER + ":" + userId, ErrorCode.ERR_NOTMEMBER);
 					}
 				}
@@ -419,26 +412,28 @@ public class GroupItemResource extends ResourceBase{
 		return usersList;
 	}
 
-
 	/**
 	 * edit group's members(groups)
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId   TODO
 	 * @param targetGroupIds
 	 * @param errMsg
 	 * @param apiType
 	 * @param group
 	 * @return
 	 */
-	private List<String>editGroupMembers(String repositoryId, JSONArray targetGroupIds, JSONArray errMsg, String apiType, GroupItem group){
-		//check only when "add" API
-		List<String>groupsList = new ArrayList<String>();
+	private List<String> editGroupMembers(String repositoryId, JSONArray targetGroupIds, JSONArray errMsg,
+			String apiType, GroupItem group) {
+		// check only when "add" API
+		List<String> groupsList = new ArrayList<String>();
 
 		List<String> gl = group.getGroups();
-		if(gl != null) groupsList = gl;
+		if (gl != null)
+			groupsList = gl;
 
 		List<GroupItem> allGroupsList = contentService.getGroupItems(repositoryId);
 		List<String> allGroupsStringList = new ArrayList<String>();
-		for(final GroupItem g : allGroupsList){
+		for (final GroupItem g : allGroupsList) {
 			allGroupsStringList.add(g.getId());
 		}
 
@@ -446,33 +441,33 @@ public class GroupItemResource extends ResourceBase{
 			String groupId = targetGroupIds.get(i).toString();
 			boolean notSkip = true;
 
-			//Existance check
+			// Existance check
 			GroupItem g = contentService.getGroupItemById(repositoryId, groupId);
-			if(g == null && apiType.equals(API_ADD)){
+			if (g == null && apiType.equals(API_ADD)) {
 				notSkip = false;
 				addErrMsg(errMsg, ITEM_GROUP + ":" + groupId, ErrorCode.ERR_NOTFOUND);
 			}
 
-			if(notSkip){
-				//"add" method
-				if(apiType.equals(API_ADD)){
-					if(isNewRecord(errMsg, groupId, groupsList)){
-						if(groupId.equals(group.getId())){
-							//skip and error when trying to add the group to itself
+			if (notSkip) {
+				// "add" method
+				if (apiType.equals(API_ADD)) {
+					if (isNewRecord(errMsg, groupId, groupsList)) {
+						if (groupId.equals(group.getId())) {
+							// skip and error when trying to add the group to itself
 							addErrMsg(errMsg, ITEM_GROUP, ErrorCode.ERR_GROUPITSELF);
-						}else{
+						} else {
 							groupsList.add(groupId);
 						}
-					}else{
-						//skip and message
+					} else {
+						// skip and message
 						addErrMsg(errMsg, ITEM_GROUP + ":" + groupId, ErrorCode.ERR_ALREADYMEMBER);
 					}
-				//"remove" method
-				}else if(apiType.equals(API_REMOVE)){
-					if(!isNewRecord(errMsg, groupId, groupsList)){
+					// "remove" method
+				} else if (apiType.equals(API_REMOVE)) {
+					if (!isNewRecord(errMsg, groupId, groupsList)) {
 						groupsList.remove(groupId);
-					}else{
-						//skip
+					} else {
+						// skip
 						addErrMsg(errMsg, ITEM_GROUP + ":" + groupId, ErrorCode.ERR_NOTMEMBER);
 					}
 				}
@@ -481,20 +476,20 @@ public class GroupItemResource extends ResourceBase{
 		return groupsList;
 	}
 
-	boolean validateNewGroup(String repositoryId, boolean status, JSONArray errMsg, String groupId, String name){
-		if(StringUtils.isBlank(groupId)){
+	boolean validateNewGroup(String repositoryId, boolean status, JSONArray errMsg, String groupId, String name) {
+		if (StringUtils.isBlank(groupId)) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUPID, ErrorCode.ERR_MANDATORY);
 		}
 
-		//groupID uniqueness
+		// groupID uniqueness
 		GroupItem group = contentService.getGroupItemById(repositoryId, groupId);
-		if(group != null){
+		if (group != null) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUPID, ErrorCode.ERR_ALREADYEXISTS);
 		}
 
-		if(StringUtils.isBlank(name)){
+		if (StringUtils.isBlank(name)) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUPNAME, ErrorCode.ERR_MANDATORY);
 		}
@@ -502,13 +497,13 @@ public class GroupItemResource extends ResourceBase{
 		return status;
 	}
 
-	boolean validateGroup(boolean status, JSONArray errMsg, String groupId, String name){
-		if(StringUtils.isBlank(name)){
+	boolean validateGroup(boolean status, JSONArray errMsg, String groupId, String name) {
+		if (StringUtils.isBlank(name)) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUPNAME, ErrorCode.ERR_MANDATORY);
 		}
 
-		if(StringUtils.isBlank(groupId)){
+		if (StringUtils.isBlank(groupId)) {
 			status = false;
 			addErrMsg(errMsg, ITEM_GROUPID, ErrorCode.ERR_MANDATORY);
 		}
@@ -516,19 +511,18 @@ public class GroupItemResource extends ResourceBase{
 		return status;
 	}
 
-
 	private JSONObject convertGroupToJson(GroupItem group) {
 		SimpleDateFormat sdf = new SimpleDateFormat(SystemConst.DATETIME_FORMAT);
 		String created = new String();
-		try{
+		try {
 			created = sdf.format(group.getCreated().getTime());
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		String modified = new String();
-		try{
+		try {
 			modified = sdf.format(group.getModified().getTime());
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		JSONObject groupJSON = new JSONObject();
@@ -539,20 +533,20 @@ public class GroupItemResource extends ResourceBase{
 		groupJSON.put(ITEM_MODIFIER, group.getModifier());
 		groupJSON.put(ITEM_MODIFIED, modified);
 		groupJSON.put(ITEM_TYPE, group.getType());
-		groupJSON.put(ITEM_MEMBER_USERS,  group.getUsers());
-		groupJSON.put(ITEM_MEMBER_USERSSIZE,  group.getUsers().size());
+		groupJSON.put(ITEM_MEMBER_USERS, group.getUsers());
+		groupJSON.put(ITEM_MEMBER_USERSSIZE, group.getUsers().size());
 		groupJSON.put(ITEM_MEMBER_GROUPS, group.getGroups());
 		groupJSON.put(ITEM_MEMBER_GROUPSSIZE, group.getGroups().size());
 
 		return groupJSON;
 	}
 
-	private JSONArray parseJsonArray(String str){
+	private JSONArray parseJsonArray(String str) {
 		JSONParser parser = new JSONParser();
 		Object obj;
 		try {
 			obj = parser.parse(str);
-			JSONArray result = (JSONArray)obj;
+			JSONArray result = (JSONArray) obj;
 			return result;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

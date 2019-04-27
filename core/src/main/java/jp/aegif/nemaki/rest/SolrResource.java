@@ -2,14 +2,11 @@ package jp.aegif.nemaki.rest;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,20 +15,17 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import jp.aegif.nemaki.cmis.aspect.query.solr.SolrUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.w3c.dom.Node;
+
+import jp.aegif.nemaki.cmis.aspect.query.solr.SolrUtil;
 
 @Path("/repo/{repositoryId}/search-engine")
 public class SolrResource extends ResourceBase {
@@ -151,7 +145,7 @@ public class SolrResource extends ResourceBase {
 		return result.toString();
 	}
 
-	public  JSONObject changeAdminPasswordImpl(String repositoryId, String password, String currentPassword,
+	public JSONObject changeAdminPasswordImpl(String repositoryId, String password, String currentPassword,
 			HttpServletRequest request) {
 		boolean status = true;
 		JSONObject result = new JSONObject();
@@ -170,12 +164,12 @@ public class SolrResource extends ResourceBase {
 		HttpGet httpAction = new HttpGet(url);
 
 		/*
-		HttpPost httpAction = new HttpPost(url);
-		List<BasicNameValuePair> requestParams = new ArrayList<BasicNameValuePair>();
-		requestParams.add(new BasicNameValuePair("repositoryId",repositoryId));
-		requestParams.add(new BasicNameValuePair("password",password));
-		requestParams.add(new BasicNameValuePair("currentPassword",currentPassword));
-		httpAction.setEntity(new UrlEncodedFormEntity(requestParams));
+		 * HttpPost httpAction = new HttpPost(url); List<BasicNameValuePair>
+		 * requestParams = new ArrayList<BasicNameValuePair>(); requestParams.add(new
+		 * BasicNameValuePair("repositoryId",repositoryId)); requestParams.add(new
+		 * BasicNameValuePair("password",password)); requestParams.add(new
+		 * BasicNameValuePair("currentPassword",currentPassword));
+		 * httpAction.setEntity(new UrlEncodedFormEntity(requestParams));
 		 */
 
 		try {

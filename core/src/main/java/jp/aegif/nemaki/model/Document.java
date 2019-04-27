@@ -35,28 +35,28 @@ import jp.aegif.nemaki.util.constant.NodeType;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Document extends Content {
 
-		// Attachment
-		private String attachmentNodeId;
+	// Attachment
+	private String attachmentNodeId;
 
-		// Versioning
-		private String versionSeriesId;
+	// Versioning
+	private String versionSeriesId;
 
-		private Boolean latestVersion;
-		private Boolean majorVersion;
-		private Boolean latestMajorVersion;
-		private String checkinComment;
-		private String versionLabel;
-		//The following properties should be moved away to VersionSeries object
-		private Boolean privateWorkingCopy;
+	private Boolean latestVersion;
+	private Boolean majorVersion;
+	private Boolean latestMajorVersion;
+	private String checkinComment;
+	private String versionLabel;
+	// The following properties should be moved away to VersionSeries object
+	private Boolean privateWorkingCopy;
 
-		private Boolean immutable;
+	private Boolean immutable;
 
-	public Document(){
+	public Document() {
 		super();
 		setType(NodeType.CMIS_DOCUMENT.value());
 	}
 
-	public Document(Content c){
+	public Document(Content c) {
 		super(c);
 		setName(c.getName());
 		setDescription(c.getDescription());
@@ -72,6 +72,7 @@ public class Document extends Content {
 
 	/**
 	 * Getter & Setter
+	 * 
 	 * @return
 	 */
 	public String getAttachmentNodeId() {
@@ -93,9 +94,11 @@ public class Document extends Content {
 	public Boolean isLatestVersion() {
 		return latestVersion;
 	}
+
 	public void setLatestVersion(Boolean latestVersion) {
 		this.latestVersion = latestVersion;
 	}
+
 	public Boolean isMajorVersion() {
 		return majorVersion;
 	}
@@ -136,11 +139,11 @@ public class Document extends Content {
 		this.checkinComment = checkinComment;
 	}
 
-	public Boolean isImmutable(){
+	public Boolean isImmutable() {
 		return immutable;
 	}
 
-	public void setImmutable(Boolean immutable){
+	public void setImmutable(Boolean immutable) {
 		this.immutable = immutable;
 	}
 

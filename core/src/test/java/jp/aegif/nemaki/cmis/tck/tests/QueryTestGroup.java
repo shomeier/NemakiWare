@@ -10,39 +10,39 @@ import org.junit.Test;
 
 import jp.aegif.nemaki.cmis.tck.TckSuite;
 
-public class QueryTestGroup extends TckSuite{
+public class QueryTestGroup extends TckSuite {
 	@Test
-	public void querySmokeTest() throws Exception{
+	public void querySmokeTest() throws Exception {
 		QuerySmokeTest test = new QuerySmokeTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void queryRootFolderTest() throws Exception{
+	public void queryRootFolderTest() throws Exception {
 		QueryRootFolderTest test = new QueryRootFolderTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void queryForObject() throws Exception{
+	public void queryForObject() throws Exception {
 		QueryForObject test = new QueryForObject();
 		run(test);
 	}
-	
+
 	@Test
-	public void queryLikeTest() throws Exception{
+	public void queryLikeTest() throws Exception {
 		QueryLikeTest test = new QueryLikeTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void queryInFolderTest() throws Exception{
+	public void queryInFolderTest() throws Exception {
 		QueryInFolderTest test = new QueryInFolderTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void contentChangesSmokeTest() throws Exception{
+	public void contentChangesSmokeTest() throws Exception {
 		ContentChangesSmokeTest test = new ContentChangesSmokeTest();
 		run(test);
 	}

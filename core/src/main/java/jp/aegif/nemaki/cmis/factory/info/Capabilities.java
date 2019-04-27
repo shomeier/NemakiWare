@@ -27,10 +27,6 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.util.SpringPropertyManager;
-import jp.aegif.nemaki.util.constant.PropertyKey;
-
 import org.apache.chemistry.opencmis.commons.enums.CapabilityAcl;
 import org.apache.chemistry.opencmis.commons.enums.CapabilityChanges;
 import org.apache.chemistry.opencmis.commons.enums.CapabilityContentStreamUpdates;
@@ -43,12 +39,15 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.CreatablePropertyT
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.NewTypeSettableAttributesImpl;
 import org.apache.commons.collections.CollectionUtils;
 
+import jp.aegif.nemaki.util.SpringPropertyManager;
+import jp.aegif.nemaki.util.constant.PropertyKey;
+
 public class Capabilities extends org.apache.chemistry.opencmis.commons.impl.dataobjects.RepositoryCapabilitiesImpl {
 
 	private static final long serialVersionUID = -7037495456587139344L;
 
 	private SpringPropertyManager pm;
-	
+
 	@PostConstruct
 	public void init() {
 		//////////////////////////////////////////////////////////////////
@@ -60,40 +59,41 @@ public class Capabilities extends org.apache.chemistry.opencmis.commons.impl.dat
 		setSupportsGetFolderTree(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_GET_FOLDER_TREE)));
 		// capabilityOrderBy
 		setCapabilityOrderBy(CapabilityOrderBy.fromValue(pm.readValue(PropertyKey.CAPABILITY_ORDER_BY)));
-		
+
 		//////////////////////////////////////////////////////////////////
 		// Object Capabilities
 		//////////////////////////////////////////////////////////////////
 		// capabilityContentStreamUpdatability
-		setCapabilityContentStreamUpdates(CapabilityContentStreamUpdates.fromValue(pm.readValue(PropertyKey.CAPABILITY_CONTENT_STREAM_UPDATABILITY)));
-		//capabilityChanges
+		setCapabilityContentStreamUpdates(CapabilityContentStreamUpdates
+				.fromValue(pm.readValue(PropertyKey.CAPABILITY_CONTENT_STREAM_UPDATABILITY)));
+		// capabilityChanges
 		setCapabilityChanges(CapabilityChanges.fromValue(pm.readValue(PropertyKey.CAPABILITY_CHANGES)));
-		//capabilityRenditions
+		// capabilityRenditions
 		setCapabilityRendition(CapabilityRenditions.fromValue(pm.readValue(PropertyKey.CAPABILITY_RENDITIONS)));
 
 		//////////////////////////////////////////////////////////////////
 		// Filing Capabilities
 		//////////////////////////////////////////////////////////////////
-		//capabilityMultifiling
+		// capabilityMultifiling
 		setSupportsMultifiling(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_MULTIFILING)));
-		//capabilityUnfiling
+		// capabilityUnfiling
 		setSupportsUnfiling(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_UNFILING)));
-		//capabilityVersionSpecificFiling
+		// capabilityVersionSpecificFiling
 		setSupportsVersionSpecificFiling(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_VERSION_SPECIFIC_FILING)));
 
 		//////////////////////////////////////////////////////////////////
 		// Versioning Capabilities
 		//////////////////////////////////////////////////////////////////
-		//capabilityPWCUpdatable
+		// capabilityPWCUpdatable
 		setIsPwcUpdatable(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_PWC_UPDATABLE)));
-		//capabilityPWCSearchable
+		// capabilityPWCSearchable
 		setIsPwcSearchable(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_PWC_SEARCHABLE)));
 		// capabilityAllVersionsSearchable
 		setAllVersionsSearchable(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_ALL_VERSION_SEARCHABLE)));
 
 		//////////////////////////////////////////////////////////////////
 		// Query Capabilities
-		//////////////////////////////////////////////////////////////////		
+		//////////////////////////////////////////////////////////////////
 		// capabilityQuery
 		setCapabilityQuery(CapabilityQuery.fromValue(pm.readValue(PropertyKey.CAPABILITY_QUERY)));
 		// capabilityJoin
@@ -101,42 +101,55 @@ public class Capabilities extends org.apache.chemistry.opencmis.commons.impl.dat
 
 		//////////////////////////////////////////////////////////////////
 		// Type Capabilities
-		//////////////////////////////////////////////////////////////////		
-		//capabilityCreatablPopertyTypes
+		//////////////////////////////////////////////////////////////////
+		// capabilityCreatablPopertyTypes
 		CreatablePropertyTypesImpl creatablePropertyTypes = new CreatablePropertyTypesImpl();
-		
+
 		List<String> _propertyTypes = pm.readValues(PropertyKey.CAPABILITY_CREATABLE_PROPERTY_TYPES);
 		Set<PropertyType> propertyTypes = new HashSet<PropertyType>();
-		if(CollectionUtils.isNotEmpty(_propertyTypes)){
-			for(String _pt : _propertyTypes){
+		if (CollectionUtils.isNotEmpty(_propertyTypes)) {
+			for (String _pt : _propertyTypes) {
 				propertyTypes.add(PropertyType.fromValue(_pt));
 			}
 		}
 		creatablePropertyTypes.setCanCreate(propertyTypes);
 		setCreatablePropertyTypes(creatablePropertyTypes);
 
-		//capabilityNewTypeSettableAttributes
+		// capabilityNewTypeSettableAttributes
 		NewTypeSettableAttributesImpl newTypeSettableAttributes = new NewTypeSettableAttributesImpl();
-		
-		newTypeSettableAttributes.setCanSetId(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_ID)));
-		newTypeSettableAttributes.setCanSetLocalName(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCAL_NAME)));
-		newTypeSettableAttributes.setCanSetLocalNamespace(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCAL_NAME_SPACE)));
-		newTypeSettableAttributes.setCanSetQueryName(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERY_NAME)));
-		newTypeSettableAttributes.setCanSetDisplayName(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_DISPLAY_NAME)));
-		newTypeSettableAttributes.setCanSetDescription(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_DESCRIPTION)));
-		newTypeSettableAttributes.setCanSetCreatable(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CREATABLE)));
-		newTypeSettableAttributes.setCanSetFileable(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_FILEABLE)));
-		newTypeSettableAttributes.setCanSetQueryable(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERYABLE)));
-		newTypeSettableAttributes.setCanSetFulltextIndexed(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_FULLTEXT_INDEXED)));
-		newTypeSettableAttributes.setCanSetIncludedInSupertypeQuery(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_INCLUDE_IN_SUPERTYPE_QUERY)));
-		newTypeSettableAttributes.setCanSetControllablePolicy(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLLABLE_POLICY)));
-		newTypeSettableAttributes.setCanSetControllableAcl(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLLABLE_ACL)));
-		
+
+		newTypeSettableAttributes
+				.setCanSetId(Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_ID)));
+		newTypeSettableAttributes.setCanSetLocalName(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCAL_NAME)));
+		newTypeSettableAttributes.setCanSetLocalNamespace(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCAL_NAME_SPACE)));
+		newTypeSettableAttributes.setCanSetQueryName(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERY_NAME)));
+		newTypeSettableAttributes.setCanSetDisplayName(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_DISPLAY_NAME)));
+		newTypeSettableAttributes.setCanSetDescription(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_DESCRIPTION)));
+		newTypeSettableAttributes.setCanSetCreatable(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CREATABLE)));
+		newTypeSettableAttributes.setCanSetFileable(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_FILEABLE)));
+		newTypeSettableAttributes.setCanSetQueryable(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERYABLE)));
+		newTypeSettableAttributes.setCanSetFulltextIndexed(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_FULLTEXT_INDEXED)));
+		newTypeSettableAttributes.setCanSetIncludedInSupertypeQuery(Boolean
+				.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_INCLUDE_IN_SUPERTYPE_QUERY)));
+		newTypeSettableAttributes.setCanSetControllablePolicy(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLLABLE_POLICY)));
+		newTypeSettableAttributes.setCanSetControllableAcl(
+				Boolean.valueOf(pm.readValue(PropertyKey.CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLLABLE_ACL)));
+
 		setNewTypeSettableAttributes(newTypeSettableAttributes);
-		
+
 		//////////////////////////////////////////////////////////////////
 		// ACL Capabilities
-		//////////////////////////////////////////////////////////////////				
+		//////////////////////////////////////////////////////////////////
 		// capabilityACL
 		setCapabilityAcl(CapabilityAcl.fromValue(pm.readValue(PropertyKey.CAPABILITY_ACL)));
 	}

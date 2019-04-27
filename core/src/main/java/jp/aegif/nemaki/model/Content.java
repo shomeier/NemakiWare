@@ -109,7 +109,7 @@ public class Content extends NodeBase {
 	public void setAcl(Acl acl) {
 		this.acl = acl;
 	}
-	
+
 	public Boolean isAclInherited() {
 		return aclInherited;
 	}
@@ -117,7 +117,7 @@ public class Content extends NodeBase {
 	public void setAclInherited(Boolean aclInherited) {
 		this.aclInherited = aclInherited;
 	}
-	
+
 	public List<Property> getSubTypeProperties() {
 		return subTypeProperties;
 	}
@@ -141,7 +141,7 @@ public class Content extends NodeBase {
 	public void setSecondaryIds(List<String> secondaryIds) {
 		this.secondaryIds = secondaryIds;
 	}
-	
+
 	public String getObjectType() {
 		return objectType;
 	}
@@ -187,8 +187,7 @@ public class Content extends NodeBase {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj != null && obj instanceof Content
-				&& ((Content) obj).getId().equals(this.getId());
+		return obj != null && obj instanceof Content && ((Content) obj).getId().equals(this.getId());
 	}
 
 	@Override

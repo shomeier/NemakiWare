@@ -24,13 +24,13 @@ package jp.aegif.nemaki.model;
 
 import java.util.List;
 
-import jp.aegif.nemaki.util.constant.NodeType;
-
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.ContentStreamAllowed;
 
+import jp.aegif.nemaki.util.constant.NodeType;
+
 public class NemakiTypeDefinition extends NodeBase {
-	//Attributes Common
+	// Attributes Common
 	private String typeId;
 	private String localName;
 	private String localNameSpace;
@@ -50,21 +50,21 @@ public class NemakiTypeDefinition extends NodeBase {
 	private Boolean typeMutabilityUpdate;
 	private Boolean typeMutabilityDelete;
 	private List<String> properties;
-	
-	//Attributes specific to Document
+
+	// Attributes specific to Document
 	private ContentStreamAllowed contentStreamAllowed;
 	private Boolean versionable;
-	
-	//Attributes specific to Relationship
+
+	// Attributes specific to Relationship
 	private List<String> allowedSourceTypes;
 	private List<String> allowedTargetTypes;
-	
-	public NemakiTypeDefinition(){
+
+	public NemakiTypeDefinition() {
 		super();
 		setType(NodeType.TYPE_DEFINITION.value());
 	}
-	
-	public NemakiTypeDefinition(NodeBase n){
+
+	public NemakiTypeDefinition(NodeBase n) {
 		setId(n.getId());
 		setType(n.getType());
 		setCreated(n.getCreated());
@@ -72,7 +72,7 @@ public class NemakiTypeDefinition extends NodeBase {
 		setModified(n.getModified());
 		setModifier(n.getModifier());
 	}
-	
+
 	/**
 	 * Getter & Setter
 	 */

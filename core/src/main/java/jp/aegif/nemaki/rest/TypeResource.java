@@ -15,15 +15,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import jp.aegif.nemaki.businesslogic.TypeService;
-import jp.aegif.nemaki.cmis.aspect.type.TypeManager;
-import jp.aegif.nemaki.model.Choice;
-import jp.aegif.nemaki.model.NemakiPropertyDefinition;
-import jp.aegif.nemaki.model.NemakiPropertyDefinitionCore;
-import jp.aegif.nemaki.model.NemakiPropertyDefinitionDetail;
-import jp.aegif.nemaki.model.NemakiTypeDefinition;
-import jp.aegif.nemaki.util.constant.NodeType;
-
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.Cardinality;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
@@ -40,6 +31,15 @@ import org.dom4j.io.SAXReader;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import jp.aegif.nemaki.businesslogic.TypeService;
+import jp.aegif.nemaki.cmis.aspect.type.TypeManager;
+import jp.aegif.nemaki.model.Choice;
+import jp.aegif.nemaki.model.NemakiPropertyDefinition;
+import jp.aegif.nemaki.model.NemakiPropertyDefinitionCore;
+import jp.aegif.nemaki.model.NemakiPropertyDefinitionDetail;
+import jp.aegif.nemaki.model.NemakiTypeDefinition;
+import jp.aegif.nemaki.util.constant.NodeType;
 
 @Path("/repo/{repositoryId}/type")
 public class TypeResource extends ResourceBase {
@@ -110,7 +110,7 @@ public class TypeResource extends ResourceBase {
 				log.warn("typeId should be specified. SKIP.");
 				continue;
 			} else if (existType(repositoryId, typeId)) {
-				log.warn(MessageFormat.format("typeId:{0} already exists in DB! SKIP.",typeId));
+				log.warn(MessageFormat.format("typeId:{0} already exists in DB! SKIP.", typeId));
 				continue;
 			}
 			tdf.setTypeId(typeId);
@@ -119,7 +119,7 @@ public class TypeResource extends ResourceBase {
 			// title
 			String title = getElementValue(type, "title");
 			if (StringUtils.isEmpty(title)) {
-				log.warn(MessageFormat.format("typeId:{0} 'title' is nos specified. Default to typeId.",typeId));
+				log.warn(MessageFormat.format("typeId:{0} 'title' is nos specified. Default to typeId.", typeId));
 			}
 			tdf.setLocalNameSpace("");
 			tdf.setDisplayName(title);
@@ -129,7 +129,7 @@ public class TypeResource extends ResourceBase {
 			String parent = getElementValue(type, "parent");
 			if ("type".equals(type.getName())) {
 				if (StringUtils.isEmpty(parent)) {
-					log.warn(MessageFormat.format("typeId:{0} 'parent' should be specified. SKIP.",typeId));
+					log.warn(MessageFormat.format("typeId:{0} 'parent' should be specified. SKIP.", typeId));
 					continue;
 				}
 
@@ -176,7 +176,7 @@ public class TypeResource extends ResourceBase {
 			String propName = getAttributeValue(property, "name");
 			// Check existing property definitions
 			if (existProperty(repositoryId, propName)) {
-				log.warn(MessageFormat.format("propertyId:{0} already exists in DB! SKIP.",propName));
+				log.warn(MessageFormat.format("propertyId:{0} already exists in DB! SKIP.", propName));
 				continue;
 			}
 			propertyIds.add(propName);
@@ -388,7 +388,7 @@ public class TypeResource extends ResourceBase {
 			}
 			return results;
 		} else {
-			log.info(MessageFormat.format("Cannot parse '{0}'.",name));
+			log.info(MessageFormat.format("Cannot parse '{0}'.", name));
 			return results;
 		}
 	}
@@ -398,7 +398,7 @@ public class TypeResource extends ResourceBase {
 		if (elm != null) {
 			return elm.getStringValue();
 		} else {
-			log.info(MessageFormat.format("Cannot parse '{0}'.",name));
+			log.info(MessageFormat.format("Cannot parse '{0}'.", name));
 			return null;
 		}
 	}

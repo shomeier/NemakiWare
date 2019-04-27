@@ -24,21 +24,20 @@ package jp.aegif.nemaki.model.couch;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import jp.aegif.nemaki.model.Acl;
-import jp.aegif.nemaki.model.Change;
-
 import org.apache.chemistry.opencmis.commons.enums.ChangeType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class CouchChange extends CouchNodeBase implements Comparable<CouchChange>{
+import jp.aegif.nemaki.model.Acl;
+import jp.aegif.nemaki.model.Change;
+
+public class CouchChange extends CouchNodeBase implements Comparable<CouchChange> {
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 3016760183200314355L;
 
-	private static final Log log = LogFactory
-			.getLog(CouchChange.class);
+	private static final Log log = LogFactory.getLog(CouchChange.class);
 
 	private String name;
 	private String baseType;
@@ -54,12 +53,11 @@ public class CouchChange extends CouchNodeBase implements Comparable<CouchChange
 	private ChangeType changeType;
 	private GregorianCalendar time;
 
-	
-	public CouchChange(){
+	public CouchChange() {
 		super();
 	}
 
-	public CouchChange(Change c){
+	public CouchChange(Change c) {
 		super(c);
 		GregorianCalendar time = c.getTime();
 		setObjectId(c.getObjectId());
@@ -159,9 +157,9 @@ public class CouchChange extends CouchNodeBase implements Comparable<CouchChange
 
 	public Long convertChangeToken(String changeToken) {
 		Long _changeToken = null;
-		try{
+		try {
 			_changeToken = Long.valueOf(changeToken);
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.error("Change token must be long type value", e);
 		}
 
@@ -171,9 +169,11 @@ public class CouchChange extends CouchNodeBase implements Comparable<CouchChange
 	public ChangeType getChangeType() {
 		return changeType;
 	}
+
 	public void setChangeType(ChangeType changeType) {
 		this.changeType = changeType;
 	}
+
 	public GregorianCalendar getTime() {
 		return time;
 	}
@@ -192,7 +192,7 @@ public class CouchChange extends CouchNodeBase implements Comparable<CouchChange
 	}
 
 	@Override
-	public Change convert(){
+	public Change convert() {
 		Change change = new Change(super.convert());
 		change.setChangeType(getChangeType());
 		change.setTime(getTime());
@@ -207,7 +207,7 @@ public class CouchChange extends CouchNodeBase implements Comparable<CouchChange
 		change.setVersionLabel(getVersionLabel());
 		change.setPolicyIds(getPolicyIds());
 		change.setAcl(getAcl());
-		
+
 		return change;
 	}
 }

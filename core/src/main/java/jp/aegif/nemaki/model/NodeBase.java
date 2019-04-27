@@ -27,8 +27,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jp.aegif.nemaki.util.constant.NodeType;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
-public class NodeBase{
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class NodeBase {
 
 	protected String id;
 	protected String type;
@@ -36,7 +36,7 @@ public class NodeBase{
 	protected String creator;
 	protected GregorianCalendar modified;
 	protected String modifier;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -52,7 +52,7 @@ public class NodeBase{
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	public GregorianCalendar getCreated() {
 		return created;
 	}
@@ -84,7 +84,7 @@ public class NodeBase{
 	public void setModifier(String modifier) {
 		this.modifier = modifier;
 	}
-	
+
 	public Boolean isFolder() {
 		if (NodeType.CMIS_FOLDER.value().equals(type)) {
 			return true;
@@ -100,7 +100,7 @@ public class NodeBase{
 			return false;
 		}
 	}
-	
+
 	public Boolean isRelationship() {
 		if (NodeType.CMIS_RELATIONSHIP.value().equals(type)) {
 			return true;
@@ -108,7 +108,7 @@ public class NodeBase{
 			return false;
 		}
 	}
-	
+
 	public Boolean isPolicy() {
 		if (NodeType.CMIS_POLICY.value().equals(type)) {
 			return true;
@@ -116,36 +116,36 @@ public class NodeBase{
 			return false;
 		}
 	}
-	
-	public Boolean isItem(){
+
+	public Boolean isItem() {
 		if (NodeType.CMIS_ITEM.value().equals(type)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	public Boolean isAttachment(){
+
+	public Boolean isAttachment() {
 		return (NodeType.ATTACHMENT.value().equals(type)) ? true : false;
 	}
-	
-	public Boolean isTypeDefinition(){
+
+	public Boolean isTypeDefinition() {
 		return (NodeType.TYPE_DEFINITION.value().equals(type)) ? true : false;
 	}
-	
-	public Boolean isPropertyDefinitionCore(){
+
+	public Boolean isPropertyDefinitionCore() {
 		return (NodeType.PROPERTY_DEFINITION_CORE.value().equals(type)) ? true : false;
 	}
-	
-	public Boolean isPropertyDefinitionDetail(){
+
+	public Boolean isPropertyDefinitionDetail() {
 		return (NodeType.PROPERTY_DEFINITION_DETAIL.value().equals(type)) ? true : false;
 	}
-	
-	public Boolean isUser(){
+
+	public Boolean isUser() {
 		return (NodeType.USER.value().equals(type)) ? true : false;
 	}
-	
-	public Boolean isGroup(){
+
+	public Boolean isGroup() {
 		return (NodeType.GROUP.value().equals(type)) ? true : false;
 	}
 }

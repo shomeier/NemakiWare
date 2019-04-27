@@ -8,12 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import jp.aegif.nemaki.cmis.aspect.type.TypeManager;
-import jp.aegif.nemaki.cmis.factory.info.RepositoryInfo;
-import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.util.constant.PropertyKey;
-
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ObjectData;
 import org.apache.chemistry.opencmis.commons.data.PropertyData;
@@ -27,6 +21,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import jp.aegif.nemaki.cmis.aspect.type.TypeManager;
+import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
+import jp.aegif.nemaki.util.PropertyManager;
+import jp.aegif.nemaki.util.constant.PropertyKey;
+
 public class SortUtil {
 
 	private static final Log log = LogFactory.getLog(SortUtil.class);
@@ -37,15 +36,14 @@ public class SortUtil {
 
 	@SuppressWarnings("unchecked")
 	public void sort(String repositoryId, List<ObjectData> list, String orderBy) {
-		//Check empty list
-		if(CollectionUtils.isEmpty(list)){
+		// Check empty list
+		if (CollectionUtils.isEmpty(list)) {
 			return;
 		}
-		
+
 		// Check orderBy argument
 		if (StringUtils.isEmpty(orderBy)) {
-			String defaultOrderBy = propertyManager
-					.readValue(PropertyKey.CAPABILITY_EXTENDED_ORDERBY_DEFAULT);
+			String defaultOrderBy = propertyManager.readValue(PropertyKey.CAPABILITY_EXTENDED_ORDERBY_DEFAULT);
 			if (StringUtils.isBlank(defaultOrderBy)) {
 				return;
 			} else {
@@ -54,14 +52,14 @@ public class SortUtil {
 		}
 
 		// Check CapabilityOrderBy
-		CapabilityOrderBy capabilityOrderBy = repositoryInfoMap.get(repositoryId).getCapabilities().getOrderByCapability();
+		CapabilityOrderBy capabilityOrderBy = repositoryInfoMap.get(repositoryId).getCapabilities()
+				.getOrderByCapability();
 		if (CapabilityOrderBy.NONE == capabilityOrderBy) {
 			return;
 		}
 
 		// Check the parsed result of orderBy argument
-		LinkedHashMap<PropertyDefinition<?>, Boolean> _orderBy = parseOrderBy(
-				orderBy, capabilityOrderBy);
+		LinkedHashMap<PropertyDefinition<?>, Boolean> _orderBy = parseOrderBy(orderBy, capabilityOrderBy);
 		if (MapUtils.isEmpty(_orderBy)) {
 			return;
 		}
@@ -87,21 +85,19 @@ public class SortUtil {
 		@Override
 		public int compare(ObjectData o1, ObjectData o2) {
 			String propertyId = propertyDefinition.getId();
-			PropertyData<?> pd1 = o1.getProperties().getProperties()
-					.get(propertyId);
-			PropertyData<?> pd2 = o2.getProperties().getProperties()
-					.get(propertyId);
+			PropertyData<?> pd1 = o1.getProperties().getProperties().get(propertyId);
+			PropertyData<?> pd2 = o2.getProperties().getProperties().get(propertyId);
 
 			Object val1 = null;
 			Object val2 = null;
-		
-			if(pd1 != null){
+
+			if (pd1 != null) {
 				val1 = pd1.getFirstValue();
 			}
-			if(pd2 != null){
+			if (pd2 != null) {
 				val2 = pd2.getFirstValue();
 			}
-			
+
 			// Null values are put to the last
 			if (val1 == null && val2 == null) {
 				return 0;
@@ -111,8 +107,7 @@ public class SortUtil {
 				return -1;
 			} else {
 				PropertyType pType = propertyDefinition.getPropertyType();
-				if (PropertyType.STRING == pType || PropertyType.ID == pType
-						|| PropertyType.HTML == pType
+				if (PropertyType.STRING == pType || PropertyType.ID == pType || PropertyType.HTML == pType
 						|| PropertyType.URI == pType) {
 					String _val1 = (String) val1;
 					String _val2 = (String) val2;
@@ -146,8 +141,8 @@ public class SortUtil {
 	 * @param orderBy
 	 * @return
 	 */
-	private LinkedHashMap<PropertyDefinition<?>, Boolean> parseOrderBy(
-			String orderBy, CapabilityOrderBy capabilityOrderBy) {
+	private LinkedHashMap<PropertyDefinition<?>, Boolean> parseOrderBy(String orderBy,
+			CapabilityOrderBy capabilityOrderBy) {
 
 		if (StringUtils.isBlank(orderBy)) {
 			return null;
@@ -162,18 +157,19 @@ public class SortUtil {
 			// Property definition
 			PropertyDefinition<?> pdf = convertToPropertyDefinition(order[0]);
 			if (pdf == null) {
-				log.warn("Invalid property query name in orderBy parameter is ignored: propertyId="
-						+ order[0]);
+				log.warn("Invalid property query name in orderBy parameter is ignored: propertyId=" + order[0]);
 				continue;
-			} else if (capabilityOrderBy == CapabilityOrderBy.COMMON &&
-					!isCommonProperty(pdf)) {
-				log.warn("This property query name in orderBy parameter is not supported when capabilityOrderBy=common: propertyId="
-						+ order[0]);
+			} else if (capabilityOrderBy == CapabilityOrderBy.COMMON && !isCommonProperty(pdf)) {
+				log.warn(
+						"This property query name in orderBy parameter is not supported when capabilityOrderBy=common: propertyId="
+								+ order[0]);
 				continue;
-			// "orderable" can be different even when the same property id
-			/*}else if(!pdf.isOrderable()){
-				log.warn("This property query name in orderBy parameter is not orderable and ignored: propertyId="
-						+ order[0]);*/
+				// "orderable" can be different even when the same property id
+				/*
+				 * }else if(!pdf.isOrderable()){ log.
+				 * warn("This property query name in orderBy parameter is not orderable and ignored: propertyId="
+				 * + order[0]);
+				 */
 			}
 
 			// Modifier
@@ -182,8 +178,8 @@ public class SortUtil {
 				if ("DESC".equals(order[1])) {
 					desc = true;
 				} else if (StringUtils.isNotBlank(order[1])) {
-					log.warn("Invalid modifier other than DESC in orderBy parameter is ignored: propertyId="
-							+ order[0]);
+					log.warn(
+							"Invalid modifier other than DESC in orderBy parameter is ignored: propertyId=" + order[0]);
 				}
 			}
 
@@ -203,45 +199,33 @@ public class SortUtil {
 		if (_queryName.length == 1) {
 			return typeManager.getPropertyDefinitionCoreForQueryName(queryName);
 		} else {
-			return typeManager
-					.getPropertyDefinitionCoreForQueryName(_queryName[1]);
+			return typeManager.getPropertyDefinitionCoreForQueryName(_queryName[1]);
 		}
 	}
 
 	private boolean isCommonProperty(PropertyDefinition<?> propertyDefinition) {
 		String id = propertyDefinition.getId();
 
-		return PropertyIds.NAME.equals(id) || PropertyIds.OBJECT_ID.equals(id)
-				|| PropertyIds.OBJECT_TYPE_ID.equals(id)
-				|| PropertyIds.BASE_TYPE_ID.equals(id)
-				|| PropertyIds.CREATED_BY.equals(id)
-				|| PropertyIds.CREATION_DATE.equals(id)
-				|| PropertyIds.LAST_MODIFIED_BY.equals(id)
-				|| PropertyIds.LAST_MODIFICATION_DATE.equals(id)
-				|| PropertyIds.IS_IMMUTABLE.equals(id)
-				|| PropertyIds.IS_PRIVATE_WORKING_COPY.equals(id)
-				|| PropertyIds.IS_LATEST_VERSION.equals(id)
-				|| PropertyIds.IS_MAJOR_VERSION.equals(id)
-				|| PropertyIds.IS_LATEST_MAJOR_VERSION.equals(id)
-				|| PropertyIds.VERSION_LABEL.equals(id)
-				|| PropertyIds.VERSION_SERIES_ID.equals(id)
+		return PropertyIds.NAME.equals(id) || PropertyIds.OBJECT_ID.equals(id) || PropertyIds.OBJECT_TYPE_ID.equals(id)
+				|| PropertyIds.BASE_TYPE_ID.equals(id) || PropertyIds.CREATED_BY.equals(id)
+				|| PropertyIds.CREATION_DATE.equals(id) || PropertyIds.LAST_MODIFIED_BY.equals(id)
+				|| PropertyIds.LAST_MODIFICATION_DATE.equals(id) || PropertyIds.IS_IMMUTABLE.equals(id)
+				|| PropertyIds.IS_PRIVATE_WORKING_COPY.equals(id) || PropertyIds.IS_LATEST_VERSION.equals(id)
+				|| PropertyIds.IS_MAJOR_VERSION.equals(id) || PropertyIds.IS_LATEST_MAJOR_VERSION.equals(id)
+				|| PropertyIds.VERSION_LABEL.equals(id) || PropertyIds.VERSION_SERIES_ID.equals(id)
 				|| PropertyIds.IS_VERSION_SERIES_CHECKED_OUT.equals(id)
 				|| PropertyIds.VERSION_SERIES_CHECKED_OUT_BY.equals(id)
-				|| PropertyIds.VERSION_SERIES_CHECKED_OUT_ID.equals(id)
-				|| PropertyIds.CHECKIN_COMMENT.equals(id)
-				|| PropertyIds.CONTENT_STREAM_LENGTH.equals(id)
-				|| PropertyIds.CONTENT_STREAM_MIME_TYPE.equals(id)
-				|| PropertyIds.CONTENT_STREAM_FILE_NAME.equals(id)
-				|| PropertyIds.CONTENT_STREAM_ID.equals(id)
-				|| PropertyIds.PARENT_ID.equals(id)
-				|| PropertyIds.ALLOWED_CHILD_OBJECT_TYPE_IDS.equals(id)
+				|| PropertyIds.VERSION_SERIES_CHECKED_OUT_ID.equals(id) || PropertyIds.CHECKIN_COMMENT.equals(id)
+				|| PropertyIds.CONTENT_STREAM_LENGTH.equals(id) || PropertyIds.CONTENT_STREAM_MIME_TYPE.equals(id)
+				|| PropertyIds.CONTENT_STREAM_FILE_NAME.equals(id) || PropertyIds.CONTENT_STREAM_ID.equals(id)
+				|| PropertyIds.PARENT_ID.equals(id) || PropertyIds.ALLOWED_CHILD_OBJECT_TYPE_IDS.equals(id)
 				|| PropertyIds.PATH.equals(id);
 	}
 
 	public void setTypeManager(TypeManager typeManager) {
 		this.typeManager = typeManager;
 	}
-	
+
 	public void setRepositoryInfoMap(RepositoryInfoMap repositoryInfoMap) {
 		this.repositoryInfoMap = repositoryInfoMap;
 	}

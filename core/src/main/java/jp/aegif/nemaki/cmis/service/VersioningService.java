@@ -36,27 +36,32 @@ import jp.aegif.nemaki.util.spring.aspect.log.LogParam;
 
 public interface VersioningService {
 
-	public void checkOut(@LogParam("callContext") CallContext callContext, @LogParam("repositoryId") String repositoryId,
-			@LogParam("objectId") Holder<String> objectId, @LogParam("contentCopied") Holder<Boolean> contentCopied,
-			@LogParam("extension") ExtensionsData extension);
+	public void checkOut(@LogParam("callContext") CallContext callContext,
+			@LogParam("repositoryId") String repositoryId, @LogParam("objectId") Holder<String> objectId,
+			@LogParam("contentCopied") Holder<Boolean> contentCopied, @LogParam("extension") ExtensionsData extension);
 
-	public void cancelCheckOut(@LogParam("callContext") CallContext callContext, @LogParam("repositoryId") String repositoryId,
-			@LogParam("objectId") String objectId, @LogParam("extension") ExtensionsData extension);
+	public void cancelCheckOut(@LogParam("callContext") CallContext callContext,
+			@LogParam("repositoryId") String repositoryId, @LogParam("objectId") String objectId,
+			@LogParam("extension") ExtensionsData extension);
 
 	public void checkIn(@LogParam("callContext") CallContext callContext, @LogParam("repositoryId") String repositoryId,
-			@LogParam("objectId") Holder<String> objectId, @LogParam("major") Boolean major, @LogParam("properties") Properties properties,
-			@LogParam("contentStream") ContentStream contentStream, @LogParam("checkinComment") String checkinComment,
-			@LogParam("policies") List<String> policies, @LogParam("addAces") Acl addAces, @LogParam("removeAces") Acl removeAces,
+			@LogParam("objectId") Holder<String> objectId, @LogParam("major") Boolean major,
+			@LogParam("properties") Properties properties, @LogParam("contentStream") ContentStream contentStream,
+			@LogParam("checkinComment") String checkinComment, @LogParam("policies") List<String> policies,
+			@LogParam("addAces") Acl addAces, @LogParam("removeAces") Acl removeAces,
 			@LogParam("extension") ExtensionsData extension);
 
-	public List<ObjectData> getAllVersions(@LogParam("callContext") CallContext callContext, @LogParam("repositoryId") String repositoryId,
-			@LogParam("objectId") String objectId, @LogParam("versionSeriesId") String versionSeriesId, @LogParam("filter") String filter,
-			@LogParam("includeAllowableActions") Boolean includeAllowableActions, @LogParam("extension") ExtensionsData extension);
+	public List<ObjectData> getAllVersions(@LogParam("callContext") CallContext callContext,
+			@LogParam("repositoryId") String repositoryId, @LogParam("objectId") String objectId,
+			@LogParam("versionSeriesId") String versionSeriesId, @LogParam("filter") String filter,
+			@LogParam("includeAllowableActions") Boolean includeAllowableActions,
+			@LogParam("extension") ExtensionsData extension);
 
-	public ObjectData getObjectOfLatestVersion(@LogParam("callContext") CallContext callContext, @LogParam("repositoryId") String repositoryId,
-			@LogParam("objectId") String objectId, @LogParam("versionSeriesId") String versionSeriesId, @LogParam("major") Boolean major,
+	public ObjectData getObjectOfLatestVersion(@LogParam("callContext") CallContext callContext,
+			@LogParam("repositoryId") String repositoryId, @LogParam("objectId") String objectId,
+			@LogParam("versionSeriesId") String versionSeriesId, @LogParam("major") Boolean major,
 			@LogParam("filter") String filter, @LogParam("includeAllowableActions") Boolean includeAllowableActions,
-			@LogParam("includeRelationships") IncludeRelationships includeRelationships, @LogParam("renditionFilter") String renditionFilter,
-			@LogParam("includePolicyIds") Boolean includePolicyIds, @LogParam("includeAcl") Boolean includeAcl,
-			@LogParam("extension") ExtensionsData extension);
+			@LogParam("includeRelationships") IncludeRelationships includeRelationships,
+			@LogParam("renditionFilter") String renditionFilter, @LogParam("includePolicyIds") Boolean includePolicyIds,
+			@LogParam("includeAcl") Boolean includeAcl, @LogParam("extension") ExtensionsData extension);
 }

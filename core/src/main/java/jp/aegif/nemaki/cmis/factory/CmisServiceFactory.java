@@ -1,20 +1,9 @@
 package jp.aegif.nemaki.cmis.factory;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-
-import jp.aegif.nemaki.cmis.factory.auth.AuthenticationService;
-import jp.aegif.nemaki.cmis.factory.auth.CmisServiceWrapper;
-import jp.aegif.nemaki.cmis.factory.auth.impl.AuthenticationServiceImpl;
-import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
-import jp.aegif.nemaki.util.DataUtil;
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.util.constant.PropertyKey;
-import jp.aegif.nemaki.util.spring.SpringUtil;
 
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.chemistry.opencmis.commons.impl.server.AbstractServiceFactory;
@@ -25,11 +14,19 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import jp.aegif.nemaki.cmis.factory.auth.AuthenticationService;
+import jp.aegif.nemaki.cmis.factory.auth.CmisServiceWrapper;
+import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
+import jp.aegif.nemaki.util.DataUtil;
+import jp.aegif.nemaki.util.PropertyManager;
+import jp.aegif.nemaki.util.constant.PropertyKey;
+import jp.aegif.nemaki.util.spring.SpringUtil;
+
 /**
  * Service factory class, specified in repository.properties.
  */
-public class CmisServiceFactory extends AbstractServiceFactory implements
-		org.apache.chemistry.opencmis.commons.server.CmisServiceFactory, ApplicationContextAware{
+public class CmisServiceFactory extends AbstractServiceFactory
+		implements org.apache.chemistry.opencmis.commons.server.CmisServiceFactory, ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
 	private PropertyManager propertyManager;
@@ -43,19 +40,22 @@ public class CmisServiceFactory extends AbstractServiceFactory implements
 	private static BigInteger DEFAULT_MAX_ITEMS_OBJECTS;
 	private static BigInteger DEFAULT_DEPTH_OBJECTS;
 
-	private static final Log log = LogFactory
-			.getLog(CmisServiceFactory.class);
+	private static final Log log = LogFactory.getLog(CmisServiceFactory.class);
 
 	public CmisServiceFactory() {
 		super();
 	}
 
 	@PostConstruct
-	public void setup(){
-		DEFAULT_MAX_ITEMS_TYPES = DataUtil.convertToBigInteger(propertyManager.readValue(PropertyKey.CMIS_SERVER_DEFAULT_MAX_ITEMS_TYPES));
-		DEFAULT_DEPTH_TYPES = DataUtil.convertToBigInteger(propertyManager.readValue(PropertyKey.CMIS_SERVER_DEFAULT_DEPTH_TYPES));
-		DEFAULT_MAX_ITEMS_OBJECTS = DataUtil.convertToBigInteger(propertyManager.readValue(PropertyKey.CMIS_SERVER_DEFAULT_MAX_ITEMS_OBJECTS));
-		DEFAULT_DEPTH_OBJECTS = DataUtil.convertToBigInteger(propertyManager.readValue(PropertyKey.CMIS_SERVER_DEFAULT_MAX_DEPTH_OBJECTS));
+	public void setup() {
+		DEFAULT_MAX_ITEMS_TYPES = DataUtil
+				.convertToBigInteger(propertyManager.readValue(PropertyKey.CMIS_SERVER_DEFAULT_MAX_ITEMS_TYPES));
+		DEFAULT_DEPTH_TYPES = DataUtil
+				.convertToBigInteger(propertyManager.readValue(PropertyKey.CMIS_SERVER_DEFAULT_DEPTH_TYPES));
+		DEFAULT_MAX_ITEMS_OBJECTS = DataUtil
+				.convertToBigInteger(propertyManager.readValue(PropertyKey.CMIS_SERVER_DEFAULT_MAX_ITEMS_OBJECTS));
+		DEFAULT_DEPTH_OBJECTS = DataUtil
+				.convertToBigInteger(propertyManager.readValue(PropertyKey.CMIS_SERVER_DEFAULT_MAX_DEPTH_OBJECTS));
 	}
 
 	/**
@@ -76,29 +76,21 @@ public class CmisServiceFactory extends AbstractServiceFactory implements
 		if (auth) {
 			// Create CmisService
 			CmisService calledCmisService = SpringUtil.getBeanByType(applicationContext, CmisService.class);
-			if(calledCmisService == null){
+			if (calledCmisService == null) {
 				log.error("RepositoryId=" + repositoryId + " does not exist", new Throwable());
 			}
 
-			CmisServiceWrapper wrapper = new CmisServiceWrapper(
-					calledCmisService,
-					DEFAULT_MAX_ITEMS_TYPES, DEFAULT_DEPTH_TYPES,
-					DEFAULT_MAX_ITEMS_OBJECTS, DEFAULT_DEPTH_OBJECTS,
-					callContext);
-			if(log.isTraceEnabled()){
-				log.trace("nemaki_log[FACTORY]"
-						+ "CmisService@"
-						+ calledCmisService.hashCode()
-						+ " with CallContext@"
-						+ callContext.hashCode()
-						+ "[repositoryId=" + callContext.getRepositoryId()
-						+ ", userId=" + callContext.getUsername()
-						+ "] is generated");
+			CmisServiceWrapper wrapper = new CmisServiceWrapper(calledCmisService, DEFAULT_MAX_ITEMS_TYPES,
+					DEFAULT_DEPTH_TYPES, DEFAULT_MAX_ITEMS_OBJECTS, DEFAULT_DEPTH_OBJECTS, callContext);
+			if (log.isTraceEnabled()) {
+				log.trace("nemaki_log[FACTORY]" + "CmisService@" + calledCmisService.hashCode() + " with CallContext@"
+						+ callContext.hashCode() + "[repositoryId=" + callContext.getRepositoryId() + ", userId="
+						+ callContext.getUsername() + "] is generated");
 			}
 
 			return wrapper;
 		} else {
-			String msg = String.format("[Repository=%1$s][UserName=%2$s]Authentication failed",repositoryId, userName);
+			String msg = String.format("[Repository=%1$s][UserName=%2$s]Authentication failed", repositoryId, userName);
 			throw new CmisUnauthorizedException(msg, BigInteger.valueOf(401));
 		}
 	}
@@ -112,8 +104,7 @@ public class CmisServiceFactory extends AbstractServiceFactory implements
 		this.propertyManager = propertyManager;
 	}
 
-	public void setAuthenticationService(
-			AuthenticationService authenticationService) {
+	public void setAuthenticationService(AuthenticationService authenticationService) {
 		this.authenticationService = authenticationService;
 	}
 

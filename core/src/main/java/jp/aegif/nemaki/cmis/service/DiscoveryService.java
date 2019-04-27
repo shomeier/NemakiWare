@@ -38,22 +38,26 @@ public interface DiscoveryService {
 
 	/**
 	 * Executes a CMIS query statement against the contents of the repository.
+	 * 
 	 * @param repositoryId TODO
 	 */
-	ObjectList query(@LogParam("callContext")CallContext callContext, @LogParam("repositoryId")String repositoryId,
-			@LogParam("statement")String statement, @LogParam("searchAllVersions")Boolean searchAllVersions, @LogParam("includeAllowableActions")Boolean includeAllowableActions,
-			@LogParam("includeRelationships")IncludeRelationships includeRelationships,
-			@LogParam("renditionFilter")String renditionFilter, @LogParam("maxItems")BigInteger maxItems,
-			@LogParam("skipCount")BigInteger skipCount, @LogParam("extension")ExtensionsData extension);
+	ObjectList query(@LogParam("callContext") CallContext callContext, @LogParam("repositoryId") String repositoryId,
+			@LogParam("statement") String statement, @LogParam("searchAllVersions") Boolean searchAllVersions,
+			@LogParam("includeAllowableActions") Boolean includeAllowableActions,
+			@LogParam("includeRelationships") IncludeRelationships includeRelationships,
+			@LogParam("renditionFilter") String renditionFilter, @LogParam("maxItems") BigInteger maxItems,
+			@LogParam("skipCount") BigInteger skipCount, @LogParam("extension") ExtensionsData extension);
 
 	/**
 	 * Get the list of object that have changed since a given point in the past.
 	 * 
 	 * TODO Not Yet Implemented
+	 * 
 	 * @param repositoryId TODO
 	 */
-	ObjectList getContentChanges(@LogParam("callContext")CallContext callContext,
-			@LogParam("repositoryId")String repositoryId, @LogParam("changeLogToken") Holder<String> changeLogToken,
-			@LogParam("includeProperties")Boolean includeProperties, @LogParam("filter")String filter, @LogParam("includePolicyIds")Boolean includePolicyIds,
-			@LogParam("includeAcl")Boolean includeAcl, @LogParam("maxItems")BigInteger maxItems, @LogParam("extension")ExtensionsData extension);
+	ObjectList getContentChanges(@LogParam("callContext") CallContext callContext,
+			@LogParam("repositoryId") String repositoryId, @LogParam("changeLogToken") Holder<String> changeLogToken,
+			@LogParam("includeProperties") Boolean includeProperties, @LogParam("filter") String filter,
+			@LogParam("includePolicyIds") Boolean includePolicyIds, @LogParam("includeAcl") Boolean includeAcl,
+			@LogParam("maxItems") BigInteger maxItems, @LogParam("extension") ExtensionsData extension);
 }

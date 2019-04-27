@@ -24,6 +24,15 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
+import org.apache.chemistry.opencmis.commons.data.ExtensionsData;
+import org.apache.chemistry.opencmis.commons.data.Properties;
+import org.apache.chemistry.opencmis.commons.enums.ChangeType;
+import org.apache.chemistry.opencmis.commons.enums.RelationshipDirection;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
+import org.apache.chemistry.opencmis.commons.server.CallContext;
+import org.apache.chemistry.opencmis.commons.spi.Holder;
+
 import jp.aegif.nemaki.model.Acl;
 import jp.aegif.nemaki.model.Archive;
 import jp.aegif.nemaki.model.AttachmentNode;
@@ -40,15 +49,6 @@ import jp.aegif.nemaki.model.UserItem;
 import jp.aegif.nemaki.model.VersionSeries;
 import jp.aegif.nemaki.model.exception.ParentNoLongerExistException;
 
-import org.apache.chemistry.opencmis.commons.data.ContentStream;
-import org.apache.chemistry.opencmis.commons.data.ExtensionsData;
-import org.apache.chemistry.opencmis.commons.data.Properties;
-import org.apache.chemistry.opencmis.commons.enums.ChangeType;
-import org.apache.chemistry.opencmis.commons.enums.RelationshipDirection;
-import org.apache.chemistry.opencmis.commons.enums.VersioningState;
-import org.apache.chemistry.opencmis.commons.server.CallContext;
-import org.apache.chemistry.opencmis.commons.spi.Holder;
-
 public interface ContentService {
 
 	// ///////////////////////////////////////
@@ -62,9 +62,10 @@ public interface ContentService {
 	public boolean isRoot(String repositoryId, Content content);
 
 	public boolean isTopLevel(String repositoryId, Content content);
-	
+
 	/**
 	 * Check if any object of a type exists
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectTypeId
 	 * @return
@@ -73,6 +74,7 @@ public interface ContentService {
 
 	/**
 	 * Get a content(without type-specified)
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -82,6 +84,7 @@ public interface ContentService {
 
 	/**
 	 * Get a fileable content by path
+	 * 
 	 * @param repositoryId TODO
 	 * @param path
 	 *
@@ -91,6 +94,7 @@ public interface ContentService {
 
 	/**
 	 * Get the parent folder
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -100,6 +104,7 @@ public interface ContentService {
 
 	/**
 	 * Get children under a folder
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -109,6 +114,7 @@ public interface ContentService {
 
 	/**
 	 * Get a document
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -118,7 +124,8 @@ public interface ContentService {
 
 	/**
 	 * Get the latest version document of a given versionSeries
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId    TODO
 	 * @param versionSeriesId
 	 *
 	 * @return
@@ -127,7 +134,8 @@ public interface ContentService {
 
 	/**
 	 * Get the latest version major document of a given versionSeries
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId    TODO
 	 * @param versionSeriesId
 	 *
 	 * @return
@@ -136,8 +144,9 @@ public interface ContentService {
 
 	/**
 	 * Get all versions of a document
-	 * @param callContext TODO
-	 * @param repositoryId TODO
+	 * 
+	 * @param callContext     TODO
+	 * @param repositoryId    TODO
 	 * @param versionSeriesId
 	 * @return
 	 */
@@ -145,6 +154,7 @@ public interface ContentService {
 
 	/**
 	 * Get checkout documents in a folder
+	 * 
 	 * @param repositoryId TODO
 	 * @param folderId
 	 * @param orderBy
@@ -152,11 +162,11 @@ public interface ContentService {
 	 *
 	 * @return
 	 */
-	List<Document> getCheckedOutDocs(String repositoryId, String folderId,
-			String orderBy, ExtensionsData extension);
+	List<Document> getCheckedOutDocs(String repositoryId, String folderId, String orderBy, ExtensionsData extension);
 
 	/**
 	 * Get a version series
+	 * 
 	 * @param repositoryId TODO
 	 * @param document
 	 * @return
@@ -165,7 +175,8 @@ public interface ContentService {
 
 	/**
 	 * Get a version series
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId    TODO
 	 * @param versionSeriesId
 	 *
 	 * @return
@@ -174,6 +185,7 @@ public interface ContentService {
 
 	/**
 	 * Get a folder
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -182,9 +194,10 @@ public interface ContentService {
 	Folder getFolder(String repositoryId, String objectId);
 
 	Folder getSystemFolder(String repositoryId);
-	
+
 	/**
 	 * Get a path string
+	 * 
 	 * @param repositoryId TODO
 	 * @param content
 	 *
@@ -192,10 +205,9 @@ public interface ContentService {
 	 */
 	String calculatePath(String repositoryId, Content content);
 
-
-
 	/**
 	 * Get a relationship
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -205,17 +217,19 @@ public interface ContentService {
 
 	/**
 	 * Search relationships by the edge node
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId          TODO
 	 * @param objectId
 	 * @param relationshipDirection
 	 *
 	 * @return
 	 */
-	List<Relationship> getRelationsipsOfObject(String repositoryId,
-			String objectId, RelationshipDirection relationshipDirection);
+	List<Relationship> getRelationsipsOfObject(String repositoryId, String objectId,
+			RelationshipDirection relationshipDirection);
 
 	/**
 	 * Get a policy
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -225,44 +239,52 @@ public interface ContentService {
 
 	/**
 	 * Get an item
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 * @return
 	 */
 	Item getItem(String repositoryId, String objectId);
-	
+
 	UserItem getUserItem(String repositoryId, String objectId);
+
 	UserItem getUserItemById(String repositoryId, String userId);
+
 	List<UserItem> getUserItems(String repositoryId);
-	
+
 	GroupItem getGroupItem(String repositoryId, String objectId);
+
 	GroupItem getGroupItemById(String repositoryId, String groupId);
+
 	List<GroupItem> getGroupItems(String repositoryId);
-	
+
 	Set<String> getGroupIdsContainingUser(String repositoryId, String userId);
+
 	String getAnonymous(String repositoryId);
+
 	String getAnyone(String repositoryId);
 
 	/**
 	 * Create a document
 	 *
 	 * @param callContext
-	 * @param repositoryId TODO
+	 * @param repositoryId    TODO
 	 * @param properties
 	 * @param parentFolder
 	 * @param contentStream
 	 * @param versioningState
 	 * @return
 	 */
-	Document createDocument(CallContext callContext, String repositoryId,
-			Properties properties, Folder parentFolder,
-			ContentStream contentStream, VersioningState versioningState, List<String> policies, org.apache.chemistry.opencmis.commons.data.Acl addAces, org.apache.chemistry.opencmis.commons.data.Acl removeAces);
+	Document createDocument(CallContext callContext, String repositoryId, Properties properties, Folder parentFolder,
+			ContentStream contentStream, VersioningState versioningState, List<String> policies,
+			org.apache.chemistry.opencmis.commons.data.Acl addAces,
+			org.apache.chemistry.opencmis.commons.data.Acl removeAces);
 
 	/**
 	 * Copy a document
 	 *
 	 * @param callContext
-	 * @param repositoryId TODO
+	 * @param repositoryId    TODO
 	 * @param properties
 	 * @param target
 	 * @param original
@@ -272,23 +294,22 @@ public interface ContentService {
 	 * @param removeAces
 	 * @return
 	 */
-	Document createDocumentFromSource(CallContext callContext,
-			String repositoryId, Properties properties, Folder target,
-			Document original, VersioningState versioningState,
-			List<String> policies,
-			org.apache.chemistry.opencmis.commons.data.Acl addAces, org.apache.chemistry.opencmis.commons.data.Acl removeAces);
+	Document createDocumentFromSource(CallContext callContext, String repositoryId, Properties properties,
+			Folder target, Document original, VersioningState versioningState, List<String> policies,
+			org.apache.chemistry.opencmis.commons.data.Acl addAces,
+			org.apache.chemistry.opencmis.commons.data.Acl removeAces);
 
 	/**
 	 * Copy a document setting new content stream
 	 *
 	 * @param callContext
-	 * @param repositoryId TODO
+	 * @param repositoryId  TODO
 	 * @param original
 	 * @param contentStream
 	 * @return
 	 */
-	Document createDocumentWithNewStream(CallContext callContext,
-			String repositoryId, Document original, ContentStream contentStream);
+	Document createDocumentWithNewStream(CallContext callContext, String repositoryId, Document original,
+			ContentStream contentStream);
 
 	Document replacePwc(CallContext callContext, String repositoryId, Document original, ContentStream contentStream);
 
@@ -301,8 +322,7 @@ public interface ContentService {
 	 * @param extension
 	 * @return
 	 */
-	Document checkOut(CallContext callContext, String repositoryId,
-			String objectId, ExtensionsData extension);
+	Document checkOut(CallContext callContext, String repositoryId, String objectId, ExtensionsData extension);
 
 	/**
 	 * Cancel checking out
@@ -312,14 +332,13 @@ public interface ContentService {
 	 * @param objectId
 	 * @param extension
 	 */
-	void cancelCheckOut(CallContext callContext, String repositoryId,
-			String objectId, ExtensionsData extension);
+	void cancelCheckOut(CallContext callContext, String repositoryId, String objectId, ExtensionsData extension);
 
 	/**
 	 * Check in and delete PWC
 	 *
 	 * @param callContext
-	 * @param repositoryId TODO
+	 * @param repositoryId   TODO
 	 * @param objectId
 	 * @param major
 	 * @param properties
@@ -331,10 +350,8 @@ public interface ContentService {
 	 * @param extension
 	 * @return
 	 */
-	Document checkIn(CallContext callContext, String repositoryId,
-			Holder<String> objectId, Boolean major, Properties properties,
-			ContentStream contentStream, String checkinComment,
-			List<String> policies,
+	Document checkIn(CallContext callContext, String repositoryId, Holder<String> objectId, Boolean major,
+			Properties properties, ContentStream contentStream, String checkinComment, List<String> policies,
 			org.apache.chemistry.opencmis.commons.data.Acl addAces,
 			org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
 
@@ -345,12 +362,12 @@ public interface ContentService {
 	 * @param repositoryId TODO
 	 * @param properties
 	 * @param parentFolder
-	 * @param extension TODO
+	 * @param extension    TODO
 	 * @return
 	 */
-	Folder createFolder(CallContext callContext, String repositoryId,
-			Properties properties, Folder parentFolder, List<String> policies, org.apache.chemistry.opencmis.commons.data.Acl
-			 addAces, org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
+	Folder createFolder(CallContext callContext, String repositoryId, Properties properties, Folder parentFolder,
+			List<String> policies, org.apache.chemistry.opencmis.commons.data.Acl addAces,
+			org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
 
 	/**
 	 * Create a relationship
@@ -364,10 +381,8 @@ public interface ContentService {
 	 * @param extension
 	 * @return
 	 */
-	Relationship createRelationship(CallContext callContext,
-			String repositoryId, Properties properties,
-			List<String> policies,
-			org.apache.chemistry.opencmis.commons.data.Acl addAces,
+	Relationship createRelationship(CallContext callContext, String repositoryId, Properties properties,
+			List<String> policies, org.apache.chemistry.opencmis.commons.data.Acl addAces,
 			org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
 
 	/**
@@ -382,14 +397,13 @@ public interface ContentService {
 	 * @param extension
 	 * @return
 	 */
-	Policy createPolicy(CallContext callContext, String repositoryId,
-			Properties properties,
-			List<String> policies,
+	Policy createPolicy(CallContext callContext, String repositoryId, Properties properties, List<String> policies,
 			org.apache.chemistry.opencmis.commons.data.Acl addAces,
 			org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
 
 	/**
 	 * Create an item
+	 * 
 	 * @param callContext
 	 * @param repositoryId TODO
 	 * @param properties
@@ -400,23 +414,27 @@ public interface ContentService {
 	 * @param extension
 	 * @return
 	 */
-	Item createItem(CallContext callContext, String repositoryId,
-			Properties properties, String folderId, List<String> policies,
-			org.apache.chemistry.opencmis.commons.data.Acl addAces, org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
+	Item createItem(CallContext callContext, String repositoryId, Properties properties, String folderId,
+			List<String> policies, org.apache.chemistry.opencmis.commons.data.Acl addAces,
+			org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
 
 	UserItem createUserItem(CallContext callContext, String repositoryId, Properties properties, String folderId,
 			List<String> policies, org.apache.chemistry.opencmis.commons.data.Acl addAces,
 			org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
+
 	UserItem createUserItem(CallContext callContext, String repositoryId, UserItem userItem);
+
 	GroupItem createGroupItem(CallContext callContext, String repositoryId, Properties properties, String folderId,
 			List<String> policies, org.apache.chemistry.opencmis.commons.data.Acl addAces,
 			org.apache.chemistry.opencmis.commons.data.Acl removeAces, ExtensionsData extension);
+
 	GroupItem createGroupItem(CallContext callContext, String repositoryId, GroupItem groupItem);
-	
+
 	Content update(CallContext callContext, String repositoryId, Content content);
-	
+
 	/**
 	 * Update a content(for general-purpose)
+	 * 
 	 * @param repositoryId TODO
 	 * @param content
 	 *
@@ -433,12 +451,12 @@ public interface ContentService {
 	 * @param content
 	 * @return
 	 */
-	Content updateProperties(CallContext callContext, String repositoryId,
-			Properties properties, Content content);
+	Content updateProperties(CallContext callContext, String repositoryId, Properties properties, Content content);
 
 	/**
 	 * Move a content
-	 * @param callContext TODO
+	 * 
+	 * @param callContext  TODO
 	 * @param repositoryId TODO
 	 * @param content
 	 * @param target
@@ -454,8 +472,8 @@ public interface ContentService {
 	 * @param objectId
 	 * @param extension
 	 */
-	void applyPolicy(CallContext callContext, String repositoryId, String policyId,
-			String objectId, ExtensionsData extension);
+	void applyPolicy(CallContext callContext, String repositoryId, String policyId, String objectId,
+			ExtensionsData extension);
 
 	/**
 	 * Remove a policy from a content
@@ -466,34 +484,32 @@ public interface ContentService {
 	 * @param objectId
 	 * @param extension
 	 */
-	void removePolicy(CallContext callContext, String repositoryId,
-			String policyId, String objectId, ExtensionsData extension);
+	void removePolicy(CallContext callContext, String repositoryId, String policyId, String objectId,
+			ExtensionsData extension);
 
 	List<Policy> getAppliedPolicies(String repositoryId, String objectId, ExtensionsData extension);
-
 
 	/**
 	 * Delete a content(for general-purpose)
 	 *
 	 * @param callContext
-	 * @param repositoryId TODO
+	 * @param repositoryId      TODO
 	 * @param objectId
 	 * @param deletedWithParent
 	 */
-	void delete(CallContext callContext, String repositoryId,
-			String objectId, Boolean deletedWithParent);
+	void delete(CallContext callContext, String repositoryId, String objectId, Boolean deletedWithParent);
 
 	/**
 	 * Delete a document (and also its versions)
 	 *
 	 * @param callContext
-	 * @param repositoryId TODO
+	 * @param repositoryId     TODO
 	 * @param objectId
 	 * @param allVersions
 	 * @param deleteWithParent
 	 */
-	void deleteDocument(CallContext callContext, String repositoryId,
-			String objectId, Boolean allVersions, Boolean deleteWithParent);
+	void deleteDocument(CallContext callContext, String repositoryId, String objectId, Boolean allVersions,
+			Boolean deleteWithParent);
 
 	/**
 	 * Delete an attachment node
@@ -506,6 +522,7 @@ public interface ContentService {
 
 	/**
 	 * Delete content stream
+	 * 
 	 * @param callContext
 	 * @param repositoryId TODO
 	 * @param objectId
@@ -516,7 +533,7 @@ public interface ContentService {
 	 * Delete a whole folder tree
 	 *
 	 * @param context
-	 * @param repositoryId TODO
+	 * @param repositoryId      TODO
 	 * @param folderId
 	 * @param allVersions
 	 * @param continueOnFailure
@@ -524,14 +541,15 @@ public interface ContentService {
 	 * @return TODO
 	 * @throws Exception
 	 */
-	List<String> deleteTree(CallContext context, String repositoryId, String folderId,
-			Boolean allVersions, Boolean continueOnFailure, Boolean deletedWithParent);
+	List<String> deleteTree(CallContext context, String repositoryId, String folderId, Boolean allVersions,
+			Boolean continueOnFailure, Boolean deletedWithParent);
 
 	// ///////////////////////////////////////
 	// Attachment
 	// ///////////////////////////////////////
 	/**
 	 * Get an attachment
+	 * 
 	 * @param repositoryId TODO
 	 * @param attachmentId
 	 *
@@ -541,6 +559,7 @@ public interface ContentService {
 
 	/**
 	 * Get an attachment without stream
+	 * 
 	 * @param repositoryId TODO
 	 * @param attachmentId
 	 *
@@ -553,7 +572,7 @@ public interface ContentService {
 	 *
 	 *
 	 * @param callContext
-	 * @param repositoryId TODO
+	 * @param repositoryId  TODO
 	 * @param objectId
 	 * @param changeToken
 	 * @param contentStream
@@ -561,11 +580,11 @@ public interface ContentService {
 	 * @param extension
 	 */
 	void appendAttachment(CallContext callContext, String repositoryId, Holder<String> objectId,
-			Holder<String> changeToken, ContentStream contentStream,
-			boolean isLastChunk, ExtensionsData extension);
+			Holder<String> changeToken, ContentStream contentStream, boolean isLastChunk, ExtensionsData extension);
 
 	/**
 	 * Get a rendition
+	 * 
 	 * @param repositoryId TODO
 	 * @param streamId
 	 *
@@ -575,6 +594,7 @@ public interface ContentService {
 
 	/**
 	 * Get renditions of a content
+	 * 
 	 * @param repositoryId TODO
 	 * @param objectId
 	 *
@@ -588,13 +608,14 @@ public interface ContentService {
 	public Acl calculateAcl(String repositoryId, Content content);
 
 	public Boolean getAclInheritedWithDefault(String repositoryId, Content content);
-	
+
 	// ///////////////////////////////////////
 	// Change event
 	// ///////////////////////////////////////
 	/**
 	 * Get a change event
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId  TODO
 	 * @param changeTokenId
 	 *
 	 * @return
@@ -603,7 +624,8 @@ public interface ContentService {
 
 	/**
 	 * Get latest change events in the change log
-	 * @param repositoryId TODO
+	 * 
+	 * @param repositoryId      TODO
 	 * @param context
 	 * @param changeLogToken
 	 * @param includeProperties
@@ -615,13 +637,13 @@ public interface ContentService {
 	 *
 	 * @return
 	 */
-	List<Change> getLatestChanges(String repositoryId,
-			CallContext context, Holder<String> changeLogToken,
-			Boolean includeProperties, String filter, Boolean includePolicyIds,
-			Boolean includeAcl, BigInteger maxItems, ExtensionsData extension);
+	List<Change> getLatestChanges(String repositoryId, CallContext context, Holder<String> changeLogToken,
+			Boolean includeProperties, String filter, Boolean includePolicyIds, Boolean includeAcl, BigInteger maxItems,
+			ExtensionsData extension);
 
 	/**
 	 * Get the latest change token in the repository
+	 * 
 	 * @param repositoryId TODO
 	 *
 	 * @return
@@ -633,6 +655,7 @@ public interface ContentService {
 	// ///////////////////////////////////////
 	/**
 	 * Get all archives in the repository
+	 * 
 	 * @param repositoryId TODO
 	 *
 	 * @return
@@ -641,6 +664,7 @@ public interface ContentService {
 
 	/**
 	 * Get a specified number of archives
+	 * 
 	 * @param repositoryId
 	 * @param skip
 	 * @param limit
@@ -648,10 +672,10 @@ public interface ContentService {
 	 * @return
 	 */
 	List<Archive> getArchives(String repositoryId, Integer skip, Integer limit, Boolean desc);
-	
-	
+
 	/**
 	 * Get an archive
+	 * 
 	 * @param repositoryId TODO
 	 * @param archiveId
 	 *
@@ -661,6 +685,7 @@ public interface ContentService {
 
 	/**
 	 * Get an archive by its original content's id
+	 * 
 	 * @param repositoryId TODO
 	 * @param archiveId
 	 *
@@ -672,13 +697,12 @@ public interface ContentService {
 	 * Create an archive of a content
 	 *
 	 * @param callContext
-	 * @param repositoryId TODO
+	 * @param repositoryId      TODO
 	 * @param objectId
 	 * @param deletedWithParent
 	 * @return
 	 */
-	Archive createArchive(CallContext callContext, String repositoryId,
-			String objectId, Boolean deletedWithParent);
+	Archive createArchive(CallContext callContext, String repositoryId, String objectId, Boolean deletedWithParent);
 
 	/**
 	 * Create an archive of an attachment
@@ -689,34 +713,38 @@ public interface ContentService {
 	 * @return
 	 */
 	Archive createAttachmentArchive(CallContext callContext, String repositoryId, String attachmentId);
-	
+
 	/**
 	 * Restore a content from an archive
+	 * 
 	 * @param repositoryId TODO
 	 * @param archiveId
 	 */
 	void restoreArchive(String repositoryId, String archiveId) throws ParentNoLongerExistException;
 
 	/**
-	 * Destroy an archive from database 
+	 * Destroy an archive from database
+	 * 
 	 * @param repositoryId
 	 * @param archiveId
 	 */
 	public void destroyArchive(String repositoryId, String archiveId);
-	
+
 	/**
 	 * Write change event
+	 * 
 	 * @param callContext
 	 * @param repositoryId TODO
 	 * @param content
 	 * @param acl
 	 * @param changeType
 	 */
-	String writeChangeEvent(CallContext callContext, String repositoryId, Content content,
-			Acl acl, ChangeType changeType);
-	
+	String writeChangeEvent(CallContext callContext, String repositoryId, Content content, Acl acl,
+			ChangeType changeType);
+
 	/**
 	 * Update version without checkIn/Out
+	 * 
 	 * @param callContext
 	 * @param repositoryId
 	 * @param objectId
@@ -727,7 +755,7 @@ public interface ContentService {
 	 * @param originalDoc
 	 * @return
 	 */
-	public Document updateWithoutCheckInOut(CallContext callContext, String repositoryId,
-			Boolean major, Properties properties,
-			ContentStream contentStream, String checkinComment, Document previousDoc, VersionSeries versionSeries);
+	public Document updateWithoutCheckInOut(CallContext callContext, String repositoryId, Boolean major,
+			Properties properties, ContentStream contentStream, String checkinComment, Document previousDoc,
+			VersionSeries versionSeries);
 }

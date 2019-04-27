@@ -13,30 +13,29 @@ import org.apache.chemistry.opencmis.server.support.wrapper.ConformanceCmisServi
 
 import jp.aegif.nemaki.util.constant.CallContextKey;
 
-public class CmisServiceWrapper extends ConformanceCmisServiceWrapper{
+public class CmisServiceWrapper extends ConformanceCmisServiceWrapper {
 	/**
-     * Constructor used by {@link CmisServiceWrapperManager}.
-     */
-    public CmisServiceWrapper(CmisService service) {
-        super(service);
-    }
+	 * Constructor used by {@link CmisServiceWrapperManager}.
+	 */
+	public CmisServiceWrapper(CmisService service) {
+		super(service);
+	}
 
-    /**
-     * Alternative constructor.
-     */
-    public CmisServiceWrapper(CmisService service, BigInteger defaultTypesMaxItems,
-            BigInteger defaultTypesDepth, BigInteger defaultMaxItems, BigInteger defaultDepth,
-            CallContext callContext) {
-        super(service, defaultTypesMaxItems, defaultTypesDepth, defaultMaxItems, defaultDepth);
-       setCallContext(callContext);
-    }
-	
+	/**
+	 * Alternative constructor.
+	 */
+	public CmisServiceWrapper(CmisService service, BigInteger defaultTypesMaxItems, BigInteger defaultTypesDepth,
+			BigInteger defaultMaxItems, BigInteger defaultDepth, CallContext callContext) {
+		super(service, defaultTypesMaxItems, defaultTypesDepth, defaultMaxItems, defaultDepth);
+		setCallContext(callContext);
+	}
+
 	@Override
 	public List<RepositoryInfo> getRepositoryInfos(ExtensionsData extension) {
-		Boolean isSu = (Boolean)getCallContext().get(CallContextKey.IS_SU);
-		if(isSu){
+		Boolean isSu = (Boolean) getCallContext().get(CallContextKey.IS_SU);
+		if (isSu) {
 			return super.getRepositoryInfos(extension);
-		}else{
+		} else {
 			List<RepositoryInfo> list = new ArrayList<RepositoryInfo>();
 			list.add(getRepositoryInfo(getCallContext().getRepositoryId(), extension));
 			return list;

@@ -25,9 +25,8 @@ import java.io.InputStream;
 
 import jp.aegif.nemaki.util.constant.NodeType;
 
+public class Rendition extends NodeBase {
 
-public class Rendition extends NodeBase{
-	
 	private String mimetype;
 	private long length;
 	private String title;
@@ -37,12 +36,12 @@ public class Rendition extends NodeBase{
 	private String renditionDocumentId;
 	private InputStream inputStream;
 
-	public Rendition(){
+	public Rendition() {
 		super();
 		setType(NodeType.RENDITION.value());
 	}
 
-	public Rendition(NodeBase n){
+	public Rendition(NodeBase n) {
 		setId(n.getId());
 		setType(n.getType());
 		setCreated(n.getCreated());

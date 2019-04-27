@@ -21,20 +21,12 @@
  ******************************************************************************/
 package jp.aegif.nemaki.rest;
 
-import jp.aegif.nemaki.common.*;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Context;
-
-import jp.aegif.nemaki.model.NodeBase;
-import jp.aegif.nemaki.util.constant.CallContextKey;
 
 import org.apache.chemistry.opencmis.commons.server.CallContext;
-import org.apache.tools.ant.types.Mapper.MapperType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
@@ -42,6 +34,10 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import jp.aegif.nemaki.common.ErrorCode;
+import jp.aegif.nemaki.model.NodeBase;
+import jp.aegif.nemaki.util.constant.CallContextKey;
 
 @Component
 public class ResourceBase {
@@ -52,7 +48,7 @@ public class ResourceBase {
 	static final String PARENTID = "/";
 	static final String SUCCESS = "success";
 	static final String FAILURE = "failure";
-	static final String DOCNAME_VIEW="_design/_repo";
+	static final String DOCNAME_VIEW = "_design/_repo";
 	static final String VIEW_ALL = "_all_dbs";
 	static final String SPACE = "";
 
@@ -112,75 +108,74 @@ public class ResourceBase {
 	static final String ITEM_PROPERTIESFILE = "propertiesFile";
 	static final String ITEM_ARCHIVE = "archive";
 
-
-
-	//Set daoService
-	public ResourceBase(){
+	// Set daoService
+	public ResourceBase() {
 
 	}
 
-	//Utility methods
-	protected JSONArray addErrMsg(JSONArray errMsg, String item, String msg){
+	// Utility methods
+	protected JSONArray addErrMsg(JSONArray errMsg, String item, String msg) {
 		JSONObject obj = new JSONObject();
 		obj.put(item, msg);
 		errMsg.add(obj);
 		return errMsg;
 	}
 
-	protected JSONObject makeResult(boolean status, JSONObject result, JSONArray errMsg){
-		if(status && errMsg.size() == 0){
+	protected JSONObject makeResult(boolean status, JSONObject result, JSONArray errMsg) {
+		if (status && errMsg.size() == 0) {
 			result.put(ITEM_STATUS, SUCCESS);
-		}else{
+		} else {
 			result.put(ITEM_STATUS, FAILURE);
 			result.put(ITEM_ERROR, errMsg);
 		}
 		return result;
 	}
 
-	protected boolean checkAdmin(JSONArray errMsg, HttpServletRequest request){
+	protected boolean checkAdmin(JSONArray errMsg, HttpServletRequest request) {
 		CallContext callContext = (CallContext) request.getAttribute("CallContext");
 		Boolean _isAdmin = (Boolean) callContext.get(CallContextKey.IS_ADMIN);
 		boolean isAdmin = (_isAdmin == null) ? false : _isAdmin;
-		if(!isAdmin){
+		if (!isAdmin) {
 			addErrMsg(errMsg, ErrorCode.ERR_ONLY_ALLOWED_FOR_ADMIN, callContext.getRepositoryId());
 		}
 		return isAdmin;
 	}
 
-	protected ArrayNode addErrMsg(ArrayNode errMsg, String item, String msg){
+	protected ArrayNode addErrMsg(ArrayNode errMsg, String item, String msg) {
 		ObjectNode obj = mapper.createObjectNode();
 		obj.put(item, msg);
 		errMsg.add(obj);
 		return errMsg;
 	}
 
-	protected ObjectNode makeResult(boolean status, ObjectNode result, ArrayNode errMsg){
-		if(status && errMsg.size() == 0){
+	protected ObjectNode makeResult(boolean status, ObjectNode result, ArrayNode errMsg) {
+		if (status && errMsg.size() == 0) {
 			result.put(ITEM_STATUS, SUCCESS);
-		}else{
+		} else {
 			result.put(ITEM_STATUS, FAILURE);
 			result.set(ITEM_ERROR, errMsg);
 		}
 		return result;
 	}
 
-	protected boolean checkAdmin(ArrayNode errMsg, HttpServletRequest request){
+	protected boolean checkAdmin(ArrayNode errMsg, HttpServletRequest request) {
 		CallContext callContext = (CallContext) request.getAttribute("CallContext");
 		Boolean _isAdmin = (Boolean) callContext.get(CallContextKey.IS_ADMIN);
 		boolean isAdmin = (_isAdmin == null) ? false : _isAdmin;
-		if(!isAdmin){
+		if (!isAdmin) {
 			addErrMsg(errMsg, ErrorCode.ERR_ONLY_ALLOWED_FOR_ADMIN, callContext.getRepositoryId());
 		}
 		return isAdmin;
 	}
 
-	protected boolean nonZeroString(String param){
-		if (param == null || param.equals("")){
+	protected boolean nonZeroString(String param) {
+		if (param == null || param.equals("")) {
 			return false;
-		}else{
+		} else {
 			return true;
 		}
 	}
+
 	protected GregorianCalendar millisToCalendar(long millis) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -188,16 +183,16 @@ public class ResourceBase {
 		return calendar;
 	}
 
-	protected void setFirstSignature(HttpServletRequest request, NodeBase nodeBase){
-		CallContext callContext = (CallContext)request.getAttribute("CallContext");
+	protected void setFirstSignature(HttpServletRequest request, NodeBase nodeBase) {
+		CallContext callContext = (CallContext) request.getAttribute("CallContext");
 		nodeBase.setCreator(callContext.getUsername());
 		nodeBase.setCreated(millisToCalendar(System.currentTimeMillis()));
 		nodeBase.setModifier(callContext.getUsername());
 		nodeBase.setModified(millisToCalendar(System.currentTimeMillis()));
 	}
 
-	protected void setModifiedSignature(HttpServletRequest request, NodeBase nodeBase){
-		CallContext callContext = (CallContext)request.getAttribute("CallContext");
+	protected void setModifiedSignature(HttpServletRequest request, NodeBase nodeBase) {
+		CallContext callContext = (CallContext) request.getAttribute("CallContext");
 		nodeBase.setModifier(callContext.getUsername());
 		nodeBase.setModified(millisToCalendar(System.currentTimeMillis()));
 	}

@@ -241,14 +241,12 @@ public class ContentServiceImpl implements ContentService {
 			return content;
 			/**
 			 * TODO: for userItems discard ok? if
-			 * (ObjectUtils.equals(NemakiObjectType.nemakiUser,
+			 * (ObjectUtils.equals(NemakiObjectType.nemakiUser, content.getObjectType())) {
+			 * return contentDaoService.getUserItem(repositoryId, content.getId()); } else
+			 * if (ObjectUtils.equals(NemakiObjectType.nemakiGroup,
 			 * content.getObjectType())) { return
-			 * contentDaoService.getUserItem(repositoryId, content.getId()); }
-			 * else if (ObjectUtils.equals(NemakiObjectType.nemakiGroup,
-			 * content.getObjectType())) { return
-			 * contentDaoService.getGroupItem(repositoryId, content.getId()); }
-			 * else { return contentDaoService.getItem(repositoryId,
-			 * content.getId()); }
+			 * contentDaoService.getGroupItem(repositoryId, content.getId()); } else {
+			 * return contentDaoService.getItem(repositoryId, content.getId()); }
 			 **/
 		} else {
 			return content;
@@ -464,6 +462,7 @@ public class ContentServiceImpl implements ContentService {
 		return writeChangeEvent(callContext, repositoryId, content, null, changeType);
 	}
 
+	@Override
 	public String writeChangeEvent(CallContext callContext, String repositoryId, Content content, Acl acl,
 			ChangeType changeType) {
 		Change change = new Change();
@@ -491,11 +490,10 @@ public class ContentServiceImpl implements ContentService {
 		change.setParentId(content.getParentId());
 
 		/*
-		 * //Policy List<String> policyIds = new ArrayList<String>();
-		 * List<Policy> policies = getAppliedPolicies(repositoryId,
-		 * content.getId(), null); if (!CollectionUtils.isEmpty(policies)) { for
-		 * (Policy p : policies) { policyIds.add(p.getId()); } }
-		 * change.setPolicyIds(policyIds);
+		 * //Policy List<String> policyIds = new ArrayList<String>(); List<Policy>
+		 * policies = getAppliedPolicies(repositoryId, content.getId(), null); if
+		 * (!CollectionUtils.isEmpty(policies)) { for (Policy p : policies) {
+		 * policyIds.add(p.getId()); } } change.setPolicyIds(policyIds);
 		 */
 
 		if (content.isDocument()) {
@@ -639,7 +637,6 @@ public class ContentServiceImpl implements ContentService {
 		// Record the change event
 		writeChangeEvent(callContext, repositoryId, result, ChangeType.CREATED);
 		writeChangeEvent(callContext, repositoryId, original, ChangeType.UPDATED);
-		
 
 		// Call Solr indexing(optional)
 		solrUtil.callSolrIndexing(repositoryId);
@@ -647,6 +644,7 @@ public class ContentServiceImpl implements ContentService {
 		return result;
 	}
 
+	@Override
 	public Document replacePwc(CallContext callContext, String repositoryId, Document originalPwc,
 			ContentStream contentStream) {
 		// Update attachment contentStream
@@ -801,6 +799,7 @@ public class ContentServiceImpl implements ContentService {
 		return result;
 	}
 
+	@Override
 	public Document updateWithoutCheckInOut(CallContext callContext, String repositoryId, Boolean major,
 			Properties properties, ContentStream contentStream, String checkinComment, Document previousDoc,
 			VersionSeries vs) {
@@ -981,8 +980,7 @@ public class ContentServiceImpl implements ContentService {
 	 * Update versionSeriesId#versionSeriesCheckedOutId after creating a PWC
 	 *
 	 * @param callContext
-	 * @param repositoryId
-	 *            TODO
+	 * @param repositoryId  TODO
 	 * @param versionSeries
 	 * @param pwc
 	 */
@@ -1581,22 +1579,22 @@ public class ContentServiceImpl implements ContentService {
 
 		// Archive
 		createArchive(callContext, repositoryId, objectId, deletedWithParent);
-		
+
 		// delete attached relationships:
-		List<Relationship> sourceRelationships = contentDaoService.getRelationshipsBySource(repositoryId,objectId);
+		List<Relationship> sourceRelationships = contentDaoService.getRelationshipsBySource(repositoryId, objectId);
 		List<Relationship> targetRelationships = contentDaoService.getRelationshipsByTarget(repositoryId, objectId);
 
 		for (Relationship relationship : sourceRelationships) {
-			try{
+			try {
 				contentDaoService.delete(repositoryId, relationship.getId());
-			}catch(Exception e){
+			} catch (Exception e) {
 				log.error("Error deleting relationship: " + e.getMessage());
 			}
 		}
 		for (Relationship relationship : targetRelationships) {
-			try{
+			try {
 				contentDaoService.delete(repositoryId, relationship.getId());
-			}catch(Exception e){
+			} catch (Exception e) {
 				log.error("Error deleting relationship: " + e.getMessage());
 			}
 		}
@@ -2088,7 +2086,7 @@ public class ContentServiceImpl implements ContentService {
 
 		CallContextImpl dummyContext = new CallContextImpl(null, CmisVersion.CMIS_1_1, null, null, null, null, null,
 				null);
-		dummyContext.put(dummyContext.USERNAME, PrincipalId.SYSTEM_IN_DB);
+		dummyContext.put(CallContext.USERNAME, PrincipalId.SYSTEM_IN_DB);
 
 		// Switch over the operation depending on the type of archive
 		if (archive.isFolder()) {
@@ -2153,6 +2151,7 @@ public class ContentServiceImpl implements ContentService {
 		}
 	}
 
+	@Override
 	public void destroyArchive(String repositoryId, String archiveId) {
 		Archive archive = contentDaoService.getArchive(repositoryId, archiveId);
 		if (archive == null) {

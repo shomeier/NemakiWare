@@ -55,13 +55,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private PropertyManager propertyManager;
 	private RepositoryInfoMap repositoryInfoMap;
 
+	@Override
 	public boolean login(CallContext callContext) {
 		String repositoryId = callContext.getRepositoryId();
 
 		// Set flag of SuperUsers
 		String suId = repositoryInfoMap.getSuperUsers().getId();
-		((CallContextImpl)callContext).put(CallContextKey.IS_SU,
-				suId.equals(repositoryId));
+		((CallContextImpl) callContext).put(CallContextKey.IS_SU, suId.equals(repositoryId));
 
 		// SSO
 		if (loginWithExternalAuth(callContext)) {
@@ -81,7 +81,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		String repositoryId = callContext.getRepositoryId();
 
 		String proxyHeaderKey = propertyManager.readValue(PropertyKey.EXTERNAL_AUTHENTICATION_PROXY_HEADER);
-		if(StringUtils.isBlank(proxyHeaderKey)) return false;
+		if (StringUtils.isBlank(proxyHeaderKey))
+			return false;
 
 		String proxyUserId = (String) callContext.get(proxyHeaderKey);
 		if (StringUtils.isBlank(proxyUserId)) {
@@ -89,12 +90,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		} else {
 			UserItem userItem = contentService.getUserItemById(repositoryId, proxyUserId);
 			if (userItem == null) {
-				Boolean isAutoCreate = propertyManager.readBoolean(PropertyKey.EXTERNAL_AUTHENTICATION_AUTO_CREATE_USER);
-				if(isAutoCreate){
+				Boolean isAutoCreate = propertyManager
+						.readBoolean(PropertyKey.EXTERNAL_AUTHENTICATION_AUTO_CREATE_USER);
+				if (isAutoCreate) {
 					String parentFolderId = propertyManager.readValue(PropertyKey.CAPABILITY_EXTENDED_USER_ITEM_FOLDER);
 					userItem = new UserItem(null, "nemaki:user", proxyUserId, proxyUserId, null, false, parentFolderId);
 					contentDaoService.create(repositoryId, userItem);
-				}else{
+				} else {
 					return false;
 				}
 			} else {
@@ -129,19 +131,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 			return true;
 		}
 
-
 		return false;
 	}
 
 	private boolean loginWithBasicAuth(CallContext callContext) {
 		String repositoryId = callContext.getRepositoryId();
 
-		//Check repositoryId exists
-		if(!repositoryInfoMap.contains(repositoryId)) return false;
+		// Check repositoryId exists
+		if (!repositoryInfoMap.contains(repositoryId))
+			return false;
 
 		// Basic auth with id/password
-		UserItem user = getAuthenticatedUserItem(callContext.getRepositoryId(), callContext.getUsername(), callContext.getPassword());
-		if (user == null) return false;
+		UserItem user = getAuthenticatedUserItem(callContext.getRepositoryId(), callContext.getUsername(),
+				callContext.getPassword());
+		if (user == null)
+			return false;
 
 		boolean isAdmin = user.isAdmin() == null ? false : true;
 		setAdminFlagInContext(callContext, isAdmin);
@@ -149,12 +153,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	}
 
 	@Override
-	public boolean loginForNemakiConfDb(CallContext callContext){
+	public boolean loginForNemakiConfDb(CallContext callContext) {
 		final String suId = repositoryInfoMap.getSuperUsers().getId();
 		final String repositoryId = callContext.getRepositoryId();
 
 		// check system config db
-		if(ObjectUtils.equals(repositoryId, SystemConst.NEMAKI_CONF_DB)){
+		if (ObjectUtils.equals(repositoryId, SystemConst.NEMAKI_CONF_DB)) {
 			UserItem user = getAuthenticatedUserItem(suId, callContext.getUsername(), callContext.getPassword());
 			if (user == null)
 				return false;
@@ -195,7 +199,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		// succeeded
 		if (u != null && StringUtils.isNotBlank(u.getPassowrd())) {
 			if (AuthenticationUtil.passwordMatches(password, u.getPassowrd())) {
-				log.debug(String.format( "[%s][%s]Get authenticated user successfully ! , Is admin?  : %s", repositoryId, userId , u.isAdmin()));
+				log.debug(String.format("[%s][%s]Get authenticated user successfully ! , Is admin?  : %s", repositoryId,
+						userId, u.isAdmin()));
 				return u;
 			}
 		}

@@ -24,16 +24,16 @@ package jp.aegif.nemaki.model.couch;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import jp.aegif.nemaki.model.Ace;
 import jp.aegif.nemaki.model.Acl;
 import jp.aegif.nemaki.model.Aspect;
 import jp.aegif.nemaki.model.Content;
 import jp.aegif.nemaki.model.Property;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-public class CouchContent extends CouchNodeBase{
+public class CouchContent extends CouchNodeBase {
 
 	private static final long serialVersionUID = -4795093916552322103L;
 	private String name;
@@ -47,11 +47,11 @@ public class CouchContent extends CouchNodeBase{
 	private String objectType;
 	private String changeToken;
 
-	public CouchContent(){
+	public CouchContent() {
 		super();
 	}
 
-	public CouchContent(Content c){
+	public CouchContent(Content c) {
 		super(c);
 		setName(c.getName());
 		setDescription(c.getDescription());
@@ -91,7 +91,6 @@ public class CouchContent extends CouchNodeBase{
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
-
 
 	public CouchAcl getAcl() {
 		return acl;
@@ -149,10 +148,10 @@ public class CouchContent extends CouchNodeBase{
 		this.changeToken = changeToken;
 	}
 
-	private CouchAcl convertToCouchAcl(Acl acl){
+	private CouchAcl convertToCouchAcl(Acl acl) {
 		List<Ace> localAces = acl.getLocalAces();
 		JSONArray entries = new org.json.simple.JSONArray();
-		for(Ace ace : localAces){
+		for (Ace ace : localAces) {
 			JSONObject entry = new JSONObject();
 			entry.put("principal", ace.getPrincipalId());
 			entry.put("permissions", ace.getPermissions());
@@ -164,7 +163,7 @@ public class CouchContent extends CouchNodeBase{
 	}
 
 	@Override
-	public Content convert(){
+	public Content convert() {
 		Content c = new Content(super.convert());
 		c.setName(getName());
 		c.setDescription(getDescription());

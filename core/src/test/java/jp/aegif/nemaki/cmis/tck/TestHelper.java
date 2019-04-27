@@ -16,91 +16,98 @@ import jp.aegif.nemaki.cmis.tck.tests.BasicsTestGroup;
 
 public class TestHelper {
 	private static final String PARAMETERS_FILE_NAME = "cmis-tck-parameters.properties";
-	
-    private TestHelper() {
-    }
 
-    public static void run(CmisTest test) throws Exception {
-        run(new SimpleCmisWrapperTestGroup(test));
-    }
+	private TestHelper() {
+	}
 
-    public static void run(CmisTestGroup group) throws Exception {
-        JUnitRunner runner = new JUnitRunner();
+	public static void run(CmisTest test) throws Exception {
+		run(new SimpleCmisWrapperTestGroup(test));
+	}
 
-        File parametersFile = new File(BasicsTestGroup.class.getClassLoader().getResource(PARAMETERS_FILE_NAME).getFile());
-        runner.loadParameters(parametersFile);
-        runner.addGroup(group);
-        runner.run(new JUnitProgressMonitor());
+	public static void run(CmisTestGroup group) throws Exception {
+		JUnitRunner runner = new JUnitRunner();
 
-        //CmisTestReport report = new TextReport();
-        //report.createReport(runner.getParameters(), runner.getGroups(), new PrintWriter(System.out));
+		File parametersFile = new File(
+				BasicsTestGroup.class.getClassLoader().getResource(PARAMETERS_FILE_NAME).getFile());
+		runner.loadParameters(parametersFile);
+		runner.addGroup(group);
+		runner.run(new JUnitProgressMonitor());
 
-        checkForFailures(runner);
-    }
-    
-    private static void checkForFailures(JUnitRunner runner) {
-        for (CmisTestGroup group : runner.getGroups()) {
-            for (CmisTest test : group.getTests()) {
-                for (CmisTestResult result : test.getResults()) {
-                    if (result.getStatus().getLevel() >= CmisTestResultStatus.FAILURE.getLevel()) {
-                        Assert.fail(result.getMessage() + "\n" + result.getStackTrace().toString());
-                    }
-                }
-            }
-        }
-    }
+		// CmisTestReport report = new TextReport();
+		// report.createReport(runner.getParameters(), runner.getGroups(), new
+		// PrintWriter(System.out));
 
-    private static class JUnitRunner extends AbstractRunner {
-    }
+		checkForFailures(runner);
+	}
 
-    private static class JUnitProgressMonitor implements CmisTestProgressMonitor {
+	private static void checkForFailures(JUnitRunner runner) {
+		for (CmisTestGroup group : runner.getGroups()) {
+			for (CmisTest test : group.getTests()) {
+				for (CmisTestResult result : test.getResults()) {
+					if (result.getStatus().getLevel() >= CmisTestResultStatus.FAILURE.getLevel()) {
+						Assert.fail(result.getMessage() + "\n" + result.getStackTrace().toString());
+					}
+				}
+			}
+		}
+	}
 
-        @SuppressWarnings("PMD.SystemPrintln")
-        public void startGroup(CmisTestGroup group) {
-            System.out.println(group.getName() + " (" + group.getTests().size() + " tests)");
-        }
+	private static class JUnitRunner extends AbstractRunner {
+	}
 
-        public void endGroup(CmisTestGroup group) {
-        }
+	private static class JUnitProgressMonitor implements CmisTestProgressMonitor {
 
-        @SuppressWarnings("PMD.SystemPrintln")
-        public void startTest(CmisTest test) {
-            System.out.println("  " + test.getName());
-        }
+		@Override
+		@SuppressWarnings("PMD.SystemPrintln")
+		public void startGroup(CmisTestGroup group) {
+			System.out.println(group.getName() + " (" + group.getTests().size() + " tests)");
+		}
 
-        public void endTest(CmisTest test) {
-        }
+		@Override
+		public void endGroup(CmisTestGroup group) {
+		}
 
-        @SuppressWarnings("PMD.SystemPrintln")
-        public void message(String msg) {
-            System.out.println(msg);
-        }
-    }
-    
-    
-    /**
-     * Minor version of CmisWrapperTestGroup
-     * @author linzhixing
-     *
-     */
-    private static class SimpleCmisWrapperTestGroup extends AbstractCmisTestGroup{
-    	
-    	 private final CmisTest test;
+		@Override
+		@SuppressWarnings("PMD.SystemPrintln")
+		public void startTest(CmisTest test) {
+			System.out.println("  " + test.getName());
+		}
 
-    	    public SimpleCmisWrapperTestGroup(CmisTest test) {
-    	        if (test == null) {
-    	            throw new IllegalArgumentException("Test is null!");
-    	        }
+		@Override
+		public void endTest(CmisTest test) {
+		}
 
-    	        this.test = test;
-    	    }
+		@Override
+		@SuppressWarnings("PMD.SystemPrintln")
+		public void message(String msg) {
+			System.out.println(msg);
+		}
+	}
 
-    	    @Override
-    	    public void init(Map<String, String> parameters) throws Exception {
-    	        super.init(parameters);
-    	        addTest(test);
-    	        setName(test.getName());
-    	    }
-    	
-    }
+	/**
+	 * Minor version of CmisWrapperTestGroup
+	 * 
+	 * @author linzhixing
+	 *
+	 */
+	private static class SimpleCmisWrapperTestGroup extends AbstractCmisTestGroup {
+
+		private final CmisTest test;
+
+		public SimpleCmisWrapperTestGroup(CmisTest test) {
+			if (test == null) {
+				throw new IllegalArgumentException("Test is null!");
+			}
+
+			this.test = test;
+		}
+
+		@Override
+		public void init(Map<String, String> parameters) throws Exception {
+			super.init(parameters);
+			addTest(test);
+			setName(test.getName());
+		}
+
+	}
 }

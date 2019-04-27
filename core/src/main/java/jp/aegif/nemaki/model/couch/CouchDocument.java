@@ -21,7 +21,6 @@
  ******************************************************************************/
 package jp.aegif.nemaki.model.couch;
 
-
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,7 +34,7 @@ public class CouchDocument extends CouchContent {
 	// Attachment
 	private String attachmentNodeId;
 	private List<String> renditionIds;
-	
+
 	// Versioning
 	private String versionSeriesId;
 	private Boolean latestVersion;
@@ -43,16 +42,16 @@ public class CouchDocument extends CouchContent {
 	private Boolean majorVersion;
 	private String checkinComment;
 	private String versionLabel;
-	//The following properties should be moved away to VersionSeries object
+	// The following properties should be moved away to VersionSeries object
 	private Boolean privateWorkingCopy;
 
 	private Boolean immutable;
-	
-	public CouchDocument(){
+
+	public CouchDocument() {
 		super();
 	}
-	
-	public CouchDocument(Document d){
+
+	public CouchDocument(Document d) {
 		super(d);
 		setAttachmentNodeId(d.getAttachmentNodeId());
 		setRenditionIds(d.getRenditionIds());
@@ -65,7 +64,7 @@ public class CouchDocument extends CouchContent {
 		setPrivateWorkingCopy(d.isPrivateWorkingCopy());
 		setImmutable(d.isImmutable());
 	}
-	
+
 	/**
 	 * Getter & Setter
 	 */
@@ -76,7 +75,7 @@ public class CouchDocument extends CouchContent {
 	public void setAttachmentNodeId(String attachmentNodeId) {
 		this.attachmentNodeId = attachmentNodeId;
 	}
-	
+
 	public List<String> getRenditionIds() {
 		return renditionIds;
 	}
@@ -92,12 +91,12 @@ public class CouchDocument extends CouchContent {
 	public void setVersionSeriesId(String versionSeriesId) {
 		this.versionSeriesId = versionSeriesId;
 	}
-	
+
 	@JsonProperty("latestVersion")
 	public Boolean isLatestVersion() {
 		return latestVersion;
 	}
-	
+
 	@JsonProperty("latestVersion")
 	public void setIsLatestVersion(Boolean latestVersion) {
 		this.latestVersion = latestVersion;
@@ -127,7 +126,6 @@ public class CouchDocument extends CouchContent {
 		this.privateWorkingCopy = privateWorkingCopy;
 	}
 
-	
 	public String getVersionLabel() {
 		return versionLabel;
 	}
@@ -144,14 +142,15 @@ public class CouchDocument extends CouchContent {
 		this.checkinComment = checkinComment;
 	}
 
-	public Boolean isImmutable(){
+	public Boolean isImmutable() {
 		return immutable;
 	}
-	
-	public void setImmutable(Boolean immutable){
+
+	public void setImmutable(Boolean immutable) {
 		this.immutable = immutable;
 	}
-	
+
+	@Override
 	public Document convert() {
 		Document d = new Document(super.convert());
 		d.setAttachmentNodeId(getAttachmentNodeId());

@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.stereotype.Component;
 
 import jp.aegif.nemaki.common.ErrorCode;
 import jp.aegif.nemaki.model.Content;
@@ -27,7 +26,7 @@ import jp.aegif.nemaki.util.lock.ThreadLockService;
 import play.Logger;
 
 @Path("/repo/{repositoryId}/cache/")
-public class CacheResource extends ResourceBase{
+public class CacheResource extends ResourceBase {
 	private NemakiCachePool nemakiCachePool;
 	private ThreadLockService threadLockService;
 
@@ -35,8 +34,7 @@ public class CacheResource extends ResourceBase{
 	 *
 	 * @param repositoryId
 	 * @param objectId
-	 * @param before
-	 *            delete if cache data modification before this date
+	 * @param before       delete if cache data modification before this date
 	 * @param httpRequest
 	 * @return
 	 */
@@ -60,10 +58,10 @@ public class CacheResource extends ResourceBase{
 					cache.removeCmisAndContentCache(objectId);
 					result.put("deleted", true);
 					Logger.warn("Remove cmis object and content cache because updated by other.");
-				}else{
+				} else {
 					result.put("deleted", false);
 				}
-			}else{
+			} else {
 				cache.removeCmisAndContentCache(objectId);
 				result.put("deleted", true);
 			}
@@ -76,9 +74,6 @@ public class CacheResource extends ResourceBase{
 		result = makeResult(status, result, errMsg);
 		return result.toJSONString();
 	}
-
-
-
 
 	public void setNemakiCachePool(NemakiCachePool nemakiCachePool) {
 		this.nemakiCachePool = nemakiCachePool;

@@ -24,23 +24,21 @@ package jp.aegif.nemaki.cmis.factory.info;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.aegif.nemaki.cmis.factory.info.RepositoryInfo;
-
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 
 /**
  * Information about the CMIS repository, the optional capabilities it supports
  * and its access control information.
  */
-public class RepositoryInfo extends org.apache.chemistry.opencmis.commons.impl.dataobjects.RepositoryInfoImpl{
+public class RepositoryInfo extends org.apache.chemistry.opencmis.commons.impl.dataobjects.RepositoryInfoImpl {
 
 	private static final long serialVersionUID = -8027732136814092210L;
-	//Custom info property
+	// Custom info property
 	private String nameSpace;
 	private String archiveId;
-	
-	public void setup(){
-		//Set changesOnType property
+
+	public void setup() {
+		// Set changesOnType property
 		List<BaseTypeId> baseTypes = new ArrayList<BaseTypeId>();
 		baseTypes.add(BaseTypeId.CMIS_DOCUMENT);
 		baseTypes.add(BaseTypeId.CMIS_FOLDER);

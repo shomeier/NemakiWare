@@ -23,21 +23,22 @@ package jp.aegif.nemaki.model.couch;
 
 import jp.aegif.nemaki.model.Item;
 
-public class CouchItem extends CouchContent{
-	
+public class CouchItem extends CouchContent {
+
 	private static final long serialVersionUID = 5431775285043659123L;
 
-	public CouchItem(){
+	public CouchItem() {
 		super();
 	}
-	
-	public CouchItem(Item i){
+
+	public CouchItem(Item i) {
 		super(i);
 	}
 
-	public Item convert(){
+	@Override
+	public Item convert() {
 		Item i = new Item(super.convert());
-	
+
 		return i;
 	}
 }

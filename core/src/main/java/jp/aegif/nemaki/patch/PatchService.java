@@ -8,13 +8,9 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.support.DesignDocument;
 import org.ektorp.support.DesignDocument.View;
 import org.ektorp.support.StdDesignDocumentFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
-import jp.aegif.nemaki.dao.ContentDaoService;
 import jp.aegif.nemaki.dao.impl.couch.connector.ConnectorPool;
-import jp.aegif.nemaki.model.PatchHistory;
 
 public class PatchService {
 	private static final Log log = LogFactory.getLog(PatchService.class);
@@ -23,20 +19,20 @@ public class PatchService {
 
 	private List<AbstractNemakiPatch> patchList;
 
-	public void apply(){
+	public void apply() {
 		createPathView();
-		for(AbstractNemakiPatch patch : patchList){
+		for (AbstractNemakiPatch patch : patchList) {
 			patch.apply();
 		}
 	}
 
-	private void createPathView(){
-		for(String repositoryId : repositoryInfoMap.keys()){
+	private void createPathView() {
+		for (String repositoryId : repositoryInfoMap.keys()) {
 			// create view
 			CouchDbConnector connector = connectorPool.get(repositoryId);
 			StdDesignDocumentFactory factory = new StdDesignDocumentFactory();
 			DesignDocument designDoc = factory.getFromDatabase(connector, "_design/_repo");
-			if(!designDoc.containsView("patch")){
+			if (!designDoc.containsView("patch")) {
 				designDoc.addView("patch", new View("function(doc) { if (doc.type == 'patch')  emit(doc.name, doc) }"));
 				connector.update(designDoc);
 			}
@@ -54,7 +50,5 @@ public class PatchService {
 	public void setPatchList(List<AbstractNemakiPatch> patchList) {
 		this.patchList = patchList;
 	}
-
-
 
 }

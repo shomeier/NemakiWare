@@ -83,7 +83,6 @@ import jp.aegif.nemaki.model.Item;
 import jp.aegif.nemaki.model.Policy;
 import jp.aegif.nemaki.model.Relationship;
 import jp.aegif.nemaki.model.Rendition;
-import jp.aegif.nemaki.model.UserItem;
 import jp.aegif.nemaki.model.VersionSeries;
 import jp.aegif.nemaki.util.DataUtil;
 import jp.aegif.nemaki.util.cache.NemakiCachePool;
@@ -153,7 +152,8 @@ public class ObjectServiceImpl implements ObjectService {
 			// General Exception
 			// //////////////////
 			Content content = contentService.getContent(repositoryId, objectId);
-			log.info(MessageFormat.format("ObjcetService#getObject getContent success: Repo={0}, Id={1}", repositoryId, objectId));
+			log.info(MessageFormat.format("ObjcetService#getObject getContent success: Repo={0}, Id={1}", repositoryId,
+					objectId));
 
 			// WORK AROUND: getObject(versionSeriesId) is interpreted as
 			// getDocumentOflatestVersion
@@ -166,7 +166,8 @@ public class ObjectServiceImpl implements ObjectService {
 			exceptionService.objectNotFound(DomainType.OBJECT, content, objectId);
 			exceptionService.permissionDenied(callContext, repositoryId, PermissionMapping.CAN_GET_PROPERTIES_OBJECT,
 					content);
-			log.info(MessageFormat.format("ObjcetService#getObject permissionDenied check success: Repo={0}, Id={1}", repositoryId, objectId));
+			log.info(MessageFormat.format("ObjcetService#getObject permissionDenied check success: Repo={0}, Id={1}",
+					repositoryId, objectId));
 
 			// //////////////////
 			// Body of the method
@@ -174,7 +175,8 @@ public class ObjectServiceImpl implements ObjectService {
 			ObjectData object = compileService.compileObjectData(callContext, repositoryId, content, filter,
 					includeAllowableActions, includeRelationships, null, includeAcl);
 
-			log.info(MessageFormat.format("ObjcetService#getObject END: Repo={0}, Id={1} Type={2} Name={3}", repositoryId, objectId, content.getObjectType(), content.getObjectType(), content.getName()));
+			log.info(MessageFormat.format("ObjcetService#getObject END: Repo={0}, Id={1} Type={2} Name={3}",
+					repositoryId, objectId, content.getObjectType(), content.getObjectType(), content.getName()));
 
 			return object;
 		} finally {
@@ -569,7 +571,7 @@ public class ObjectServiceImpl implements ObjectService {
 			// //////////////////
 			exceptionService.streamNotSupported(td, contentStream);
 			exceptionService.updateConflict(doc, changeToken);
-			exceptionService.versioning(callContext,doc);
+			exceptionService.versioning(callContext, doc);
 
 			// //////////////////
 			// Body of the method
@@ -721,15 +723,15 @@ public class ObjectServiceImpl implements ObjectService {
 		// //////////////////
 		// General Exception
 		// //////////////////
-		
+
 		exceptionService.invalidArgumentRequiredCollection("properties", properties.getPropertyList());
 		Content content = contentService.getContent(repositoryId, objectId.getValue());
 		exceptionService.objectNotFound(DomainType.OBJECT, content, objectId.getValue());
 		if (content.isDocument()) {
 			Document d = (Document) content;
-			exceptionService.versioning(callContext,d);
+			exceptionService.versioning(callContext, d);
 			exceptionService.constraintUpdateWhenCheckedOut(repositoryId, callContext.getUsername(), d);
-			
+
 			TypeDefinition typeDef = typeManager.getTypeDefinition(repositoryId, d);
 			exceptionService.constraintImmutable(repositoryId, d, typeDef);
 		}

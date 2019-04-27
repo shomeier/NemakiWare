@@ -40,8 +40,7 @@ import jp.aegif.nemaki.util.cache.NemakiCachePool;
 @Component
 public class PrincipalDaoServiceImpl implements PrincipalDaoService {
 
-	private static final Log log = LogFactory
-			.getLog(PrincipalDaoServiceImpl.class);
+	private static final Log log = LogFactory.getLog(PrincipalDaoServiceImpl.class);
 
 	private PrincipalDaoService nonCachedPrincipalDaoService;
 	private NemakiCachePool nemakiCachePool;
@@ -78,7 +77,7 @@ public class PrincipalDaoServiceImpl implements PrincipalDaoService {
 		if (clazz.equals(User.class)) {
 			User exising = getUser(repositoryId, nodeId);
 			nonCachedPrincipalDaoService.delete(repositoryId, null, nodeId);
-		} else if(clazz.equals(Group.class)){
+		} else if (clazz.equals(Group.class)) {
 			Group exising = getGroup(repositoryId, nodeId);
 			nonCachedPrincipalDaoService.delete(repositoryId, null, nodeId);
 		}
@@ -127,8 +126,7 @@ public class PrincipalDaoServiceImpl implements PrincipalDaoService {
 		return groups;
 	}
 
-	public void setNonCachedPrincipalDaoService(
-			PrincipalDaoService nonCachedPrincipalDaoService) {
+	public void setNonCachedPrincipalDaoService(PrincipalDaoService nonCachedPrincipalDaoService) {
 		this.nonCachedPrincipalDaoService = nonCachedPrincipalDaoService;
 	}
 

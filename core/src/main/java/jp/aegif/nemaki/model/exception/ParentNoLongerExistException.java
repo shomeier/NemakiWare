@@ -1,5 +1,5 @@
 package jp.aegif.nemaki.model.exception;
 
-public class ParentNoLongerExistException extends Exception{
+public class ParentNoLongerExistException extends Exception {
 
 }

@@ -27,9 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import jp.aegif.nemaki.businesslogic.ContentService;
-import jp.aegif.nemaki.model.Folder;
-
 import org.antlr.runtime.tree.Tree;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -57,13 +54,16 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
+import jp.aegif.nemaki.businesslogic.ContentService;
+import jp.aegif.nemaki.model.Folder;
+
 /**
  * CMIS to Solr parser class for WHERE clause of query
  *
  * @author linzhixing
  *
  */
-public class SolrPredicateWalker{
+public class SolrPredicateWalker {
 
 	private final String repositoryId;
 	private final SolrUtil solrUtil;
@@ -73,7 +73,8 @@ public class SolrPredicateWalker{
 	public static final String FLD = "field";
 	public static final String CND = "cond";
 
-	public SolrPredicateWalker(String repositoryId, QueryObject queryObject, SolrUtil solrUtil, ContentService contentService) {
+	public SolrPredicateWalker(String repositoryId, QueryObject queryObject, SolrUtil solrUtil,
+			ContentService contentService) {
 		this.repositoryId = repositoryId;
 		this.queryObject = queryObject;
 		this.solrUtil = solrUtil;
@@ -89,7 +90,7 @@ public class SolrPredicateWalker{
 			return walkAnd(node.getChild(0), node.getChild(1));
 		case CmisQlStrictLexer.OR:
 			return walkOr(node.getChild(0), node.getChild(1));
-			// Comparison walks
+		// Comparison walks
 		case CmisQlStrictLexer.EQ:
 			return walkEquals(node.getChild(0), node.getChild(1));
 		case CmisQlStrictLexer.NEQ:
@@ -106,7 +107,7 @@ public class SolrPredicateWalker{
 			return walkLike(node.getChild(0), node.getChild(1));
 		case CmisQlStrictLexer.NOT_LIKE:
 			return walkNotLike(node.getChild(0), node.getChild(1));
-			// Multiple value type walks
+		// Multiple value type walks
 		case CmisQlStrictLexer.IN:
 			return walkIn(node.getChild(0), node.getChild(1));
 		case CmisQlStrictLexer.NOT_IN:
@@ -119,7 +120,7 @@ public class SolrPredicateWalker{
 			return walkIsNull(node.getChild(0));
 		case CmisQlStrictLexer.IS_NOT_NULL:
 			return walkIsNotNull(node.getChild(0));
-			// GetChildren type walks
+		// GetChildren type walks
 		case CmisQlStrictLexer.IN_FOLDER:
 			if (node.getChildCount() == 1) {
 				return walkInFolder(null, node.getChild(0));
@@ -185,43 +186,37 @@ public class SolrPredicateWalker{
 
 	private Query walkGreaterThan(Tree leftNode, Tree rightNode) {
 		HashMap<String, String> map = walkCompareInternal(leftNode, rightNode);
-		TermRangeQuery t = new TermRangeQuery(map.get(FLD),
-				convertToBytesRef(map.get(CND)), null, false, false);
+		TermRangeQuery t = new TermRangeQuery(map.get(FLD), convertToBytesRef(map.get(CND)), null, false, false);
 		return t;
 	}
 
 	private Query walkGreaterOrEquals(Tree leftNode, Tree rightNode) {
 		HashMap<String, String> map = walkCompareInternal(leftNode, rightNode);
-		TermRangeQuery t = new TermRangeQuery(map.get(FLD),
-				convertToBytesRef(map.get(CND)), null, true, false);
+		TermRangeQuery t = new TermRangeQuery(map.get(FLD), convertToBytesRef(map.get(CND)), null, true, false);
 		return t;
 	}
 
 	private Query walkLessThan(Tree leftNode, Tree rightNode) {
 		HashMap<String, String> map = walkCompareInternal(leftNode, rightNode);
-		TermRangeQuery t = new TermRangeQuery(map.get(FLD), null,
-				convertToBytesRef(map.get(CND)), false, false);
+		TermRangeQuery t = new TermRangeQuery(map.get(FLD), null, convertToBytesRef(map.get(CND)), false, false);
 		return t;
 	}
 
 	private Query walkLessOrEquals(Tree leftNode, Tree rightNode) {
 		HashMap<String, String> map = walkCompareInternal(leftNode, rightNode);
-		TermRangeQuery t = new TermRangeQuery(map.get(FLD), null,
-				convertToBytesRef(map.get(CND)), false, true);
+		TermRangeQuery t = new TermRangeQuery(map.get(FLD), null, convertToBytesRef(map.get(CND)), false, true);
 		return t;
 	}
 
 	/**
-	 * TODO Implement check for each kind of literal
-	 * Parse field name & condition value. Field name is prepared for Solr
-	 * query.
+	 * TODO Implement check for each kind of literal Parse field name & condition
+	 * value. Field name is prepared for Solr query.
 	 *
 	 * @param leftNode
 	 * @param rightNode
 	 * @return
 	 */
-	private HashMap<String, String> walkCompareInternal(Tree leftNode,
-			Tree rightNode) {
+	private HashMap<String, String> walkCompareInternal(Tree leftNode, Tree rightNode) {
 		HashMap<String, String> map = new HashMap<String, String>();
 
 		String left = solrUtil.convertToString(leftNode);
@@ -236,8 +231,7 @@ public class SolrPredicateWalker{
 		// Check for CMIS SQL specification
 		Object rVal = walkExpr(stringNode);
 		if (!(rVal instanceof String)) {
-			throw new IllegalStateException(
-					"LIKE operator requires String literal on right hand side.");
+			throw new IllegalStateException("LIKE operator requires String literal on right hand side.");
 		}
 		ColumnReference colRef = getColumnReference(colNode);
 		String colRefName = colRef.getName();
@@ -245,21 +239,19 @@ public class SolrPredicateWalker{
 		Map<String, PropertyDefinition<?>> pds = td.getPropertyDefinitions();
 		PropertyDefinition<?> pd = pds.get(colRefName);
 		PropertyType propType = pd.getPropertyType();
-		if (propType != PropertyType.STRING && propType != PropertyType.HTML
-				&& propType != PropertyType.ID && propType != PropertyType.URI) {
-			throw new IllegalStateException("Property type " + propType.value()
-					+ " is not allowed FOR LIKE");
+		if (propType != PropertyType.STRING && propType != PropertyType.HTML && propType != PropertyType.ID
+				&& propType != PropertyType.URI) {
+			throw new IllegalStateException("Property type " + propType.value() + " is not allowed FOR LIKE");
 		}
 		if (pd.getCardinality() != Cardinality.SINGLE) {
-			throw new IllegalStateException(
-					"LIKE is not allowed for multi-value properties ");
+			throw new IllegalStateException("LIKE is not allowed for multi-value properties ");
 		}
 
 		// Build a statement
-		String field = solrUtil.getPropertyNameInSolr(repositoryId,solrUtil.convertToString(colNode));
+		String field = solrUtil.getPropertyNameInSolr(repositoryId, solrUtil.convertToString(colNode));
 		String pattern = translatePattern((String) rVal); // Solr wildcard
 															// expression
-		
+
 		Term t = new Term(field, pattern);
 		TermQuery q = new TermQuery(t);
 		return q;
@@ -302,8 +294,7 @@ public class SolrPredicateWalker{
 		ColumnReference colRef = getColumnReference(leftNode);
 		PropertyDefinition<?> pd = colRef.getPropertyDefinition();
 		if (pd.getCardinality() != Cardinality.MULTI) {
-			throw new IllegalStateException(
-					"Operator ANY...IN only is allowed on multi-value properties ");
+			throw new IllegalStateException("Operator ANY...IN only is allowed on multi-value properties ");
 		}
 
 		// Build a statement
@@ -339,8 +330,7 @@ public class SolrPredicateWalker{
 		// Check for CMIS SQL specification
 		Object lit = walkExpr(paramNode);
 		if (!(lit instanceof String)) {
-			throw new IllegalStateException(
-					"Folder id in IN_FOLDER must be of type String");
+			throw new IllegalStateException("Folder id in IN_FOLDER must be of type String");
 		}
 
 		// Build a statement
@@ -363,8 +353,7 @@ public class SolrPredicateWalker{
 		// Check for CMIS SQL specification
 		Object lit = walkExpr(paramNode);
 		if (!(lit instanceof String)) {
-			throw new IllegalStateException(
-					"Folder id in IN_FOLDER must be of type String");
+			throw new IllegalStateException("Folder id in IN_FOLDER must be of type String");
 		}
 
 		// Build a Statement
@@ -382,7 +371,7 @@ public class SolrPredicateWalker{
 	}
 
 	private Query walkInTreeInternal(Tree paramNode, String repositoryId) {
-		//Build first query for descendant folders
+		// Build first query for descendant folders
 		BooleanQuery query1 = new BooleanQuery();
 
 		String s = paramNode.getText();
@@ -391,16 +380,16 @@ public class SolrPredicateWalker{
 		Folder folder = contentService.getFolder(repositoryId, folderId);
 
 		String folderPath = contentService.calculatePath(repositoryId, folder);
-		String _folderPath = folderPath.replaceAll("\\/", "\\\\/"); //escape in Solr query
+		String _folderPath = folderPath.replaceAll("\\/", "\\\\/"); // escape in Solr query
 
-		if(contentService.isRoot(repositoryId, folder)){
+		if (contentService.isRoot(repositoryId, folder)) {
 			Term t = new Term(solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.PATH), _folderPath + "*");
 			query1.add(new TermQuery(t), Occur.MUST);
-		}else{
-			String _folderId = folderId.replaceAll("\\/", "\\\\/"); //escape in Solr query
+		} else {
+			String _folderId = folderId.replaceAll("\\/", "\\\\/"); // escape in Solr query
 			Term t1 = new Term(solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.OBJECT_ID), _folderId);
 			String path = folderPath + "/*";
-			String _path = path.replaceAll("\\/", "\\\\/"); //escape in Solr query
+			String _path = path.replaceAll("\\/", "\\\\/"); // escape in Solr query
 			Term t2 = new Term(solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.PATH), _path);
 			query1.add(new TermQuery(t1), Occur.SHOULD);
 			query1.add(new TermQuery(t2), Occur.SHOULD);
@@ -420,9 +409,9 @@ public class SolrPredicateWalker{
 			e.printStackTrace();
 		}
 
-		if(children != null && !children.isEmpty()){
+		if (children != null && !children.isEmpty()) {
 			Iterator<SolrDocument> it = children.iterator();
-			while(it.hasNext()){
+			while (it.hasNext()) {
 				SolrDocument sd = it.next();
 				String id = (String) sd.getFieldValue("object_id");
 				descendantIds.add(id);
@@ -446,16 +435,17 @@ public class SolrPredicateWalker{
 	// //////////////////////////////////////////////////////////////////////////////
 	// Definition of full-text search type walk
 	// //////////////////////////////////////////////////////////////////////////////
-	// Wildcards of CONTAINS() is the same as those of Solr, so leave them as they are.
+	// Wildcards of CONTAINS() is the same as those of Solr, so leave them as they
+	// are.
 	private Query walkContains(Tree qualNode, Tree queryNode) {
 		if (qualNode != null) {
-			//Qualifier isn't needed as long as JOIN isn't supported
-			//String qualifier = walkExpr(qualNode).toString();
-			//Term tQual = new Term("type", buildQualField(qualifier));
-			//Query qQual = new TermQuery(tQual);
+			// Qualifier isn't needed as long as JOIN isn't supported
+			// String qualifier = walkExpr(qualNode).toString();
+			// Term tQual = new Term("type", buildQualField(qualifier));
+			// Query qQual = new TermQuery(tQual);
 
 			BooleanQuery q = new BooleanQuery();
-			//q.add(qQual, Occur.MUST);
+			// q.add(qQual, Occur.MUST);
 			q.add(walkSearchExpr(queryNode), Occur.MUST);
 
 			return q;
@@ -477,8 +467,8 @@ public class SolrPredicateWalker{
 		case TextSearchLexer.TEXT_SEARCH_PHRASE_STRING_LIT:
 			return walkTextPhrase(node);
 		default:
-			//walkOtherExpr(node);
-			//return null;
+			// walkOtherExpr(node);
+			// return null;
 			return walkTextPhrase(node);
 		}
 	}
@@ -518,18 +508,18 @@ public class SolrPredicateWalker{
 
 	private Query walkTextPhrase(Tree node) {
 		String termString = escapeString(node.toString());
-		if(termString.charAt(0) == '\'' && termString.charAt(termString.length()-1) == '\'' ){
-			termString = '"' + termString.substring(1,termString.length() -2) + '"';
+		if (termString.charAt(0) == '\'' && termString.charAt(termString.length() - 1) == '\'') {
+			termString = '"' + termString.substring(1, termString.length() - 2) + '"';
 		}
 		Term term = new Term("text", termString);
 		TermQuery q = new TermQuery(term);
 		return q;
 	}
-	
+
 	private String escapeString(String val) {
-				
+
 		return val.replaceAll(":", "\\\\:");
-		
+
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////
@@ -574,7 +564,7 @@ public class SolrPredicateWalker{
 	private Object walkString(Tree node) {
 		String s = node.getText();
 		s = s.substring(1, s.length() - 1);
-		//return "\"" + ClientUtils.escapeQueryChars(s) + "\"";
+		// return "\"" + ClientUtils.escapeQueryChars(s) + "\"";
 		return ClientUtils.escapeQueryChars(s);
 	}
 
@@ -604,8 +594,7 @@ public class SolrPredicateWalker{
 	}
 
 	private Object walkOtherExpr(Tree node) {
-		throw new CmisRuntimeException("Unknown node type: " + node.getType()
-				+ " (" + node.getText() + ")");
+		throw new CmisRuntimeException("Unknown node type: " + node.getType() + " (" + node.getText() + ")");
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////
@@ -641,8 +630,7 @@ public class SolrPredicateWalker{
 			index = wildcardString.indexOf('%', start);
 			if (index < 0) {
 				res.append(wildcardString.substring(start));
-			} else if (index == 0 || index > 0
-					&& wildcardString.charAt(index - 1) != '\\') {
+			} else if (index == 0 || index > 0 && wildcardString.charAt(index - 1) != '\\') {
 				res.append(wildcardString.substring(start, index));
 				res.append("*");
 			} else {
@@ -660,8 +648,7 @@ public class SolrPredicateWalker{
 			index = wildcardString.indexOf('_', start);
 			if (index < 0) {
 				res.append(wildcardString.substring(start));
-			} else if (index == 0 || index > 0
-					&& wildcardString.charAt(index - 1) != '\\') {
+			} else if (index == 0 || index > 0 && wildcardString.charAt(index - 1) != '\\') {
 				res.append(wildcardString.substring(start, index));
 				res.append("?"); //
 			} else {
@@ -673,16 +660,13 @@ public class SolrPredicateWalker{
 	}
 
 	private ColumnReference getColumnReference(Tree columnNode) {
-		CmisSelector sel = queryObject.getColumnReference(columnNode
-				.getTokenStartIndex());
+		CmisSelector sel = queryObject.getColumnReference(columnNode.getTokenStartIndex());
 		if (null == sel) {
-			throw new IllegalStateException("Unknown property query name "
-					+ columnNode.getChild(0));
+			throw new IllegalStateException("Unknown property query name " + columnNode.getChild(0));
 		} else if (sel instanceof ColumnReference) {
 			return (ColumnReference) sel;
 		} else {
-			throw new IllegalStateException(
-					"Unexpected numerical value function in where clause");
+			throw new IllegalStateException("Unexpected numerical value function in where clause");
 		}
 	}
 
@@ -705,8 +689,7 @@ public class SolrPredicateWalker{
 	 * @param solrServer
 	 * @return
 	 */
-	private List<String> getDescendantFolderId(String folderId,
-			SolrServer solrServer) {
+	private List<String> getDescendantFolderId(String folderId, SolrServer solrServer) {
 		List<String> list = new ArrayList<String>();
 
 		list.add(folderId); // Add oneself to the list in advance
@@ -714,7 +697,9 @@ public class SolrPredicateWalker{
 		SolrQuery query = new SolrQuery();
 
 		query.setQuery(solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.PARENT_ID) + ":" + folderId + " AND "
-				+ solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.BASE_TYPE_ID) + ":cmis\\:folder"); // only "folder" nodes
+				+ solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.BASE_TYPE_ID) + ":cmis\\:folder"); // only
+																												// "folder"
+																												// nodes
 
 		// Connect to SolrServer and add subfolder ids to the list
 		try {

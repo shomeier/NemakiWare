@@ -34,6 +34,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Get a user by userId(It's supposed to be unique)
+	 * 
 	 * @param repositoryId TODO
 	 * @param userId
 	 * @return
@@ -42,6 +43,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Get a users
+	 * 
 	 * @param repositoryId TODO
 	 * @return
 	 */
@@ -49,6 +51,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Get Admin user
+	 * 
 	 * @param repositoryId TODO
 	 * @return
 	 */
@@ -56,6 +59,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Get a group
+	 * 
 	 * @param repositoryId TODO
 	 * @param nodeId
 	 * @return
@@ -64,6 +68,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Get a group by groupId(It's supposed to be unique)
+	 * 
 	 * @param repositoryId TODO
 	 * @param groupId
 	 * @return
@@ -72,6 +77,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Get all the groups
+	 * 
 	 * @param repositoryId TODO
 	 * @return
 	 */
@@ -79,6 +85,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Create a user
+	 * 
 	 * @param repositoryId TODO
 	 * @param user
 	 * @return newly created user
@@ -87,6 +94,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Create a group
+	 * 
 	 * @param repositoryId TODO
 	 * @param group
 	 * @return newly created group
@@ -95,6 +103,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Update a user
+	 * 
 	 * @param repositoryId TODO
 	 * @param user
 	 * @return updated user
@@ -103,6 +112,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Update a group
+	 * 
 	 * @param repositoryId TODO
 	 * @param group
 	 * @return updated group
@@ -111,6 +121,7 @@ public interface PrincipalDaoService {
 
 	/**
 	 * Delete a user / group
+	 * 
 	 * @param repositoryId TODO
 	 * @param clazz
 	 * @param id

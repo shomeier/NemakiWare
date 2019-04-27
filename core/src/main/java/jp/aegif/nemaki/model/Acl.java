@@ -31,7 +31,7 @@ public class Acl {
 	private List<Ace> inheritedAces;
 	private List<Ace> localAces;
 
-	public Acl(){
+	public Acl() {
 		inheritedAces = new ArrayList<Ace>();
 		localAces = new ArrayList<Ace>();
 	}
@@ -39,72 +39,73 @@ public class Acl {
 	public List<Ace> getInheritedAces() {
 		return inheritedAces;
 	}
+
 	public void setInheritedAces(List<Ace> inheritedAces) {
 		this.inheritedAces = inheritedAces;
 	}
+
 	public List<Ace> getLocalAces() {
 		return localAces;
 	}
+
 	public void setLocalAces(List<Ace> localAces) {
 		this.localAces = localAces;
 	}
 
-	public List<Ace> getAllAces(){
-		//TODO local overwrites inherited
+	public List<Ace> getAllAces() {
+		// TODO local overwrites inherited
 		List<Ace> merged = new ArrayList<Ace>(inheritedAces);
 		merged.addAll(localAces);
 		return merged;
 	}
 
-	public List<Ace>getPropagatingAces(){
+	public List<Ace> getPropagatingAces() {
 		List<Ace> merged = new ArrayList<Ace>(inheritedAces);
-		//merged.add(ace);
+		// merged.add(ace);
 		return merged;
 	}
 
-	public List<Ace> getMergedAces(){
+	public List<Ace> getMergedAces() {
 		HashMap<String, Ace> _result = buildMap(localAces);
 		HashMap<String, Ace> localMap = buildMap(localAces);
 		HashMap<String, Ace> inheritedMap = buildMap(inheritedAces);
 
-		for(Entry<String, Ace> i : inheritedMap.entrySet()){
-			if(!localMap.containsKey(i.getKey())){
+		for (Entry<String, Ace> i : inheritedMap.entrySet()) {
+			if (!localMap.containsKey(i.getKey())) {
 				_result.put(i.getKey(), i.getValue());
 			}
 		}
 
-		//Convert map to list
+		// Convert map to list
 		List<Ace> result = new ArrayList<Ace>();
-		for(Entry<String, Ace> r : _result.entrySet()){
+		for (Entry<String, Ace> r : _result.entrySet()) {
 			result.add(r.getValue());
 		}
 		return result;
 	}
 
-	public void mergeInheritedAces(Acl acl){
-		//Inheritすべき外部からのインプットを確定する
+	public void mergeInheritedAces(Acl acl) {
+		// Inheritすべき外部からのインプットを確定する
 		List<Ace> aces = acl.getMergedAces();
 
 		HashMap<String, Ace> localMap = buildMap(localAces);
 		HashMap<String, Ace> inheritedMap = buildMap(aces);
 
-		for(Entry<String, Ace> i : inheritedMap.entrySet()){
-			if(!localMap.containsKey(i.getKey())){
+		for (Entry<String, Ace> i : inheritedMap.entrySet()) {
+			if (!localMap.containsKey(i.getKey())) {
 				this.inheritedAces.add(i.getValue());
 			}
 		}
 	}
 
-
-	private HashMap<String, Ace> buildMap(List<Ace> aces){
+	private HashMap<String, Ace> buildMap(List<Ace> aces) {
 		HashMap<String, Ace> map = new HashMap<String, Ace>();
 
-		for(Ace ace : aces){
+		for (Ace ace : aces) {
 			map.put(ace.getPrincipalId(), ace);
 		}
 
 		return map;
 	}
-
 
 }

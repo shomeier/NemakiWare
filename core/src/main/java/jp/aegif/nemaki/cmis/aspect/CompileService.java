@@ -25,10 +25,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
-import jp.aegif.nemaki.model.Acl;
-import jp.aegif.nemaki.model.Change;
-import jp.aegif.nemaki.model.Content;
-
 import org.apache.chemistry.opencmis.commons.data.AllowableActions;
 import org.apache.chemistry.opencmis.commons.data.ObjectData;
 import org.apache.chemistry.opencmis.commons.data.ObjectList;
@@ -37,33 +33,38 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.PropertiesImpl;
 import org.apache.chemistry.opencmis.commons.server.CallContext;
 import org.apache.chemistry.opencmis.commons.spi.Holder;
 
+import jp.aegif.nemaki.model.Acl;
+import jp.aegif.nemaki.model.Change;
+import jp.aegif.nemaki.model.Content;
+
 public interface CompileService {
-	public ObjectData compileObjectData(CallContext context,
-			String repositoryId, Content content, String filter,
-			Boolean includeAllowableActions, IncludeRelationships includeRelationships, String renditionFilter, Boolean includeAcl);
+	public ObjectData compileObjectData(CallContext context, String repositoryId, Content content, String filter,
+			Boolean includeAllowableActions, IncludeRelationships includeRelationships, String renditionFilter,
+			Boolean includeAcl);
 
-	public <T extends Content> ObjectList compileObjectDataList(CallContext callContext,
-			String repositoryId, List<T> contents, String filter,
-			Boolean includeAllowableActions, IncludeRelationships includeRelationships, String renditionFilter, Boolean includeAcl, BigInteger maxItems, BigInteger skipCount, boolean folderOnly, String orderBy);
-	
+	public <T extends Content> ObjectList compileObjectDataList(CallContext callContext, String repositoryId,
+			List<T> contents, String filter, Boolean includeAllowableActions, IncludeRelationships includeRelationships,
+			String renditionFilter, Boolean includeAcl, BigInteger maxItems, BigInteger skipCount, boolean folderOnly,
+			String orderBy);
+
 	public <T extends Content> ObjectList compileObjectDataListForSearchResult(CallContext callContext,
-			String repositoryId, List<T> contents, String filter,
-			Boolean includeAllowableActions, IncludeRelationships includeRelationships, String renditionFilter, Boolean includeAcl, BigInteger maxItems, BigInteger skipCount, boolean folderOnly, String orderBy, long numFound);
+			String repositoryId, List<T> contents, String filter, Boolean includeAllowableActions,
+			IncludeRelationships includeRelationships, String renditionFilter, Boolean includeAcl, BigInteger maxItems,
+			BigInteger skipCount, boolean folderOnly, String orderBy, long numFound);
 
-	public ObjectList compileChangeDataList(CallContext context, String repositoryId,
-			List<Change> changes, Holder<String> changeLogToken, Boolean includeProperties,
-			String filter, Boolean includePolicyIds, Boolean includeAcl);
+	public ObjectList compileChangeDataList(CallContext context, String repositoryId, List<Change> changes,
+			Holder<String> changeLogToken, Boolean includeProperties, String filter, Boolean includePolicyIds,
+			Boolean includeAcl);
 
-	public org.apache.chemistry.opencmis.commons.data.Acl compileAcl(
-			Acl acl, Boolean isInherited, Boolean onlyBasicPermissions);
-
+	public org.apache.chemistry.opencmis.commons.data.Acl compileAcl(Acl acl, Boolean isInherited,
+			Boolean onlyBasicPermissions);
 
 	public PropertiesImpl compileProperties(CallContext callContext, String repositoryId, Content content);
 
-	public AllowableActions compileAllowableActions(CallContext callContext, String repositoryId, Content content, Acl acl);
+	public AllowableActions compileAllowableActions(CallContext callContext, String repositoryId, Content content,
+			Acl acl);
 
-	public AllowableActions compileAllowableActions(CallContext callContext,
-			String repositoryId, Content content);
+	public AllowableActions compileAllowableActions(CallContext callContext, String repositoryId, Content content);
 
 	public Set<String> splitFilter(String filter);
 }

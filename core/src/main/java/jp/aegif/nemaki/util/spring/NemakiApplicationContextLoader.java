@@ -7,15 +7,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
-public class NemakiApplicationContextLoader implements ApplicationContextAware,
-		InitializingBean {
+public class NemakiApplicationContextLoader implements ApplicationContextAware, InitializingBean {
 	private XmlWebApplicationContext applicationContext;
 	private PropertyPlaceholderConfigurer propertyConfigurer;
 	private String[] configLocations;
 
 	@Override
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = (XmlWebApplicationContext) applicationContext;
 
 	}
@@ -27,8 +25,7 @@ public class NemakiApplicationContextLoader implements ApplicationContextAware,
 		applicationContext.refresh();
 	}
 
-	public void setPropertyConfigurer(
-			PropertyPlaceholderConfigurer propertyConfigurer) {
+	public void setPropertyConfigurer(PropertyPlaceholderConfigurer propertyConfigurer) {
 		this.propertyConfigurer = propertyConfigurer;
 	}
 

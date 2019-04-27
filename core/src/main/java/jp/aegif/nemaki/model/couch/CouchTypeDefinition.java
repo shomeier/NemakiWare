@@ -24,10 +24,10 @@ package jp.aegif.nemaki.model.couch;
 
 import java.util.List;
 
-import jp.aegif.nemaki.model.NemakiTypeDefinition;
-
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.ContentStreamAllowed;
+
+import jp.aegif.nemaki.model.NemakiTypeDefinition;
 
 public class CouchTypeDefinition extends CouchNodeBase {
 
@@ -86,9 +86,9 @@ public class CouchTypeDefinition extends CouchNodeBase {
 		setTypeMutabilityCreate(t.isTypeMutabilityCreate());
 		setTypeMutabilityUpdate(t.isTypeMutabilityUpdate());
 		setTypeMutabilityDelete(t.isTypeMutabilityDelete());
-		
+
 		setProperties(t.getProperties());
-		
+
 		setContentStreamAllowed(t.getContentStreamAllowed());
 		setVersionable(t.isVersionable());
 		setAllowedSourceTypes(t.getAllowedSourceTypes());
@@ -249,7 +249,7 @@ public class CouchTypeDefinition extends CouchNodeBase {
 	public void setProperties(List<String> properties) {
 		this.properties = properties;
 	}
-	
+
 	public ContentStreamAllowed getContentStreamAllowed() {
 		return contentStreamAllowed;
 	}
@@ -286,6 +286,7 @@ public class CouchTypeDefinition extends CouchNodeBase {
 		this.baseId = baseId;
 	}
 
+	@Override
 	public NemakiTypeDefinition convert() {
 		NemakiTypeDefinition t = new NemakiTypeDefinition(super.convert());
 		t.setTypeId(getTypeId());
@@ -307,7 +308,7 @@ public class CouchTypeDefinition extends CouchNodeBase {
 		t.setTypeMutabilityUpdate(isTypeMutabilityUpdate());
 		t.setTypeMutabilityDelete(isTypeMutabilityDelete());
 		t.setProperties(getProperties());
-		
+
 		t.setContentStreamAllowed(getContentStreamAllowed());
 		t.setVersionable(isVersionable());
 		t.setAllowedSourceTypes(getAllowedSourceTypes());

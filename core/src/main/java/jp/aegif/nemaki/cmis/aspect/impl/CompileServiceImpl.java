@@ -169,8 +169,8 @@ public class CompileServiceImpl implements CompileService {
 			Content content, String filter, Boolean includeAllowableActions, IncludeRelationships includeRelationships,
 			String renditionFilter, Boolean includeAcl) {
 
-		log.info(MessageFormat.format("CompileService#compileObjectDataWithFullAttributes START : Repo={0}, Id={1}", repositoryId, content.getId()));
-
+		log.info(MessageFormat.format("CompileService#compileObjectDataWithFullAttributes START : Repo={0}, Id={1}",
+				repositoryId, content.getId()));
 
 		ObjectDataImpl result = new ObjectDataImpl();
 
@@ -179,31 +179,37 @@ public class CompileServiceImpl implements CompileService {
 		PropertiesImpl properties = compileProperties(callContext, repositoryId, content);
 		result.setProperties(properties);
 
-		log.info(MessageFormat.format("CompileService#compileObjectDataWithFullAttributes compileProperties success : Repo={0}, Id={1}", repositoryId, content.getId()));
+		log.info(MessageFormat.format(
+				"CompileService#compileObjectDataWithFullAttributes compileProperties success : Repo={0}, Id={1}",
+				repositoryId, content.getId()));
 
 		// Set acl and allowable actions
 		setAclAndAllowableActionsInternal(result, callContext, repositoryId, content, includeAllowableActions,
 				includeAcl);
 
-		log.info(MessageFormat.format("CompileService#compileObjectDataWithFullAttributes setAclAndAllowableActionsInternal success : Repo={0}, Id={1}", repositoryId, content.getId()));
-
+		log.info(MessageFormat.format(
+				"CompileService#compileObjectDataWithFullAttributes setAclAndAllowableActionsInternal success : Repo={0}, Id={1}",
+				repositoryId, content.getId()));
 
 		// Set relationship
 		setRelationshipInternal(result, callContext, repositoryId, content, includeRelationships);
 
-		log.info(MessageFormat.format("CompileService#compileObjectDataWithFullAttributes setRelationshipInternal success : Repo={0}, Id={1}", repositoryId, content.getId()));
-
+		log.info(MessageFormat.format(
+				"CompileService#compileObjectDataWithFullAttributes setRelationshipInternal success : Repo={0}, Id={1}",
+				repositoryId, content.getId()));
 
 		// Set Renditions
 		if (content.isDocument()) {
 			result.setRenditions(compileRenditions(callContext, repositoryId, content));
 		}
-		log.info(MessageFormat.format("CompileService#compileObjectDataWithFullAttributes setRenditions if document success : Repo={0}, Id={1}", repositoryId, content.getId()));
+		log.info(MessageFormat.format(
+				"CompileService#compileObjectDataWithFullAttributes setRenditions if document success : Repo={0}, Id={1}",
+				repositoryId, content.getId()));
 
 		nemakiCachePool.get(repositoryId).getObjectDataCache().put(new Element(content.getId(), result));
 
-		log.info(MessageFormat.format("CompileService#compileObjectDataWithFullAttributes END : Repo={0}, Id={1}", repositoryId, content.getId()));
-
+		log.info(MessageFormat.format("CompileService#compileObjectDataWithFullAttributes END : Repo={0}, Id={1}",
+				repositoryId, content.getId()));
 
 		return result;
 	}
@@ -214,7 +220,7 @@ public class CompileServiceImpl implements CompileService {
 		if (!content.isRelationship() && includeRelationships != IncludeRelationships.NONE
 				&& includeRelationshipsEnabled()) {
 			objectData.setRelationships(compileRelationships(callContext, repositoryId, content, includeRelationships));
-		}else{
+		} else {
 			objectData.setRelationships(new ArrayList<ObjectData>());
 		}
 	}
@@ -390,11 +396,12 @@ public class CompileServiceImpl implements CompileService {
 			return list;
 		}
 	}
+
 	@Override
-	public <T extends Content> ObjectList compileObjectDataListForSearchResult(CallContext callContext, String repositoryId,
-			List<T> contents, String filter, Boolean includeAllowableActions, IncludeRelationships includeRelationships,
-			String renditionFilter, Boolean includeAcl, BigInteger maxItems, BigInteger skipCount, boolean folderOnly,
-			String orderBy, long numFound) {
+	public <T extends Content> ObjectList compileObjectDataListForSearchResult(CallContext callContext,
+			String repositoryId, List<T> contents, String filter, Boolean includeAllowableActions,
+			IncludeRelationships includeRelationships, String renditionFilter, Boolean includeAcl, BigInteger maxItems,
+			BigInteger skipCount, boolean folderOnly, String orderBy, long numFound) {
 		if (CollectionUtils.isEmpty(contents)) {
 			// Empty list
 			ObjectListImpl list = new ObjectListImpl();
@@ -583,7 +590,6 @@ public class CompileServiceImpl implements CompileService {
 			versionSeries = contentService.getVersionSeries(repositoryId, d);
 		}
 
-
 		String userName = callContext.getUsername();
 		Set<String> groups = contentService.getGroupIdsContainingUser(repositoryId, userName);
 
@@ -618,8 +624,8 @@ public class CompileServiceImpl implements CompileService {
 			}
 
 			// Add an allowable action
-			boolean allowable = permissionService.checkPermissionWithGivenList(callContext, repositoryId, mappingEntry.getKey(), acl,
-					baseType, content, userName, groups);
+			boolean allowable = permissionService.checkPermissionWithGivenList(callContext, repositoryId,
+					mappingEntry.getKey(), acl, baseType, content, userName, groups);
 
 			if (allowable) {
 				actionSet.add(convertKeyToAction(key));
@@ -738,8 +744,8 @@ public class CompileServiceImpl implements CompileService {
 	private List<ObjectData> compileRelationships(CallContext context, String repositoryId, Content content,
 			IncludeRelationships irl) {
 
-		log.info(MessageFormat.format("CompileService#compileRelationships START: Repo={0}, Id={1}", repositoryId, content.getId()));
-
+		log.info(MessageFormat.format("CompileService#compileRelationships START: Repo={0}, Id={1}", repositoryId,
+				content.getId()));
 
 		if (IncludeRelationships.NONE == irl) {
 			return null;
@@ -1036,9 +1042,9 @@ public class CompileServiceImpl implements CompileService {
 			} else {
 				length = attachment.getLength();
 				mimeType = attachment.getMimeType();
-				if(attachment.getName() == null || attachment.getName().isEmpty()){
+				if (attachment.getName() == null || attachment.getName().isEmpty()) {
 					fileName = document.getName();
-				}else{
+				} else {
 					fileName = attachment.getName();
 				}
 				streamId = attachment.getId();
@@ -1148,14 +1154,10 @@ public class CompileServiceImpl implements CompileService {
 	/**
 	 * Adds specified property in property set.
 	 *
-	 * @param props
-	 *            property set
-	 * @param tdf
-	 *            object type (e.g. cmis:document)
-	 * @param id
-	 *            property ID
-	 * @param value
-	 *            actual property value
+	 * @param props property set
+	 * @param tdf   object type (e.g. cmis:document)
+	 * @param id    property ID
+	 * @param value actual property value
 	 */
 	// TODO if cast fails, continue the operation
 	private void addProperty(PropertiesImpl props, TypeDefinition tdf, String id, Object value) {
@@ -1302,8 +1304,8 @@ public class CompileServiceImpl implements CompileService {
 	}
 
 	/**
-	 * Separates filter string with ','. If filter is null or empty, it means
-	 * all properties can go.
+	 * Separates filter string with ','. If filter is null or empty, it means all
+	 * properties can go.
 	 */
 	// TODO implement CMIS filterNotValid exception?
 	// NOTE: "not set" can mean "all properties" and invalid queryName should be

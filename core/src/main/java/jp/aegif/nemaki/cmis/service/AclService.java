@@ -50,18 +50,17 @@ import jp.aegif.nemaki.util.spring.aspect.log.LogParam;
 public interface AclService {
 
 	Acl getAcl(@LogParam("context") CallContext context, @LogParam("repositoryId") String repositoryId,
-			@LogParam("objectId") String objectId, @LogParam("onlyBasicPermissions") Boolean onlyBasicPermissions, ExtensionsData extension);
+			@LogParam("objectId") String objectId, @LogParam("onlyBasicPermissions") Boolean onlyBasicPermissions,
+			ExtensionsData extension);
 
 	/**
-	 * Applies a new ACL to an object. Since it is not possible to transmit an
-	 * "add ACL" and a "remove ACL" via AtomPub, the merging has to be done on
-	 * the client side. The ACEs provided here is supposed to the new complete
-	 * ACL.<br/>
+	 * Applies a new ACL to an object. Since it is not possible to transmit an "add
+	 * ACL" and a "remove ACL" via AtomPub, the merging has to be done on the client
+	 * side. The ACEs provided here is supposed to the new complete ACL.<br/>
 	 * 
 	 * TODO re-design ACL system in Nemaki
 	 * 
-	 * @param repositoryId
-	 *            TODO
+	 * @param repositoryId TODO
 	 */
 	Acl applyAcl(@LogParam("callContext") CallContext callContext, @LogParam("repositoryId") String repositoryId,
 			@LogParam("objectId") String objectId, @LogParam("aces") Acl aces,

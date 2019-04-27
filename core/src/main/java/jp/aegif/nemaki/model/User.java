@@ -30,8 +30,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jp.aegif.nemaki.util.constant.NodeType;
 
 /**
- * Nemaki user.
- * This class is deprecated and remains for backward compatiblity (patch)
+ * Nemaki user. This class is deprecated and remains for backward compatiblity
+ * (patch)
+ * 
  * @see jp.aegif.nemaki.model.UserItem
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -54,8 +55,7 @@ public class User extends NodeBase {
 		setType(NodeType.USER.value());
 	}
 
-	public User(String id, String name, String firstName, String lastName,
-			String email, String passwordHash) {
+	public User(String id, String name, String firstName, String lastName, String email, String passwordHash) {
 		this();
 		setUserId(id);
 		setName(name);
@@ -65,7 +65,7 @@ public class User extends NodeBase {
 		setPasswordHash(passwordHash);
 	}
 
-	public User(NodeBase n){
+	public User(NodeBase n) {
 		setId(n.getId());
 		setType(n.getType());
 		setCreated(n.getCreated());
@@ -132,7 +132,6 @@ public class User extends NodeBase {
 	public void setAdmin(Boolean admin) {
 		this.admin = admin;
 	}
-
 
 	public Set<String> getFavorites() {
 		return favorites;

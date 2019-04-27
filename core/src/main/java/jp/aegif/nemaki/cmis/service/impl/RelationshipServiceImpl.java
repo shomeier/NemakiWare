@@ -28,6 +28,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 
+import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.data.ExtensionsData;
+import org.apache.chemistry.opencmis.commons.data.ObjectData;
+import org.apache.chemistry.opencmis.commons.data.ObjectList;
+import org.apache.chemistry.opencmis.commons.data.PermissionMapping;
+import org.apache.chemistry.opencmis.commons.definitions.TypeDefinitionContainer;
+import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
+import org.apache.chemistry.opencmis.commons.enums.RelationshipDirection;
+import org.apache.chemistry.opencmis.commons.server.CallContext;
+
 import jp.aegif.nemaki.businesslogic.ContentService;
 import jp.aegif.nemaki.cmis.aspect.CompileService;
 import jp.aegif.nemaki.cmis.aspect.ExceptionService;
@@ -39,17 +49,6 @@ import jp.aegif.nemaki.util.DataUtil;
 import jp.aegif.nemaki.util.constant.DomainType;
 import jp.aegif.nemaki.util.lock.ThreadLockService;
 
-import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.data.ExtensionsData;
-import org.apache.chemistry.opencmis.commons.data.ObjectData;
-import org.apache.chemistry.opencmis.commons.data.ObjectList;
-import org.apache.chemistry.opencmis.commons.data.PermissionMapping;
-import org.apache.chemistry.opencmis.commons.definitions.TypeDefinitionContainer;
-import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
-import org.apache.chemistry.opencmis.commons.enums.RelationshipDirection;
-import org.apache.chemistry.opencmis.commons.impl.dataobjects.ObjectListImpl;
-import org.apache.chemistry.opencmis.commons.server.CallContext;
-
 public class RelationshipServiceImpl implements RelationshipService {
 	private TypeManager typeManager;
 	private ContentService contentService;
@@ -58,16 +57,15 @@ public class RelationshipServiceImpl implements RelationshipService {
 	private ThreadLockService threadLockService;
 
 	@Override
-	public ObjectList getObjectRelationships(CallContext callContext,
-			String repositoryId, String objectId,
-			Boolean includeSubRelationshipTypes, RelationshipDirection relationshipDirection,
-			String typeId, String filter,
-			Boolean includeAllowableActions, BigInteger maxItems, BigInteger skipCount, ExtensionsData extension) {
+	public ObjectList getObjectRelationships(CallContext callContext, String repositoryId, String objectId,
+			Boolean includeSubRelationshipTypes, RelationshipDirection relationshipDirection, String typeId,
+			String filter, Boolean includeAllowableActions, BigInteger maxItems, BigInteger skipCount,
+			ExtensionsData extension) {
 
 		exceptionService.invalidArgumentRequiredString("objectId", objectId);
 
 		Lock lock = threadLockService.getReadLock(repositoryId, objectId);
-		try{
+		try {
 			lock.lock();
 
 			// //////////////////
@@ -76,8 +74,8 @@ public class RelationshipServiceImpl implements RelationshipService {
 
 			Content content = contentService.getContent(repositoryId, objectId);
 			exceptionService.objectNotFound(DomainType.OBJECT, content, objectId);
-			exceptionService.permissionDenied(callContext,
-					repositoryId, PermissionMapping.CAN_GET_OBJECT_RELATIONSHIPS_OBJECT, content);
+			exceptionService.permissionDenied(callContext, repositoryId,
+					PermissionMapping.CAN_GET_OBJECT_RELATIONSHIPS_OBJECT, content);
 
 			// //////////////////
 			// Body of the method
@@ -86,8 +84,8 @@ public class RelationshipServiceImpl implements RelationshipService {
 			relationshipDirection = (relationshipDirection == null) ? RelationshipDirection.SOURCE
 					: relationshipDirection;
 
-			List<Relationship> rels = contentService.getRelationsipsOfObject(
-					repositoryId, objectId, relationshipDirection);
+			List<Relationship> rels = contentService.getRelationsipsOfObject(repositoryId, objectId,
+					relationshipDirection);
 
 			// Filtering results
 			List<Relationship> extracted = new ArrayList<Relationship>();
@@ -96,18 +94,19 @@ public class RelationshipServiceImpl implements RelationshipService {
 				typeIds.add(typeId);
 
 				if (includeSubRelationshipTypes) {
-					List<TypeDefinitionContainer> descendants = typeManager
-							.getTypesDescendants(repositoryId, typeId,
-									BigInteger.valueOf(-1), false);
+					List<TypeDefinitionContainer> descendants = typeManager.getTypesDescendants(repositoryId, typeId,
+							BigInteger.valueOf(-1), false);
 					for (TypeDefinitionContainer tdc : descendants) {
 						typeIds.add(tdc.getTypeDefinition().getId());
 					}
 				}
 
 				for (Relationship rel : rels) {
-					ObjectData objectData = compileService.compileObjectData(callContext, repositoryId, rel, null, false, null, null, false);
-					String objectTypeId = DataUtil.getIdProperty(objectData.getProperties(), PropertyIds.OBJECT_TYPE_ID);
-					if (typeIds.contains(objectTypeId) ){
+					ObjectData objectData = compileService.compileObjectData(callContext, repositoryId, rel, null,
+							false, null, null, false);
+					String objectTypeId = DataUtil.getIdProperty(objectData.getProperties(),
+							PropertyIds.OBJECT_TYPE_ID);
+					if (typeIds.contains(objectTypeId)) {
 						extracted.add(rel);
 					}
 				}
@@ -119,10 +118,10 @@ public class RelationshipServiceImpl implements RelationshipService {
 
 			// cannot compile includeAllowableActions if includeAcl=false
 			boolean includeAcl = includeAllowableActions;
-			return compileService.compileObjectDataList(callContext,
-					repositoryId, extracted, filter,
-					includeAllowableActions, IncludeRelationships.NONE, null, includeAcl, maxItems, skipCount, false, null);
-		}finally{
+			return compileService.compileObjectDataList(callContext, repositoryId, extracted, filter,
+					includeAllowableActions, IncludeRelationships.NONE, null, includeAcl, maxItems, skipCount, false,
+					null);
+		} finally {
 			lock.unlock();
 		}
 	}

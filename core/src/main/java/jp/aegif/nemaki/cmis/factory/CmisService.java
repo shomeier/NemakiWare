@@ -23,14 +23,12 @@ package jp.aegif.nemaki.cmis.factory;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.Acl;
 import org.apache.chemistry.opencmis.commons.data.AllowableActions;
 import org.apache.chemistry.opencmis.commons.data.BulkUpdateObjectIdAndChangeToken;
-import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.data.ExtensionsData;
 import org.apache.chemistry.opencmis.commons.data.FailedToDeleteData;
@@ -57,7 +55,6 @@ import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
-import org.apache.chemistry.opencmis.commons.impl.dataobjects.CmisExtensionElementImpl;
 import org.apache.chemistry.opencmis.commons.impl.server.AbstractCmisService;
 import org.apache.chemistry.opencmis.commons.impl.server.ObjectInfoImpl;
 import org.apache.chemistry.opencmis.commons.impl.server.RenditionInfoImpl;
@@ -69,8 +66,6 @@ import org.apache.chemistry.opencmis.server.support.wrapper.CallContextAwareCmis
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
 
 import jp.aegif.nemaki.cmis.service.AclService;
 import jp.aegif.nemaki.cmis.service.DiscoveryService;
@@ -80,7 +75,6 @@ import jp.aegif.nemaki.cmis.service.PolicyService;
 import jp.aegif.nemaki.cmis.service.RelationshipService;
 import jp.aegif.nemaki.cmis.service.RepositoryService;
 import jp.aegif.nemaki.cmis.service.VersioningService;
-import jp.aegif.nemaki.plugin.action.JavaBackedAction;
 
 /**
  * Nemaki CMIS service.
@@ -123,8 +117,6 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 			info = getObjectInfoIntern(repositoryId, object);
 			// add object info
 			addObjectInfo(info);
-
-
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -189,10 +181,9 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 				// get latest version
 				// // Nemaki Cusomization START ////
 				/*
-				 * List<ObjectData> versions = getAllVersions(repositoryId,
-				 * object.getId(), info.getVersionSeriesId(), null,
-				 * Boolean.FALSE, null); if (versions != null && versions.size()
-				 * > 0) {
+				 * List<ObjectData> versions = getAllVersions(repositoryId, object.getId(),
+				 * info.getVersionSeriesId(), null, Boolean.FALSE, null); if (versions != null
+				 * && versions.size() > 0) {
 				 * info.setWorkingCopyOriginalId(versions.get(0).getId()); }
 				 */
 
@@ -229,11 +220,10 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 			// // Nemaki Cusomization START ////
 			/*
 			 * } else { try { List<ObjectParentData> parents =
-			 * getObjectParents(repositoryId, object.getId(), null,
-			 * Boolean.FALSE, IncludeRelationships.NONE, "cmis:none",
-			 * Boolean.FALSE, null); info.setHasParent(parents.size() > 0); }
-			 * catch (CmisInvalidArgumentException e) {
-			 * info.setHasParent(false); } }
+			 * getObjectParents(repositoryId, object.getId(), null, Boolean.FALSE,
+			 * IncludeRelationships.NONE, "cmis:none", Boolean.FALSE, null);
+			 * info.setHasParent(parents.size() > 0); } catch (CmisInvalidArgumentException
+			 * e) { info.setHasParent(false); } }
 			 */
 		} else {
 			String objecTypeId = getIdProperty(object, PropertyIds.OBJECT_TYPE_ID);
@@ -341,8 +331,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 		Holder<ObjectData> parentObjectData = new Holder<ObjectData>(null);
 
 		ObjectInFolderList children = navigationService.getChildren(getCallContext(), repositoryId, folderId, filter,
-				orderBy, includeAllowableActions, includeRelationships, renditionFilter, includePathSegment, maxItems, skipCount, parentObjectData,
-				extension);
+				orderBy, includeAllowableActions, includeRelationships, renditionFilter, includePathSegment, maxItems,
+				skipCount, parentObjectData, extension);
 
 		if (parentObjectData != null && parentObjectData.getValue() != null) {
 			setObjectInfo(repositoryId, parentObjectData.getValue());
@@ -357,8 +347,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Gets the set of descendant objects contained in the specified folder or
-	 * any of its child folders.
+	 * Gets the set of descendant objects contained in the specified folder or any
+	 * of its child folders.
 	 */
 	@Override
 	public List<ObjectInFolderContainer> getDescendants(String repositoryId, String folderId, BigInteger depth,
@@ -379,8 +369,7 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Gets the set of descendant folder objects contained in the specified
-	 * folder.
+	 * Gets the set of descendant folder objects contained in the specified folder.
 	 */
 	@Override
 	public List<ObjectInFolderContainer> getFolderTree(String repositoryId, String folderId, BigInteger depth,
@@ -422,8 +411,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Gets the list of documents that are checked out that the user has access
-	 * to. No checkout for now, so empty.
+	 * Gets the list of documents that are checked out that the user has access to.
+	 * No checkout for now, so empty.
 	 */
 	@Override
 	public ObjectList getCheckedOutDocs(String repositoryId, String folderId, String filter, String orderBy,
@@ -438,8 +427,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	// ---- Object Service Implementation ---
 
 	/**
-	 * Creates a new document, folder or policy. The property
-	 * "cmis:objectTypeId" defines the type and implicitly the base type.
+	 * Creates a new document, folder or policy. The property "cmis:objectTypeId"
+	 * defines the type and implicitly the base type.
 	 */
 	@Override
 	public String create(String repositoryId, Properties properties, String folderId, ContentStream contentStream,
@@ -477,8 +466,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Creates a folder object of the specified type (given by the
-	 * cmis:objectTypeId property) in the specified location.
+	 * Creates a folder object of the specified type (given by the cmis:objectTypeId
+	 * property) in the specified location.
 	 */
 	@Override
 	public String createFolder(String repositoryId, Properties properties, String folderId, List<String> policies,
@@ -511,18 +500,16 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Deletes an object or cancels a check out. For the Web Services binding
-	 * this is always an object deletion. For the AtomPub it depends on the
-	 * referenced object. If it is a checked out document then the check out
-	 * must be canceled. If the object is not a checked out document then the
-	 * object must be deleted.
+	 * Deletes an object or cancels a check out. For the Web Services binding this
+	 * is always an object deletion. For the AtomPub it depends on the referenced
+	 * object. If it is a checked out document then the check out must be canceled.
+	 * If the object is not a checked out document then the object must be deleted.
 	 */
 	@Override
 	public void deleteObjectOrCancelCheckOut(String repositoryId, String objectId, Boolean allVersions,
 			ExtensionsData extension) {
 		// TODO When checkOut implemented, implement switching the two methods
-		ObjectData o = getObject(repositoryId, objectId, null, true, IncludeRelationships.BOTH, null, true, true,
-				null);
+		ObjectData o = getObject(repositoryId, objectId, null, true, IncludeRelationships.BOTH, null, true, true, null);
 		PropertyData<?> isPWC = o.getProperties().getProperties().get(PropertyIds.IS_PRIVATE_WORKING_COPY);
 		if (isPWC != null && isPWC.getFirstValue().equals(true)) {
 			versioningService.cancelCheckOut(getCallContext(), repositoryId, objectId, null);
@@ -553,8 +540,7 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 
 	/**
 	 * Gets the content stream for the specified document object, or gets a
-	 * rendition stream for a specified rendition of a document or folder
-	 * object.
+	 * rendition stream for a specified rendition of a document or folder object.
 	 */
 	@Override
 	public ContentStream getContentStream(String repositoryId, String objectId, String streamId, BigInteger offset,
@@ -602,8 +588,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 
 	/**
 	 * Gets the list of associated renditions for the specified object. Only
-	 * rendition attributes are returned, not rendition stream. No renditions,
-	 * so empty.
+	 * rendition attributes are returned, not rendition stream. No renditions, so
+	 * empty.
 	 */
 	@Override
 	public List<RenditionData> getRenditions(String repositoryId, String objectId, String renditionFilter,
@@ -696,8 +682,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Get a subset of the properties for the latest document object in the
-	 * version series.
+	 * Get a subset of the properties for the latest document object in the version
+	 * series.
 	 */
 	@Override
 	public Properties getPropertiesOfLatestVersion(String repositoryId, String objectId, String versionSeriesId,
@@ -711,9 +697,9 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 
 	/**
 	 * Applies a new ACL (Access Control List) to an object. Since it is not
-	 * possible to transmit an "add ACL" and a "remove ACL" via AtomPub, the
-	 * merging has to be done on the client side. The ACEs provided here is
-	 * supposed to the new complete ACL.
+	 * possible to transmit an "add ACL" and a "remove ACL" via AtomPub, the merging
+	 * has to be done on the client side. The ACEs provided here is supposed to the
+	 * new complete ACL.
 	 */
 	@Override
 	public Acl applyAcl(String repositoryId, String objectId, Acl aces, AclPropagation aclPropagation) {
@@ -721,8 +707,7 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Get the ACL (Access Control List) currently applied to the specified
-	 * object.
+	 * Get the ACL (Access Control List) currently applied to the specified object.
 	 */
 	@Override
 	public Acl getAcl(String repositoryId, String objectId, Boolean onlyBasicPermissions, ExtensionsData extension) {
@@ -732,8 +717,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	// --- Repository Service Implementation ---
 
 	/**
-	 * Returns information about the CMIS repository, the optional capabilities
-	 * it supports and its access control information.
+	 * Returns information about the CMIS repository, the optional capabilities it
+	 * supports and its access control information.
 	 */
 	@Override
 	public RepositoryInfo getRepositoryInfo(String repositoryId, ExtensionsData extension) {
@@ -748,8 +733,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 
 	/**
 	 * Returns a list of CMIS repository information available from this CMIS
-	 * service endpoint. In contrast to the CMIS specification this method
-	 * returns repository infos not only repository ids. (See OpenCMIS doc)
+	 * service endpoint. In contrast to the CMIS specification this method returns
+	 * repository infos not only repository ids. (See OpenCMIS doc)
 	 */
 	@Override
 	public List<RepositoryInfo> getRepositoryInfos(ExtensionsData arg0) {
@@ -757,8 +742,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Returns the list of object types defined for the repository that are
-	 * children of the specified type.
+	 * Returns the list of object types defined for the repository that are children
+	 * of the specified type.
 	 */
 	@Override
 	public TypeDefinitionList getTypeChildren(String repositoryId, String typeId, Boolean includePropertyDefinitions,
@@ -776,8 +761,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	}
 
 	/**
-	 * Returns the set of descendant object type defined for the repository
-	 * under the specified type.
+	 * Returns the set of descendant object type defined for the repository under
+	 * the specified type.
 	 */
 	@Override
 	public List<TypeDefinitionContainer> getTypeDescendants(String repositoryId, String typeId, BigInteger depth,
@@ -891,6 +876,7 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	/*
 	 * Setters/Getters
 	 */
+	@Override
 	public void setCallContext(CallContext context) {
 		this.context = context;
 
@@ -902,6 +888,7 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 		}
 	}
 
+	@Override
 	public CallContext getCallContext() {
 		return context;
 	}

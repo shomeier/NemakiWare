@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 import jp.aegif.nemaki.model.Rendition;
 
-public class CouchRendition extends CouchNodeBase{
+public class CouchRendition extends CouchNodeBase {
 	private static final long serialVersionUID = -9012249344879285010L;
 	private String mimetype;
 	private long length;
@@ -36,11 +36,11 @@ public class CouchRendition extends CouchNodeBase{
 	private String renditionDocumentId;
 	private InputStream inputStream;
 
-	public CouchRendition(){
+	public CouchRendition() {
 		super();
 	}
-	
-	public CouchRendition(Rendition r){
+
+	public CouchRendition(Rendition r) {
 		super(r);
 		setKind(r.getKind());
 		setTitle(r.getTitle());
@@ -49,7 +49,7 @@ public class CouchRendition extends CouchNodeBase{
 		setLength(r.getLength());
 		setMimetype(r.getMimetype());
 	}
-	
+
 	public String getKind() {
 		return kind;
 	}
@@ -57,7 +57,7 @@ public class CouchRendition extends CouchNodeBase{
 	public void setKind(String kind) {
 		this.kind = kind;
 	}
-	
+
 	public String getMimetype() {
 		return mimetype;
 	}
@@ -114,7 +114,8 @@ public class CouchRendition extends CouchNodeBase{
 		this.inputStream = inputStream;
 	}
 
-	public Rendition convert(){
+	@Override
+	public Rendition convert() {
 		Rendition r = new Rendition(super.convert());
 		r.setKind(getKind());
 		r.setTitle(getTitle());

@@ -25,21 +25,21 @@ package jp.aegif.nemaki.model.couch;
 import java.math.BigDecimal;
 import java.util.List;
 
-import jp.aegif.nemaki.model.Choice;
-import jp.aegif.nemaki.model.NemakiPropertyDefinitionDetail;
-
 import org.apache.chemistry.opencmis.commons.enums.Cardinality;
 import org.apache.chemistry.opencmis.commons.enums.DecimalPrecision;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 import org.apache.chemistry.opencmis.commons.enums.Updatability;
 import org.apache.lucene.document.DateTools.Resolution;
 
+import jp.aegif.nemaki.model.Choice;
+import jp.aegif.nemaki.model.NemakiPropertyDefinitionDetail;
+
 public class CouchPropertyDefinitionDetail extends CouchNodeBase {
 
 	private static final long serialVersionUID = 4477156425295443676L;
 
 	private String coreNodeId;
-	
+
 	// Attributes common
 	private String propertyId;
 	private String localName;
@@ -71,11 +71,11 @@ public class CouchPropertyDefinitionDetail extends CouchNodeBase {
 	// Attributes specific to String
 	private Long maxLength;
 
-	public CouchPropertyDefinitionDetail(){
+	public CouchPropertyDefinitionDetail() {
 		super();
 	}
-	
-	public CouchPropertyDefinitionDetail(NemakiPropertyDefinitionDetail p){
+
+	public CouchPropertyDefinitionDetail(NemakiPropertyDefinitionDetail p) {
 		super(p);
 		setCoreNodeId(p.getCoreNodeId());
 		setLocalName(p.getLocalName());
@@ -89,7 +89,7 @@ public class CouchPropertyDefinitionDetail extends CouchNodeBase {
 		setChoices(p.getChoices());
 		setOpenChoice(p.isOpenChoice());
 		setDefaultValue(p.getDefaultValue());
-		
+
 		setMinValue(p.getMinValue());
 		setMaxValue(p.getMaxValue());
 		setResolution(p.getResolution());
@@ -98,9 +98,9 @@ public class CouchPropertyDefinitionDetail extends CouchNodeBase {
 		setDecimalMaxValue(p.getDecimalMaxValue());
 		setMaxLength(p.getMaxLength());
 	}
-	
+
 	/**
-	 * Getter & Setter 
+	 * Getter & Setter
 	 */
 	public String getPropertyId() {
 		return propertyId;
@@ -285,10 +285,11 @@ public class CouchPropertyDefinitionDetail extends CouchNodeBase {
 	public void setMaxLength(Long maxLength) {
 		this.maxLength = maxLength;
 	}
-	
-	public NemakiPropertyDefinitionDetail convert(){
+
+	@Override
+	public NemakiPropertyDefinitionDetail convert() {
 		NemakiPropertyDefinitionDetail p = new NemakiPropertyDefinitionDetail(super.convert());
-		
+
 		p.setCoreNodeId(getCoreNodeId());
 		p.setLocalName(getLocalName());
 		p.setLocalNameSpace(getLocalNameSpace());
@@ -301,7 +302,7 @@ public class CouchPropertyDefinitionDetail extends CouchNodeBase {
 		p.setChoices(getChoices());
 		p.setOpenChoice(isOpenChoice());
 		p.setDefaultValue(getDefaultValue());
-		
+
 		p.setMinValue(getMinValue());
 		p.setMaxLength(getMaxValue());
 		p.setResolution(getResolution());
@@ -309,7 +310,6 @@ public class CouchPropertyDefinitionDetail extends CouchNodeBase {
 		p.setDecimalMinValue(getDecimalMinValue());
 		p.setDecimalMaxValue(getDecimalMaxValue());
 		p.setMaxLength(getMaxLength());
-		
 
 		return p;
 	}

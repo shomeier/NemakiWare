@@ -4,17 +4,18 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-public class UserItem extends Item{
+public class UserItem extends Item {
 	private String userId;
 	private String passowrd;
 	private Boolean admin = false;
 
-	public UserItem(){
+	public UserItem() {
 		super();
 		setAcl(new Acl());
 	}
-	
-	public UserItem(String id, String objectType, String userId, String name, String password, Boolean admin, String parentFolderId){
+
+	public UserItem(String id, String objectType, String userId, String name, String password, Boolean admin,
+			String parentFolderId) {
 		this();
 		setId(id);
 		setObjectType(objectType);
@@ -24,8 +25,8 @@ public class UserItem extends Item{
 		setAdmin(admin);
 		setParentId(parentFolderId);
 	}
-	
-	public UserItem(Item item){
+
+	public UserItem(Item item) {
 		super(item);
 		try {
 			BeanUtils.copyProperties(this, item);
@@ -37,7 +38,7 @@ public class UserItem extends Item{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getUserId() {
 		return userId;
 	}

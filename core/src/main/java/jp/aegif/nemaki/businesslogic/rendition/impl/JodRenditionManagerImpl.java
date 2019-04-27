@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.MimeType;
 import javax.annotation.PostConstruct;
 
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -33,8 +32,7 @@ public class JodRenditionManagerImpl implements RenditionManager {
 
 	private PropertyManager propertyManager;
 	private DefaultDocumentFormatRegistry registry;
-	private static final Log log = LogFactory
-			.getLog(JodRenditionManagerImpl.class);
+	private static final Log log = LogFactory.getLog(JodRenditionManagerImpl.class);
 
 	@PostConstruct
 	public void init() {
@@ -42,8 +40,7 @@ public class JodRenditionManagerImpl implements RenditionManager {
 
 		String definitionFile = "";
 		try {
-			definitionFile = propertyManager.readValue(
-					PropertyKey.JODCONVERTER_REGISTRY_DATAFORMATS);
+			definitionFile = propertyManager.readValue(PropertyKey.JODCONVERTER_REGISTRY_DATAFORMATS);
 		} catch (Exception e) {
 			log.error("Cannot read a permission definition file", e);
 		}
@@ -58,41 +55,36 @@ public class JodRenditionManagerImpl implements RenditionManager {
 				String extension = (String) (format.get("extension"));
 				String mediaType = (String) (format.get("mediaType"));
 
-				DocumentFormat df = new DocumentFormat(name, extension,
-						mediaType);
+				DocumentFormat df = new DocumentFormat(name, extension, mediaType);
 				registry.addFormat(df);
 			}
 
 		}
 	}
 
-	public ContentStream convertToPdf(ContentStream contentStream,
-			String documentName) {
-		//Skip pdf file (Avoid converting pdf to pdf)
-		if(contentStream.getMimeType().equals("application/pdf")){
+	@Override
+	public ContentStream convertToPdf(ContentStream contentStream, String documentName) {
+		// Skip pdf file (Avoid converting pdf to pdf)
+		if (contentStream.getMimeType().equals("application/pdf")) {
 			return contentStream;
 		}
-		
+
 		OutputStream outputStream = null;
 		try {
 			String prefix = getPrefix(documentName);
 			String suffix = getSuffix(documentName);
-			File inputFile = convertInputStreamToFile(prefix, "." + suffix,
-					contentStream.getStream());
+			File inputFile = convertInputStreamToFile(prefix, "." + suffix, contentStream.getStream());
 			inputFile.deleteOnExit();
 			File outputFile = File.createTempFile("output", ".pdf");
 			outputFile.deleteOnExit();
 
-			String officehome = propertyManager
-					.readValue(PropertyKey.JODCONVERTER_OFFICEHOME);
+			String officehome = propertyManager.readValue(PropertyKey.JODCONVERTER_OFFICEHOME);
 
-			OfficeManager officeManager = new DefaultOfficeManagerConfiguration()
-					.setPortNumber(8100).setOfficeHome(officehome)
-					.buildOfficeManager();
+			OfficeManager officeManager = new DefaultOfficeManagerConfiguration().setPortNumber(8100)
+					.setOfficeHome(officehome).buildOfficeManager();
 			officeManager.start();
 
-			OfficeDocumentConverter converter = new OfficeDocumentConverter(
-					officeManager);
+			OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
 			converter.convert(inputFile, outputFile);
 
 			officeManager.stop();
@@ -131,8 +123,7 @@ public class JodRenditionManagerImpl implements RenditionManager {
 	 * @return
 	 * @throws IOException
 	 */
-	private File convertInputStreamToFile(String prefix, String suffix,
-			InputStream inputStream) throws IOException {
+	private File convertInputStreamToFile(String prefix, String suffix, InputStream inputStream) throws IOException {
 
 		File file = File.createTempFile(prefix, suffix);
 		try {
@@ -174,6 +165,7 @@ public class JodRenditionManagerImpl implements RenditionManager {
 		return fileName;
 	}
 
+	@Override
 	public boolean checkConvertible(String mediatype) {
 		DocumentFormat df = registry.getFormatByMediaType(mediatype);
 		return df != null;

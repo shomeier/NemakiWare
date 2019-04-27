@@ -25,11 +25,11 @@ package jp.aegif.nemaki.model;
 import java.math.BigDecimal;
 import java.util.List;
 
-import jp.aegif.nemaki.util.constant.NodeType;
-
 import org.apache.chemistry.opencmis.commons.enums.DecimalPrecision;
 import org.apache.chemistry.opencmis.commons.enums.Updatability;
 import org.apache.lucene.document.DateTools.Resolution;
+
+import jp.aegif.nemaki.util.constant.NodeType;
 
 public class NemakiPropertyDefinitionDetail extends NodeBase {
 	private String coreNodeId;
@@ -76,7 +76,7 @@ public class NemakiPropertyDefinitionDetail extends NodeBase {
 		setModifier(n.getModifier());
 	}
 
-	public NemakiPropertyDefinitionDetail(NemakiPropertyDefinition p, String coreNodeId){
+	public NemakiPropertyDefinitionDetail(NemakiPropertyDefinition p, String coreNodeId) {
 		setType(NodeType.PROPERTY_DEFINITION_DETAIL.value());
 
 		setCoreNodeId(coreNodeId);

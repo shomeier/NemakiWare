@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -88,9 +89,16 @@
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.4.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.4.2</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -151,9 +159,9 @@
 
 
 		<dependency>
-		    <groupId>xml-apis</groupId>
-		    <artifactId>xml-apis</artifactId>
-		    <version>1.4.01</version>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
 		</dependency>
 
 		<dependency>
@@ -407,6 +415,13 @@
 
 	<build>
 		<finalName>core</finalName>
+
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+			</testResource>
+		</testResources>
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -422,8 +437,8 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.0.0</version>
 				<configuration>
-					 <packagingExcludes>**/custom-nemakiware.properties</packagingExcludes>
-					 <packagingExcludes>**/custom-repository.yml</packagingExcludes>
+					<packagingExcludes>**/custom-nemakiware.properties</packagingExcludes>
+					<packagingExcludes>**/custom-repository.yml</packagingExcludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -460,10 +475,10 @@
 						<contextPath>/core</contextPath>
 					</webAppConfig>
 					<!-- <connectors> -->
-						<!-- <httpConnector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector"> -->
-						<httpConnector>
-							<port>8080</port>
-						</httpConnector>
+					<!-- <httpConnector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector"> -->
+					<httpConnector>
+						<port>8080</port>
+					</httpConnector>
 					<!-- </connectors> -->
 					<scanTargets>
 						<scanTarget>src/main/webapp</scanTarget>
@@ -497,7 +512,8 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>

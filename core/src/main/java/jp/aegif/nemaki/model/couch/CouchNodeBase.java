@@ -23,15 +23,15 @@ package jp.aegif.nemaki.model.couch;
 
 import java.util.GregorianCalendar;
 
-import jp.aegif.nemaki.model.NodeBase;
-import jp.aegif.nemaki.util.constant.NodeType;
-
 import org.ektorp.support.CouchDbDocument;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
-public class CouchNodeBase extends CouchDbDocument{
+import jp.aegif.nemaki.model.NodeBase;
+import jp.aegif.nemaki.util.constant.NodeType;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CouchNodeBase extends CouchDbDocument {
 	private static final long serialVersionUID = 8798101386986624403L;
 
 	protected String type;
@@ -39,22 +39,23 @@ public class CouchNodeBase extends CouchDbDocument{
 	protected String creator;
 	protected GregorianCalendar modified;
 	protected String modifier;
-	
-	public CouchNodeBase(){
+
+	public CouchNodeBase() {
 		super();
 	}
-	
-	public CouchNodeBase(NodeBase nb){
+
+	public CouchNodeBase(NodeBase nb) {
 		super();
-		//CouchDbDocument doesn't allow setId(null)
-		if(nb.getId() != null) setId(nb.getId());
+		// CouchDbDocument doesn't allow setId(null)
+		if (nb.getId() != null)
+			setId(nb.getId());
 		setType(nb.getType());
 		setCreated(nb.getCreated());
 		setCreator(nb.getCreator());
 		setModified(nb.getModified());
 		setModifier(nb.getModifier());
 	}
-	
+
 	public String getType() {
 		return type;
 	}
@@ -62,31 +63,31 @@ public class CouchNodeBase extends CouchDbDocument{
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	public Boolean isFolder(){
-		return (NodeType.CMIS_FOLDER.value().equals(type)) ? true : false;  
+
+	public Boolean isFolder() {
+		return (NodeType.CMIS_FOLDER.value().equals(type)) ? true : false;
 	}
-	
-	public Boolean isDocument(){
+
+	public Boolean isDocument() {
 		return (NodeType.CMIS_DOCUMENT.value().equals(type)) ? true : false;
 	}
-	
-	public Boolean isRelationship(){
+
+	public Boolean isRelationship() {
 		return (NodeType.CMIS_RELATIONSHIP.value().equals(type)) ? true : false;
 	}
-	
-	public Boolean isPolicy(){
+
+	public Boolean isPolicy() {
 		return (NodeType.CMIS_POLICY.value().equals(type)) ? true : false;
 	}
 
-	public Boolean isContent(){
+	public Boolean isContent() {
 		return isDocument() || isFolder() || isRelationship() || isPolicy();
 	}
-	
-	public Boolean isAttachment(){
+
+	public Boolean isAttachment() {
 		return (NodeType.ATTACHMENT.value().equals(type)) ? true : false;
 	}
-	
+
 	public GregorianCalendar getCreated() {
 		return created;
 	}
@@ -118,8 +119,8 @@ public class CouchNodeBase extends CouchDbDocument{
 	public void setModifier(String modifier) {
 		this.modifier = modifier;
 	}
-	
-	public NodeBase convert(){
+
+	public NodeBase convert() {
 		NodeBase n = new NodeBase();
 		n.setId(getId());
 		n.setType(getType());

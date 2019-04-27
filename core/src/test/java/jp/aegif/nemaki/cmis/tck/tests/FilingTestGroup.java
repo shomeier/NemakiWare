@@ -6,15 +6,15 @@ import org.junit.Test;
 
 import jp.aegif.nemaki.cmis.tck.TckSuite;
 
-public class FilingTestGroup extends TckSuite{
+public class FilingTestGroup extends TckSuite {
 	@Test
-	public void multifilingTest() throws Exception{
+	public void multifilingTest() throws Exception {
 		MultifilingTest test = new MultifilingTest();
 		run(test);
 	}
-	
+
 	@Test
-	public void unfilingTest() throws Exception{
+	public void unfilingTest() throws Exception {
 		UnfilingTest test = new UnfilingTest();
 		run(test);
 	}

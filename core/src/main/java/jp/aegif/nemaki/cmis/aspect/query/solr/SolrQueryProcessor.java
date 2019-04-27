@@ -31,15 +31,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jp.aegif.nemaki.businesslogic.ContentService;
-import jp.aegif.nemaki.cmis.aspect.CompileService;
-import jp.aegif.nemaki.cmis.aspect.ExceptionService;
-import jp.aegif.nemaki.cmis.aspect.PermissionService;
-import jp.aegif.nemaki.cmis.aspect.query.QueryProcessor;
-import jp.aegif.nemaki.cmis.aspect.type.TypeManager;
-import jp.aegif.nemaki.model.Content;
-import jp.aegif.nemaki.util.lock.ThreadLockService;
-
 import org.antlr.runtime.tree.Tree;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ExtensionsData;
@@ -55,9 +46,7 @@ import org.apache.chemistry.opencmis.server.support.query.QueryUtilStrict;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TermQuery;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -65,6 +54,15 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.CommonParams;
+
+import jp.aegif.nemaki.businesslogic.ContentService;
+import jp.aegif.nemaki.cmis.aspect.CompileService;
+import jp.aegif.nemaki.cmis.aspect.ExceptionService;
+import jp.aegif.nemaki.cmis.aspect.PermissionService;
+import jp.aegif.nemaki.cmis.aspect.query.QueryProcessor;
+import jp.aegif.nemaki.cmis.aspect.type.TypeManager;
+import jp.aegif.nemaki.model.Content;
+import jp.aegif.nemaki.util.lock.ThreadLockService;
 
 public class SolrQueryProcessor implements QueryProcessor {
 
@@ -75,67 +73,74 @@ public class SolrQueryProcessor implements QueryProcessor {
 	private ExceptionService exceptionService;
 	private ThreadLockService threadLockService;
 	private SolrUtil solrUtil;
-	private static final Log logger = LogFactory
-			.getLog(SolrQueryProcessor.class);
+	private static final Log logger = LogFactory.getLog(SolrQueryProcessor.class);
 
 	public SolrQueryProcessor() {
 
 	}
 
-	private class CmisTypeManager implements org.apache.chemistry.opencmis.server.support.TypeManager{
+	private class CmisTypeManager implements org.apache.chemistry.opencmis.server.support.TypeManager {
 		private String repositoryId;
 		private TypeManager typeManager;
-		
-		public CmisTypeManager(String repositoryId, TypeManager typeManager){
+
+		public CmisTypeManager(String repositoryId, TypeManager typeManager) {
 			this.repositoryId = repositoryId;
 			this.typeManager = typeManager;
 		}
+
 		@Override
 		public void addTypeDefinition(TypeDefinition arg0, boolean arg1) {
 			// TODO Auto-generated method stub
-			
+
 		}
+
 		@Override
 		public void deleteTypeDefinition(String typeId) {
 			typeManager.deleteTypeDefinition(repositoryId, typeId);
-			
+
 		}
+
 		@Override
 		public String getPropertyIdForQueryName(TypeDefinition typeDefinition, String propQueryName) {
 			return typeManager.getPropertyIdForQueryName(repositoryId, typeDefinition, propQueryName);
 		}
+
 		@Override
 		public List<TypeDefinitionContainer> getRootTypes() {
 			return typeManager.getRootTypes(repositoryId);
 		}
+
 		@Override
 		public TypeDefinitionContainer getTypeById(String typeId) {
 			return typeManager.getTypeById(repositoryId, typeId);
 		}
+
 		@Override
 		public TypeDefinition getTypeByQueryName(String typeQueryName) {
 			return typeManager.getTypeByQueryName(repositoryId, typeQueryName);
 		}
+
 		@Override
 		public Collection<TypeDefinitionContainer> getTypeDefinitionList() {
 			return typeManager.getTypeDefinitionList(repositoryId);
 		}
+
 		@Override
 		public void updateTypeDefinition(TypeDefinition typeDefinition) {
 			typeManager.updateTypeDefinition(repositoryId, typeDefinition);
-			
+
 		}
 	}
-	
+
 	@Override
-	public ObjectList query(CallContext callContext, String repositoryId,
-			String statement, Boolean searchAllVersions,
-			Boolean includeAllowableActions, IncludeRelationships includeRelationships,
-			String renditionFilter, BigInteger maxItems, BigInteger skipCount, ExtensionsData extension) {
+	public ObjectList query(CallContext callContext, String repositoryId, String statement, Boolean searchAllVersions,
+			Boolean includeAllowableActions, IncludeRelationships includeRelationships, String renditionFilter,
+			BigInteger maxItems, BigInteger skipCount, ExtensionsData extension) {
 
 		SolrServer solrServer = solrUtil.getSolrServer();
 		// replacing backslashed for TIMESTAMP only
-		Pattern time_p = Pattern.compile("(TIMESTAMP\\s?'[\\-\\d]*T\\d{2})\\\\:(\\d{2})\\\\:([\\.\\d]*Z')", Pattern.CASE_INSENSITIVE);
+		Pattern time_p = Pattern.compile("(TIMESTAMP\\s?'[\\-\\d]*T\\d{2})\\\\:(\\d{2})\\\\:([\\.\\d]*Z')",
+				Pattern.CASE_INSENSITIVE);
 		Matcher time_m = time_p.matcher(statement);
 		statement = time_m.replaceAll("$1:$2:$3");
 
@@ -159,11 +164,11 @@ public class SolrQueryProcessor implements QueryProcessor {
 			whereQueryString = "*:*";
 		} else {
 			try {
-				SolrPredicateWalker solrPredicateWalker = new SolrPredicateWalker(repositoryId,
-						queryObject, solrUtil, contentService);
+				SolrPredicateWalker solrPredicateWalker = new SolrPredicateWalker(repositoryId, queryObject, solrUtil,
+						contentService);
 				Query whereQuery = solrPredicateWalker.walkPredicate(whereTree);
 				whereQueryString = whereQuery.toString();
-				} catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO Output more detailed exception
 				exceptionService.invalidArgument("Invalid CMIS SQL statement!");
@@ -172,17 +177,17 @@ public class SolrQueryProcessor implements QueryProcessor {
 
 		// Build solr query of FROM
 		String fromQueryString = "";
-		
+
 		String repositoryQuery = "repository_id:" + repositoryId;
-		
+
 		fromQueryString += repositoryQuery + " AND ";
 		TypeDefinition td = null;
 
 		td = queryObject.getMainFromName();
 
 		// includedInSupertypeQuery
-		List<TypeDefinitionContainer> typeDescendants = typeManager
-				.getTypesDescendants(repositoryId, td.getId(), BigInteger.valueOf(-1), false);
+		List<TypeDefinitionContainer> typeDescendants = typeManager.getTypesDescendants(repositoryId, td.getId(),
+				BigInteger.valueOf(-1), false);
 		Iterator<TypeDefinitionContainer> iterator = typeDescendants.iterator();
 		List<String> tables = new ArrayList<String>();
 		while (iterator.hasNext()) {
@@ -196,33 +201,35 @@ public class SolrQueryProcessor implements QueryProcessor {
 			String table = descendant.getQueryName();
 			tables.add(table.replaceAll(":", "\\\\:"));
 		}
-		
+
 //		Term t = new Term(
 //				solrUtil.getPropertyNameInSolr(PropertyIds.OBJECT_TYPE_ID),
 //				StringUtils.join(tables, " "));
 //		fromQueryString += new TermQuery(t).toString();
-		fromQueryString += "("+ solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.OBJECT_TYPE_ID) +":"+ StringUtils.join(tables," " + solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.OBJECT_TYPE_ID) + ":") + ")";
+		fromQueryString += "(" + solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.OBJECT_TYPE_ID) + ":"
+				+ StringUtils.join(tables,
+						" " + solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.OBJECT_TYPE_ID) + ":")
+				+ ")";
 
 		// Execute query
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setQuery(whereQueryString);
 		solrQuery.setFilterQueries(fromQueryString);
-		
+
 		logger.info(solrQuery.toString());
 		logger.info("statement: " + statement);
 		logger.info("skipCount: " + skipCount);
 		logger.info("maxItems: " + maxItems);
-		if(skipCount == null){
+		if (skipCount == null) {
 			solrQuery.set(CommonParams.START, 0);
-		}else{
+		} else {
 			solrQuery.set(CommonParams.START, skipCount.intValue());
 		}
-		if(maxItems == null){
+		if (maxItems == null) {
 			solrQuery.set(CommonParams.ROWS, 50);
-		}else{
+		} else {
 			solrQuery.set(CommonParams.ROWS, maxItems.intValue());
 		}
-		
 
 		QueryResponse resp = null;
 		try {
@@ -231,10 +238,9 @@ public class SolrQueryProcessor implements QueryProcessor {
 			e.printStackTrace();
 		}
 
-		long numFound =0;
+		long numFound = 0;
 		// Output search results to ObjectList
-		if (resp != null && resp.getResults() != null
-				&& resp.getResults().getNumFound() != 0) {
+		if (resp != null && resp.getResults() != null && resp.getResults().getNumFound() != 0) {
 			SolrDocumentList docs = resp.getResults();
 			numFound = docs.getNumFound();
 
@@ -245,43 +251,37 @@ public class SolrQueryProcessor implements QueryProcessor {
 
 				// When for some reason the content is missed, pass through
 				if (c == null) {
-					logger.warn("[objectId=" + docId
-							+ "]It is missed in DB but still rests in Solr.");
+					logger.warn("[objectId=" + docId + "]It is missed in DB but still rests in Solr.");
 				} else {
 					contents.add(c);
 				}
 
 			}
-			
-			
+
 			List<Lock> locks = threadLockService.readLocks(repositoryId, contents);
-			try{
+			try {
 				threadLockService.bulkLock(locks);
-				
+
 				// Filter out by permissions
-				List<Content> permitted = permissionService.getFiltered(
-						callContext, repositoryId, contents);
+				List<Content> permitted = permissionService.getFiltered(callContext, repositoryId, contents);
 
 				// Filter return value with SELECT clause
-				Map<String, String> requestedWithAliasKey = queryObject
-						.getRequestedPropertiesByAlias();
+				Map<String, String> requestedWithAliasKey = queryObject.getRequestedPropertiesByAlias();
 				String filter = null;
 				if (!requestedWithAliasKey.keySet().contains("*")) {
 					// Create filter(queryNames) from query aliases
 					filter = StringUtils.join(requestedWithAliasKey.values(), ",");
 				}
-				
 
 				// Build ObjectList
 				String orderBy = orderBy(queryObject);
-				ObjectList result = compileService.compileObjectDataListForSearchResult(
-						callContext, repositoryId, permitted, filter,
-						includeAllowableActions, includeRelationships, renditionFilter, false,
-						maxItems, skipCount, false, orderBy,numFound);
+				ObjectList result = compileService.compileObjectDataListForSearchResult(callContext, repositoryId,
+						permitted, filter, includeAllowableActions, includeRelationships, renditionFilter, false,
+						maxItems, skipCount, false, orderBy, numFound);
 
 				return result;
-				
-			}finally{
+
+			} finally {
 				threadLockService.bulkUnlock(locks);
 			}
 		} else {
@@ -291,8 +291,8 @@ public class SolrQueryProcessor implements QueryProcessor {
 			return nullList;
 		}
 	}
-	
-	private String orderBy(QueryObject queryObject){
+
+	private String orderBy(QueryObject queryObject) {
 		List<SortSpec> sortSpecs = queryObject.getOrderBys();
 		List<String> _orderBy = new ArrayList<String>();
 		for (SortSpec sortSpec : sortSpecs) {
@@ -308,23 +308,23 @@ public class SolrQueryProcessor implements QueryProcessor {
 		return orderBy;
 	}
 
-	private Tree extractWhereTree(Tree tree){
+	private Tree extractWhereTree(Tree tree) {
 		for (int i = 0; i < tree.getChildCount(); i++) {
 			Tree selectTree = tree.getChild(i);
 			if ("SELECT".equals(selectTree.getText())) {
-				for(int j=0; j < selectTree.getChildCount(); j++){
+				for (int j = 0; j < selectTree.getChildCount(); j++) {
 					Tree whereTree = selectTree.getChild(j);
-					if("WHERE".equals(whereTree.getText())){
+					if ("WHERE".equals(whereTree.getText())) {
 						return whereTree.getChild(0);
 					}
 				}
-				
+
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public void setTypeManager(TypeManager typeManager) {
 		this.typeManager = typeManager;
 	}

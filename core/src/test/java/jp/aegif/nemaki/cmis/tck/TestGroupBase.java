@@ -69,7 +69,7 @@ public class TestGroupBase extends AbstractRunner {
 		run(new SimpleCmisWrapperTestGroup(test));
 		TckSuite.addToGroup(this.getClass(), test);
 	}
-	
+
 	public void run(CmisTestGroup group) throws Exception {
 		JUnitRunner runner = new JUnitRunner();
 
@@ -97,23 +97,28 @@ public class TestGroupBase extends AbstractRunner {
 
 	private static class JUnitProgressMonitor implements CmisTestProgressMonitor {
 
+		@Override
 		@SuppressWarnings("PMD.SystemPrintln")
 		public void startGroup(CmisTestGroup group) {
 			// System.out.println(group.getName() + " (" +
 			// group.getTests().size() + " tests)");
 		}
 
+		@Override
 		public void endGroup(CmisTestGroup group) {
 		}
 
+		@Override
 		@SuppressWarnings("PMD.SystemPrintln")
 		public void startTest(CmisTest test) {
 			System.out.println("  " + test.getName());
 		}
 
+		@Override
 		public void endTest(CmisTest test) {
 		}
 
+		@Override
 		@SuppressWarnings("PMD.SystemPrintln")
 		public void message(String msg) {
 			System.out.println(msg);

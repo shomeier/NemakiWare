@@ -27,13 +27,13 @@ public class Relationship extends Content {
 	public static final String TYPE = "relationship";
 	private String sourceId;
 	private String targetId;
-	
-	public Relationship(){
+
+	public Relationship() {
 		super();
 		setType(NodeType.CMIS_RELATIONSHIP.value());
 	}
-	
-	public Relationship(Content c){
+
+	public Relationship(Content c) {
 		super(c);
 		setName(c.getName());
 		setDescription(c.getDescription());
@@ -46,18 +46,21 @@ public class Relationship extends Content {
 		setObjectType(c.getObjectType());
 		setChangeToken(c.getChangeToken());
 	}
-	
+
 	public String getSourceId() {
 		return sourceId;
 	}
+
 	public void setSourceId(String sourceId) {
 		this.sourceId = sourceId;
 	}
+
 	public String getTargetId() {
 		return targetId;
 	}
+
 	public void setTargetId(String targetId) {
 		this.targetId = targetId;
 	}
-	
+
 }

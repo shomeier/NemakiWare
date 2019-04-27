@@ -26,6 +26,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import jp.aegif.nemaki.businesslogic.PrincipalService;
 import jp.aegif.nemaki.cmis.factory.info.RepositoryInfo;
 import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
@@ -33,9 +36,6 @@ import jp.aegif.nemaki.dao.PrincipalDaoService;
 import jp.aegif.nemaki.model.Group;
 import jp.aegif.nemaki.model.User;
 import jp.aegif.nemaki.util.constant.PrincipalId;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Principal(User / Group) Service implementation.
@@ -45,19 +45,19 @@ public class PrincipalServiceImpl implements PrincipalService {
 
 	private static final Log log = LogFactory.getLog(PrincipalServiceImpl.class);
 
-	private RepositoryInfoMap repositoryInfoMap; 
+	private RepositoryInfoMap repositoryInfoMap;
 	private PrincipalDaoService principalDaoService;
 
 	@Override
 	public List<User> getUsers(String repositoryId) {
-		//refresh to cope with new user without restarting the server
+		// refresh to cope with new user without restarting the server
 		List<User> users = principalDaoService.getUsers(repositoryId);
 		return users;
 	}
 
 	@Override
 	public List<Group> getGroups(String repositoryId) {
-		//refresh to cope with new group without restarting the server
+		// refresh to cope with new group without restarting the server
 		List<Group> groups = principalDaoService.getGroups(repositoryId);
 		return groups;
 	}
@@ -66,17 +66,17 @@ public class PrincipalServiceImpl implements PrincipalService {
 	public Set<String> getGroupIdsContainingUser(String repositoryId, String userId) {
 		String anonymous = getAnonymous(repositoryId);
 		String anyone = getAnyone(repositoryId);
-		
+
 		Set<String> groupIds = new HashSet<String>();
 
-		//Anonymous user doesn't belong to any group, even to Anyone.
-		if(userId.equals(anonymous)){
+		// Anonymous user doesn't belong to any group, even to Anyone.
+		if (userId.equals(anonymous)) {
 			return groupIds;
 		}
 
 		List<Group> groups = getGroups(repositoryId);
 		for (Group g : groups) {
-			if ( containsUserInGroup(repositoryId, userId, g) ) {
+			if (containsUserInGroup(repositoryId, userId, g)) {
 				groupIds.add(g.getGroupId());
 			}
 		}
@@ -86,13 +86,14 @@ public class PrincipalServiceImpl implements PrincipalService {
 
 	private boolean containsUserInGroup(String repositoryId, String userId, Group group) {
 		log.debug("$$ group:" + group.getName());
-		if ( group.getUsers().contains(userId))
+		if (group.getUsers().contains(userId))
 			return true;
-		for(String groupId: group.getGroups() ) {
+		for (String groupId : group.getGroups()) {
 			log.debug("$$ subgroup: " + groupId);
 			Group g = this.getGroupById(repositoryId, groupId);
 			boolean result = containsUserInGroup(repositoryId, userId, g);
-			if ( result ) return true;
+			if (result)
+				return true;
 		}
 		return false;
 	}
@@ -109,9 +110,9 @@ public class PrincipalServiceImpl implements PrincipalService {
 
 	@Override
 	public synchronized void createUser(String repositoryId, User user) {
-		//UserID uniqueness
+		// UserID uniqueness
 		List<String> principalIds = getPrincipalIds(repositoryId);
-		if(principalIds.contains(user.getUserId())){
+		if (principalIds.contains(user.getUserId())) {
 			log.error("userId=" + user.getUserId() + " already exists.");
 		}
 
@@ -130,9 +131,9 @@ public class PrincipalServiceImpl implements PrincipalService {
 
 	@Override
 	public synchronized void createGroup(String repositoryId, Group group) {
-		//GroupID uniqueness
+		// GroupID uniqueness
 		List<String> principalIds = getPrincipalIds(repositoryId);
-		if(principalIds.contains(group.getGroupId())){
+		if (principalIds.contains(group.getGroupId())) {
 			log.error("groupId=" + group.getGroupId() + " already exists.");
 		}
 
@@ -149,47 +150,49 @@ public class PrincipalServiceImpl implements PrincipalService {
 		principalDaoService.delete(repositoryId, Group.class, id);
 	}
 
-	private List<String> getPrincipalIds(String repositoryId){
+	private List<String> getPrincipalIds(String repositoryId) {
 		String anonymous = getAnonymous(repositoryId);
 		String anyone = getAnyone(repositoryId);
-		
+
 		List<String> principalIds = new ArrayList<String>();
 
-		//UserId
+		// UserId
 		List<User> users = principalDaoService.getUsers(repositoryId);
-		for(User u : users){
-			if(principalIds.contains(u.getUserId())){
+		for (User u : users) {
+			if (principalIds.contains(u.getUserId())) {
 				log.warn("userId=" + u.getUserId() + " is duplicate in the database.");
 			}
 			principalIds.add(u.getUserId());
 		}
 
-		//GroupId
+		// GroupId
 		List<Group> groups = principalDaoService.getGroups(repositoryId);
-		for(Group g : groups){
-			if(principalIds.contains(g.getGroupId())){
+		for (Group g : groups) {
+			if (principalIds.contains(g.getGroupId())) {
 				log.warn("groupId=" + g.getGroupId() + " is duplicate in the database.");
 			}
 			principalIds.add(g.getGroupId());
 		}
 
-		//Anonymous
-		if(principalIds.contains(anonymous)){
-			log.warn("CMIS 'anonymous':" +  anonymous + " should have not been registered in the database.");
+		// Anonymous
+		if (principalIds.contains(anonymous)) {
+			log.warn("CMIS 'anonymous':" + anonymous + " should have not been registered in the database.");
 		}
 		principalIds.add(anonymous);
-		if(principalIds.contains(PrincipalId.ANONYMOUS_IN_DB)){
-			log.warn("CMIS 'anonymous':" +  anonymous + " should have not been registered in the database.(For system use)");
+		if (principalIds.contains(PrincipalId.ANONYMOUS_IN_DB)) {
+			log.warn("CMIS 'anonymous':" + anonymous
+					+ " should have not been registered in the database.(For system use)");
 		}
 		principalIds.add(PrincipalId.ANONYMOUS_IN_DB);
 
-		//Anyone
-		if(principalIds.contains(anyone) ){
+		// Anyone
+		if (principalIds.contains(anyone)) {
 			log.warn("CMIS 'anyone': " + anyone + " should have not been registered in the database.");
 		}
 		principalIds.add(anyone);
-		if(principalIds.contains(PrincipalId.ANYONE_IN_DB)){
-			log.warn("CMIS 'anyone':" + PrincipalId.ANYONE_IN_DB + " should have not been registered in the database.(For system use)");
+		if (principalIds.contains(PrincipalId.ANYONE_IN_DB)) {
+			log.warn("CMIS 'anyone':" + PrincipalId.ANYONE_IN_DB
+					+ " should have not been registered in the database.(For system use)");
 		}
 		principalIds.add(PrincipalId.ANYONE_IN_DB);
 
@@ -220,5 +223,5 @@ public class PrincipalServiceImpl implements PrincipalService {
 	public void setRepositoryInfoMap(RepositoryInfoMap repositoryInfoMap) {
 		this.repositoryInfoMap = repositoryInfoMap;
 	}
-	
+
 }

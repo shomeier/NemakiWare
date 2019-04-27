@@ -24,10 +24,8 @@ package jp.aegif.nemaki.rest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -43,25 +41,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import jp.aegif.nemaki.businesslogic.ContentService;
-import jp.aegif.nemaki.cmis.factory.SystemCallContext;
-import jp.aegif.nemaki.common.ErrorCode;
-import jp.aegif.nemaki.model.Content;
-import jp.aegif.nemaki.model.Folder;
-import jp.aegif.nemaki.model.Property;
-import jp.aegif.nemaki.model.UserItem;
-import jp.aegif.nemaki.util.AuthenticationUtil;
-import jp.aegif.nemaki.util.DataUtil;
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.common.NemakiObjectType;
-import jp.aegif.nemaki.util.constant.PropertyKey;
-import jp.aegif.nemaki.util.constant.SystemConst;
-
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.PropertiesImpl;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.PropertyIdImpl;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.PropertyStringImpl;
 import org.apache.chemistry.opencmis.commons.server.CallContext;
-import org.apache.chemistry.opencmis.server.support.query.CmisQlExtParser_CmisBaseGrammar.null_predicate_return;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ObjectUtils;
@@ -71,9 +54,19 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonParser;
+import jp.aegif.nemaki.businesslogic.ContentService;
+import jp.aegif.nemaki.cmis.factory.SystemCallContext;
+import jp.aegif.nemaki.common.ErrorCode;
+import jp.aegif.nemaki.common.NemakiObjectType;
+import jp.aegif.nemaki.model.Content;
+import jp.aegif.nemaki.model.Folder;
+import jp.aegif.nemaki.model.Property;
+import jp.aegif.nemaki.model.UserItem;
+import jp.aegif.nemaki.util.AuthenticationUtil;
+import jp.aegif.nemaki.util.PropertyManager;
+import jp.aegif.nemaki.util.constant.PropertyKey;
+import jp.aegif.nemaki.util.constant.SystemConst;
 
 @Path("/repo/{repositoryId}/user/")
 public class UserItemResource extends ResourceBase {
@@ -162,9 +155,9 @@ public class UserItemResource extends ResourceBase {
 		for (UserItem user : users) {
 			if (user.getUserId().contains(query) || user.getName().contains(query)) {
 				JSONObject userJSON = convertUserToJson(user);
-				if(queriedUsers.size() < 50){
+				if (queriedUsers.size() < 50) {
 					queriedUsers.add(userJSON);
-				}else{
+				} else {
 					break;
 				}
 			}
@@ -205,14 +198,19 @@ public class UserItemResource extends ResourceBase {
 			// parent
 			final Folder usersFolder = getOrCreateSystemSubFolder(repositoryId, "users");
 
-			UserItem user = new UserItem(null, NemakiObjectType.nemakiUser, userId, name, passwordHash, false, usersFolder.getId());
+			UserItem user = new UserItem(null, NemakiObjectType.nemakiUser, userId, name, passwordHash, false,
+					usersFolder.getId());
 
 			Map<String, Object> map = new HashMap<>();
-			if (firstName != null) map.put("nemaki:firstName", firstName);
-			if (lastName != null) map.put("nemaki:lastName", lastName);
-			if (email != null) map.put("nemaki:email", email);
+			if (firstName != null)
+				map.put("nemaki:firstName", firstName);
+			if (lastName != null)
+				map.put("nemaki:lastName", lastName);
+			if (email != null)
+				map.put("nemaki:email", email);
 			List<Property> properties = new ArrayList<>();
-			for(String key : map.keySet()) properties.add(new Property(key, map.get(key)));
+			for (String key : map.keySet())
+				properties.add(new Property(key, map.get(key)));
 			user.setSubTypeProperties(properties);
 
 			setFirstSignature(httpRequest, user);
@@ -224,16 +222,16 @@ public class UserItemResource extends ResourceBase {
 		return result.toJSONString();
 	}
 
-	//TODO this is a copy & paste method.
-	private Folder getOrCreateSystemSubFolder(String repositoryId, String name){
+	// TODO this is a copy & paste method.
+	private Folder getOrCreateSystemSubFolder(String repositoryId, String name) {
 		Folder systemFolder = contentService.getSystemFolder(repositoryId);
 
 		// check existing folder
 		List<Content> children = contentService.getChildren(repositoryId, systemFolder.getId());
-		if(CollectionUtils.isNotEmpty(children)){
-			for(Content child : children){
-				if(ObjectUtils.equals(name, child.getName())){
-					return (Folder)child;
+		if (CollectionUtils.isNotEmpty(children)) {
+			for (Content child : children) {
+				if (ObjectUtils.equals(name, child.getName())) {
+					return (Folder) child;
 				}
 			}
 		}
@@ -243,7 +241,8 @@ public class UserItemResource extends ResourceBase {
 		properties.addProperty(new PropertyStringImpl("cmis:name", name));
 		properties.addProperty(new PropertyIdImpl("cmis:objectTypeId", "cmis:folder"));
 		properties.addProperty(new PropertyIdImpl("cmis:baseTypeId", "cmis:folder"));
-		Folder _target = contentService.createFolder(new SystemCallContext(repositoryId), repositoryId, properties, systemFolder, null, null, null, null);
+		Folder _target = contentService.createFolder(new SystemCallContext(repositoryId), repositoryId, properties,
+				systemFolder, null, null, null, null);
 		return _target;
 	}
 
@@ -260,18 +259,18 @@ public class UserItemResource extends ResourceBase {
 
 		UserItem userItem = contentService.getUserItemById(repositoryId, userId);
 
-		//TODO checkAuthorityForUser
+		// TODO checkAuthorityForUser
 
-		//password match
-		if(AuthenticationUtil.passwordMatches(oldPassword, userItem.getPassowrd())){
+		// password match
+		if (AuthenticationUtil.passwordMatches(oldPassword, userItem.getPassowrd())) {
 			String hash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 			userItem.setPassowrd(hash);
-			try{
+			try {
 				contentService.update(new SystemCallContext(repositoryId), repositoryId, userItem);
-			}catch(Exception e){
+			} catch (Exception e) {
 				addErrMsg(errMsg, ITEM_USER, ErrorCode.ERR_UPDATE);
 			}
-		}else{
+		} else {
 			// wrong previous password!
 			status = false;
 			addErrMsg(errMsg, ITEM_USER, ErrorCode.ERR_WRONGPASSWORD);
@@ -280,56 +279,38 @@ public class UserItemResource extends ResourceBase {
 		makeResult(status, result, errMsg);
 		return result.toJSONString();
 
-		/*User user = principalService.getUserById(repositoryId, userId);
-
-		// Validation
-		status = checkAuthorityForUser(status, errMsg, httpRequest, userId, repositoryId);
-		if (status) {
-
-			if (!AuthenticationUtil.passwordMatches(oldPassword, user.getPasswordHash())) {
-				status = false;
-				addErrMsg(errMsg, ITEM_USER, ErrorCode.ERR_WRONGPASSWORD);
-			}
-
-			// Edit & Update
-			if (status) {
-				// Edit the user info
-				String passwordHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-				user.setPasswordHash(passwordHash);
-				setModifiedSignature(httpRequest, user);
-
-				try {
-					principalService.updateUser(repositoryId, user);
-				} catch (Exception e) {
-					e.printStackTrace();
-					status = false;
-					addErrMsg(errMsg, ITEM_USER, ErrorCode.ERR_UPDATE);
-				}
-
-				setModifiedSignature(httpRequest, user);
-				try {
-					principalService.updateUser(repositoryId, user);
-				} catch (Exception e) {
-					e.printStackTrace();
-					status = false;
-					addErrMsg(errMsg, ITEM_USER, ErrorCode.ERR_UPDATE);
-				}
-
-				if(status){
-					String solrUserId = propertyManager.readValue(PropertyKey.SOLR_NEMAKI_USERID);
-					if(user.getUserId().equals(solrUserId)){
-						JSONObject capResult = solrResource.changeAdminPasswordImpl(repositoryId, newPassword, oldPassword, httpRequest);
-						if (capResult.get(ITEM_STATUS).toString()  != SUCCESS){
-							// TODO: Error handling
-							status = false;
-							addErrMsg(errMsg, ITEM_USER, capResult.get(ITEM_ERROR).toString());
-						}
-					}
-				}
-			}
-		}
-		makeResult(status, result, errMsg);
-		return result.toJSONString();*/
+		/*
+		 * User user = principalService.getUserById(repositoryId, userId);
+		 * 
+		 * // Validation status = checkAuthorityForUser(status, errMsg, httpRequest,
+		 * userId, repositoryId); if (status) {
+		 * 
+		 * if (!AuthenticationUtil.passwordMatches(oldPassword, user.getPasswordHash()))
+		 * { status = false; addErrMsg(errMsg, ITEM_USER, ErrorCode.ERR_WRONGPASSWORD);
+		 * }
+		 * 
+		 * // Edit & Update if (status) { // Edit the user info String passwordHash =
+		 * BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		 * user.setPasswordHash(passwordHash); setModifiedSignature(httpRequest, user);
+		 * 
+		 * try { principalService.updateUser(repositoryId, user); } catch (Exception e)
+		 * { e.printStackTrace(); status = false; addErrMsg(errMsg, ITEM_USER,
+		 * ErrorCode.ERR_UPDATE); }
+		 * 
+		 * setModifiedSignature(httpRequest, user); try {
+		 * principalService.updateUser(repositoryId, user); } catch (Exception e) {
+		 * e.printStackTrace(); status = false; addErrMsg(errMsg, ITEM_USER,
+		 * ErrorCode.ERR_UPDATE); }
+		 * 
+		 * if(status){ String solrUserId =
+		 * propertyManager.readValue(PropertyKey.SOLR_NEMAKI_USERID);
+		 * if(user.getUserId().equals(solrUserId)){ JSONObject capResult =
+		 * solrResource.changeAdminPasswordImpl(repositoryId, newPassword, oldPassword,
+		 * httpRequest); if (capResult.get(ITEM_STATUS).toString() != SUCCESS){ // TODO:
+		 * Error handling status = false; addErrMsg(errMsg, ITEM_USER,
+		 * capResult.get(ITEM_ERROR).toString()); } } } } } makeResult(status, result,
+		 * errMsg); return result.toJSONString();
+		 */
 
 	}
 
@@ -348,11 +329,10 @@ public class UserItemResource extends ResourceBase {
 
 		// Existing user
 		UserItem user = contentService.getUserItemById(repositoryId, userId);
-		if(user == null){
+		if (user == null) {
 			status = false;
 			addErrMsg(errMsg, ITEM_USER, ErrorCode.ERR_NOTFOUND);
 		}
-
 
 		// Validation
 		status = checkAuthorityForUser(status, errMsg, httpRequest, userId, repositoryId);
@@ -366,7 +346,8 @@ public class UserItemResource extends ResourceBase {
 				user.setName(name);
 
 			Map<String, Object> map = new HashMap<>();
-			for(Property prop : user.getSubTypeProperties()) map.put(prop.getKey(), prop.getValue());
+			for (Property prop : user.getSubTypeProperties())
+				map.put(prop.getKey(), prop.getValue());
 			JSONParser parser = new JSONParser();
 			if (firstName != null)
 				map.put("nemaki:firstName", firstName);
@@ -378,8 +359,9 @@ public class UserItemResource extends ResourceBase {
 				try {
 					JSONArray adds = (JSONArray) (parser.parse(addFavorites));
 					Object favs = map.get("nemaki:favorites");
-					if(favs == null) favs = new ArrayList<String>();
-					((List)favs).addAll(adds);
+					if (favs == null)
+						favs = new ArrayList<String>();
+					((List) favs).addAll(adds);
 					map.put("nemaki:favorites", favs);
 				} catch (ParseException e) {
 					e.printStackTrace();
@@ -389,17 +371,18 @@ public class UserItemResource extends ResourceBase {
 				try {
 					JSONArray removes = (JSONArray) (parser.parse(removeFavorites));
 					Object favs = map.get("nemaki:favorites");
-					if(favs == null) favs = new ArrayList<String>();
-					((List)favs).removeAll(removes);
+					if (favs == null)
+						favs = new ArrayList<String>();
+					((List) favs).removeAll(removes);
 					map.put("nemaki:favorites", favs);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 			}
 			List<Property> properties = new ArrayList<>();
-			for(String key : map.keySet()) properties.add(new Property(key, map.get(key)));
+			for (String key : map.keySet())
+				properties.add(new Property(key, map.get(key)));
 			user.setSubTypeProperties(properties);
-
 
 			// update
 			if (StringUtils.isNotBlank(password)) {
@@ -536,7 +519,8 @@ public class UserItemResource extends ResourceBase {
 		userJSON.put(ITEM_MODIFIED, modified);
 
 		Map<String, Object> kvMap = new HashMap<>();
-		for(Property p : user.getSubTypeProperties()) kvMap.put(p.getKey(), p.getValue());
+		for (Property p : user.getSubTypeProperties())
+			kvMap.put(p.getKey(), p.getValue());
 
 		userJSON.put(ITEM_FIRSTNAME, MapUtils.getObject(kvMap, "nemaki:firstName", ""));
 		userJSON.put(ITEM_LASTNAME, MapUtils.getObject(kvMap, "nemaki:lastName", ""));
@@ -555,23 +539,26 @@ public class UserItemResource extends ResourceBase {
 
 		String userId = callContext.getUsername();
 		String password = callContext.getPassword();
-		if (!userId.equals(resoureId) && !isAdminOperaiton(repositoryId, userId, password) && !isSystemUser(repositoryId, resoureId)) {
+		if (!userId.equals(resoureId) && !isAdminOperaiton(repositoryId, userId, password)
+				&& !isSystemUser(repositoryId, resoureId)) {
 			status = false;
 			addErrMsg(errMsg, ITEM_USER, ErrorCode.ERR_NOTAUTHENTICATED);
 		}
 		return status;
 	}
 
-	private boolean isSystemUser(String repositoryId, String userId){
+	private boolean isSystemUser(String repositoryId, String userId) {
 		boolean result = false;
 		UserItem user = contentService.getUserItemById(repositoryId, userId);
 
 		result = user.isAdmin();
-		if(result) return true;
+		if (result)
+			return true;
 
 		String solrUserId = propertyManager.readValue(PropertyKey.SOLR_NEMAKI_USERID);
 		result = user.getUserId().equals(solrUserId);
-		if(result) return true;
+		if (result)
+			return true;
 
 		return result;
 	}

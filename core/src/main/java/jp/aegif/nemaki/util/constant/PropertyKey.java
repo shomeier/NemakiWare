@@ -1,13 +1,13 @@
 package jp.aegif.nemaki.util.constant;
 
 public interface PropertyKey {
-	//DB
-	final String DB_COUCHDB_URL= "db.couchdb.url";
-	final String DB_COUCHDB_MAX_CONNECTIONS= "db.couchdb.max.connections";
-	final String DB_COUCHDB_CONNECTION_TIMEOUT= "db.couchdb.connection.timeout";
-	final String DB_COUCHDB_SOCKET_TIMEOUT= "db.couchdb.socket.timeout";
+	// DB
+	final String DB_COUCHDB_URL = "db.couchdb.url";
+	final String DB_COUCHDB_MAX_CONNECTIONS = "db.couchdb.max.connections";
+	final String DB_COUCHDB_CONNECTION_TIMEOUT = "db.couchdb.connection.timeout";
+	final String DB_COUCHDB_SOCKET_TIMEOUT = "db.couchdb.socket.timeout";
 
-	//CMIS
+	// CMIS
 	final String CMIS_SERVER_DEFAULT_MAX_ITEMS_TYPES = "cmis.server.default.max.items.types";
 	final String CMIS_SERVER_DEFAULT_DEPTH_TYPES = "cmis.server.default.depth.types";
 	final String CMIS_SERVER_DEFAULT_MAX_ITEMS_OBJECTS = "cmis.server.default.max.items.objects";
@@ -15,21 +15,20 @@ public interface PropertyKey {
 	final String REPOSITORY_DEFINITION = "repository.definition";
 	final String REPOSITORY_DEFINITION_DEFAULT = "repository.definition.default";
 
-	//Solr
+	// Solr
 	final String SOLR_PROTOCOL = "solr.protocol";
 	final String SOLR_HOST = "solr.host";
 	final String SOLR_PORT = "solr.port";
 	final String SOLR_CONTEXT = "solr.context";
-	final String SOLR_INDEXING_FORCE= "solr.indexing.force";
-	final String SOLR_NEMAKI_USERID= "solr.nemaki.userid";
+	final String SOLR_INDEXING_FORCE = "solr.indexing.force";
+	final String SOLR_NEMAKI_USERID = "solr.nemaki.userid";
 
+	// Config file path
+	final String PERMISSION_DEFINITION = "permission.definition";
+	final String PERMISSION_MAPPING_DEFINITION = "permission.mapping.definition";
+	final String OVRRIDE_FILE = "override.file";
 
-	//Config file path
-	final String PERMISSION_DEFINITION= "permission.definition";
-	final String PERMISSION_MAPPING_DEFINITION= "permission.mapping.definition";
-	final String OVRRIDE_FILE= "override.file";
-
-	//Capability
+	// Capability
 	final String CAPABILITY_EXTENDED_ORDERBY_DEFAULT = "capability.extended.orderBy.default";
 	final String CAPABILITY_EXTENDED_PREVIEW = "capability.extended.preview";
 	final String CAPABILITY_EXTENDED_INCLUDE_RELATIONSHIPS = "capability.extended.include.relationships";
@@ -41,7 +40,7 @@ public interface PropertyKey {
 	final String CAPABILITY_EXTENDED_USER_ITEM_FOLDER = "capability.extended.user.item.folder";
 	final String SYSTEM_FOLDER = "system.folder";
 
-	//Rest
+	// Rest
 	final String REST_USER_ENABLED = "rest.user.enabled";
 	final String REST_GROUP_ENABLED = "rest.group.enabled";
 	final String REST_TYPE_ENABLED = "rest.type.enabled";
@@ -49,7 +48,7 @@ public interface PropertyKey {
 	final String REST_SOLR_ENABLED = "rest.solr.enabled";
 	final String REST_AUTHTOKEN_ENABLED = "rest.authtoken.enabled";
 
-	//Capabilities
+	// Capabilities
 	final String CAPABILITY_GET_DESCENDENTS = "capability.getDescendants";
 	final String CAPABILITY_GET_FOLDER_TREE = "capability.getFolderTree";
 	final String CAPABILITY_ORDER_BY = "capability.orderBy";
@@ -70,9 +69,9 @@ public interface PropertyKey {
 	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_LOCAL_NAME_SPACE = "capability.newTypeSettableAttributes.localNamespace";
 	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_DISPLAY_NAME = "capability.newTypeSettableAttributes.displayName";
 	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERY_NAME = "capability.newTypeSettableAttributes.queryName";
-	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_DESCRIPTION= "capability.newTypeSettableAttributes.description";
-	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CREATABLE= "capability.newTypeSettableAttributes.creatable";
-	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_FILEABLE= "capability.newTypeSettableAttributes.fileable";
+	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_DESCRIPTION = "capability.newTypeSettableAttributes.description";
+	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CREATABLE = "capability.newTypeSettableAttributes.creatable";
+	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_FILEABLE = "capability.newTypeSettableAttributes.fileable";
 	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_QUERYABLE = "capability.newTypeSettableAttributes.queryable";
 	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_FULLTEXT_INDEXED = "capability.newTypeSettableAttributes.fulltextIndexed";
 	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_INCLUDE_IN_SUPERTYPE_QUERY = "capability.newTypeSettableAttributes.includeInSupetypeQuery";
@@ -80,7 +79,7 @@ public interface PropertyKey {
 	final String CAPABILITY_NEW_TYPE_SETTABLE_ATTRIBUTES_CONTROLLABLE_ACL = "capability.newTypeSettableAttributes.controllableACL";
 	final String CAPABILITY_ACL = "capability.acl";
 
-	//Base types
+	// Base types
 	final String BASETYPE_DOCUMENT_LOCAL_NAME = "basetype.document.localName";
 	final String BASETYPE_DOCUMENT_DISPLAY_NAME = "basetype.document.displayName";
 	final String BASETYPE_DOCUMENT_DESCRIPTION = "basetype.document.description";
@@ -163,25 +162,25 @@ public interface PropertyKey {
 	final String BASETYPE_SECONDARY_TYPE_MUTABILITY_CAN_UPDATE = "basetype.secondary.typeMutability.canUpdate";
 	final String BASETYPE_SECONDARY_TYPE_MUTABILITY_CAN_DELETE = "basetype.secondary.typeMutability.canDelete";
 
-	//Property
-	final String PROPERTY_NAME_UPDATABILITY="property.name.updatability";
-	final String PROPERTY_NAME_QUERYABLE="property.name.queryable";
-	final String PROPERTY_NAME_ORDERABLE="property.name.orderable";
+	// Property
+	final String PROPERTY_NAME_UPDATABILITY = "property.name.updatability";
+	final String PROPERTY_NAME_QUERYABLE = "property.name.queryable";
+	final String PROPERTY_NAME_ORDERABLE = "property.name.orderable";
 
-	final String PROPERTY_DESCRIPTION_UPDATABILITY="property.description.updatability";
-	final String PROPERTY_DESCRIPTION_QUERYABLE="property.description.queryable";
-	final String PROPERTY_DESCRIPTION_ORDERABLE="property.description.orderable";
+	final String PROPERTY_DESCRIPTION_UPDATABILITY = "property.description.updatability";
+	final String PROPERTY_DESCRIPTION_QUERYABLE = "property.description.queryable";
+	final String PROPERTY_DESCRIPTION_ORDERABLE = "property.description.orderable";
 
-	final String PROPERTY_OBJECT_ID_ORDERABLE= "property.objectId.orderable";
+	final String PROPERTY_OBJECT_ID_ORDERABLE = "property.objectId.orderable";
 
-	final String PROPERTY_BASE_TYPE_ID_QUERYABLE="property.baseTypeId.queryable";
-	final String PROPERTY_BASE_TYPE_ID_ORDERABLE="property.baseTypeId.orderable";
+	final String PROPERTY_BASE_TYPE_ID_QUERYABLE = "property.baseTypeId.queryable";
+	final String PROPERTY_BASE_TYPE_ID_ORDERABLE = "property.baseTypeId.orderable";
 
-	final String PROPERTY_OBJECT_TYPE_ID_QUERYABLE="property.objectTypeId.queryable";
-	final String PROPERTY_OBJECT_TYPE_ID_ORDERABLE="property.objectTypeId.orderable";
+	final String PROPERTY_OBJECT_TYPE_ID_QUERYABLE = "property.objectTypeId.queryable";
+	final String PROPERTY_OBJECT_TYPE_ID_ORDERABLE = "property.objectTypeId.orderable";
 
-	final String PROPERTY_SECONDARY_OBJECT_TYPE_IDS_UPDATABILITY="property.secondaryObjectTypeIds.updatability";
-	final String PROPERTY_SECONDARY_OBJECT_TYPE_IDS_QUERYABLE="property.secondaryObjectTypeIds.queryable";
+	final String PROPERTY_SECONDARY_OBJECT_TYPE_IDS_UPDATABILITY = "property.secondaryObjectTypeIds.updatability";
+	final String PROPERTY_SECONDARY_OBJECT_TYPE_IDS_QUERYABLE = "property.secondaryObjectTypeIds.queryable";
 
 	final String PROPERTY_IS_IMMUTABLE_QUERYABLE = "property.isImmutable.queryable";
 	final String PROPERTY_IS_IMMUTABLE_ORDERABLE = "property.isImmutable.orderable";
@@ -242,11 +241,11 @@ public interface PropertyKey {
 	final String PROPERTY_POLICY_TEXT_QUERYABLE = "property.policyText.queryable";
 	final String PROPERTY_POLICY_TEXT_ORDERABLE = "property.policyText.orderable";
 
-	//Rendition service
+	// Rendition service
 	final String JODCONVERTER_REGISTRY_DATAFORMATS = "jodconverter.registry.dataformats";
 	final String JODCONVERTER_OFFICEHOME = "jodconverter.officehome";
 
-	//Log
+	// Log
 	final String LOG_ASPECT_DEFAULT = "log.aspect.default";
 	final String LOG_ASPECT_EXPRESSION = "log.aspect.expression";
 	final String LOG_CONFIG_FILE = "log.config.file";
@@ -259,16 +258,16 @@ public interface PropertyKey {
 	final String LOG_AFTER = "log.after";
 	final String LOG_CALLCONTEXT = "log.callcontext";
 
-	//Cache
+	// Cache
 	final String CACHE_CONFIG = "cache.config";
 
-	//Auth token
+	// Auth token
 	final String AUTH_TOKEN_EXPIRATION = "auth.token.expiration";
 
-	//External authentication
+	// External authentication
 	final String EXTERNAL_AUTHENTICATION_PROXY_HEADER = "external.authenticaion.proxyHeader";
 	final String EXTERNAL_AUTHENTICATION_AUTO_CREATE_USER = "external.authenticaion.isAutoCreateUser";
 
-	//Thread
+	// Thread
 	final String THREAD_MAX = "thread.max";
 }

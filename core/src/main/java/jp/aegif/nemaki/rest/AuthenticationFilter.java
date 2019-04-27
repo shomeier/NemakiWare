@@ -57,71 +57,72 @@ public class AuthenticationFilter implements Filter {
 	private RepositoryInfoMap repositoryInfoMap;
 	private final String TOKEN_FALSE = "false";
 
-	private  Log log = LogFactory.getLog(AuthenticationFilter.class);
+	private Log log = LogFactory.getLog(AuthenticationFilter.class);
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 	}
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse res,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+			throws IOException, ServletException {
 		HttpServletRequest hreq = (HttpServletRequest) req;
 		HttpServletResponse hres = (HttpServletResponse) res;
 
 		boolean auth = login(hreq, hres);
-		if(auth){
+		if (auth) {
 			chain.doFilter(req, res);
-		}else{
+		} else {
 			log.warn("REST API Unauthorized! : " + hreq.getRequestURI());
 			hres.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 	}
 
-	public boolean login(HttpServletRequest request, HttpServletResponse response){
+	public boolean login(HttpServletRequest request, HttpServletResponse response) {
 		final String repositoryId = getRepositoryId(request);
 
-		//Make dummy callContext
+		// Make dummy callContext
 		NemakiAuthCallContextHandler callContextHandeler = new NemakiAuthCallContextHandler();
 		Map<String, String> map = callContextHandeler.getCallContextMap(request);
-		CallContextImpl ctxt = new CallContextImpl(null, CmisVersion.CMIS_1_1, repositoryId, null, request, response, null, null);
-		for(String key : map.keySet()){
+		CallContextImpl ctxt = new CallContextImpl(null, CmisVersion.CMIS_1_1, repositoryId, null, request, response,
+				null, null);
+		for (String key : map.keySet()) {
 			ctxt.put(key, map.get(key));
 		}
 
 		// auth
 		boolean auth = false;
-		if(ObjectUtils.equals(repositoryId, SystemConst.NEMAKI_CONF_DB)){
+		if (ObjectUtils.equals(repositoryId, SystemConst.NEMAKI_CONF_DB)) {
 			auth = authenticationService.loginForNemakiConfDb(ctxt);
-		}else{
+		} else {
 			auth = authenticationService.login(ctxt);
 		}
 
-		//Add attributes to Jersey @Context parameter
-		//TODO hard-coded key
+		// Add attributes to Jersey @Context parameter
+		// TODO hard-coded key
 		request.setAttribute("CallContext", ctxt);
 
 		return auth;
 	}
 
-	private String getRepositoryId(HttpServletRequest request){
+	private String getRepositoryId(HttpServletRequest request) {
 		// split path
-        String[] pathFragments = HttpUtils.splitPath(request);
+		String[] pathFragments = HttpUtils.splitPath(request);
 
-        if(pathFragments.length > 0){
-        	if(ApiType.REPO.equals(pathFragments[0])){
-        		if(pathFragments.length > 1 && StringUtils.isNotBlank(pathFragments[1])){
-        			String repositoryId = pathFragments[1];
-        			return repositoryId;
-        		}else{
-        			System.err.println("repositoryId is not specified in URI.");
-        		}
-        	}else if(ApiType.ALL.equals(pathFragments[0])){
-        		return repositoryInfoMap.getSuperUsers().getId();
-        	}
-        }
+		if (pathFragments.length > 0) {
+			if (ApiType.REPO.equals(pathFragments[0])) {
+				if (pathFragments.length > 1 && StringUtils.isNotBlank(pathFragments[1])) {
+					String repositoryId = pathFragments[1];
+					return repositoryId;
+				} else {
+					System.err.println("repositoryId is not specified in URI.");
+				}
+			} else if (ApiType.ALL.equals(pathFragments[0])) {
+				return repositoryInfoMap.getSuperUsers().getId();
+			}
+		}
 
-        return null;
+		return null;
 	}
 
 	@Override
@@ -130,29 +131,29 @@ public class AuthenticationFilter implements Filter {
 
 	}
 
-	private boolean checkResourceEnabled(HttpServletRequest request){
+	private boolean checkResourceEnabled(HttpServletRequest request) {
 		boolean enabled = true;
 
 		String pathInfo = request.getPathInfo();
-		if(pathInfo.startsWith("/user")){
+		if (pathInfo.startsWith("/user")) {
 			String userResourceEnabled = propertyManager.readValue(PropertyKey.REST_USER_ENABLED);
 			enabled = TOKEN_FALSE.equals(userResourceEnabled) ? false : true;
-		}else if(pathInfo.startsWith("/group")){
+		} else if (pathInfo.startsWith("/group")) {
 			String groupResourceEnabled = propertyManager.readValue(PropertyKey.REST_GROUP_ENABLED);
 			enabled = TOKEN_FALSE.equals(groupResourceEnabled) ? false : true;
-		}else if(pathInfo.startsWith("/type")){
+		} else if (pathInfo.startsWith("/type")) {
 			String typeResourceEnabled = propertyManager.readValue(PropertyKey.REST_TYPE_ENABLED);
 			enabled = TOKEN_FALSE.equals(typeResourceEnabled) ? false : true;
-		}else if(pathInfo.startsWith("/archive")){
+		} else if (pathInfo.startsWith("/archive")) {
 			String archiveResourceEnabled = propertyManager.readValue(PropertyKey.REST_ARCHIVE_ENABLED);
 			enabled = TOKEN_FALSE.equals(archiveResourceEnabled) ? false : true;
-		}else if(pathInfo.startsWith("/search-engine")){
+		} else if (pathInfo.startsWith("/search-engine")) {
 			String solrResourceEnabled = propertyManager.readValue(PropertyKey.REST_SOLR_ENABLED);
 			enabled = TOKEN_FALSE.equals(solrResourceEnabled) ? false : true;
-		}else if(pathInfo.startsWith("/authtoken")){
+		} else if (pathInfo.startsWith("/authtoken")) {
 			String authtokenResourceEnabled = propertyManager.readValue(PropertyKey.REST_AUTHTOKEN_ENABLED);
 			enabled = TOKEN_FALSE.equals(authtokenResourceEnabled) ? false : true;
-		}else{
+		} else {
 			enabled = false;
 		}
 

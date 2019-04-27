@@ -20,7 +20,6 @@
  ******************************************************************************/
 package jp.aegif.nemaki.model;
 
-
 public class Property {
 
 	@SuppressWarnings("unused")
@@ -34,10 +33,10 @@ public class Property {
 		this.value = value;
 	}
 
-	public Property(){
-		
+	public Property() {
+
 	}
-	
+
 	public String getKey() {
 		return key;
 	}

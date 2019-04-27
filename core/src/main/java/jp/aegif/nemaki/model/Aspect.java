@@ -57,9 +57,9 @@ public class Aspect {
 		this.name = name;
 		this.properties = properties;
 	}
-	
-	public Aspect(){
-		
+
+	public Aspect() {
+
 	}
 
 	public String getName() {

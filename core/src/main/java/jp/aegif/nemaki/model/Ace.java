@@ -30,7 +30,7 @@ public class Ace {
 	private List<String> permissions;
 	private boolean direct;
 
-	public Ace(){
+	public Ace() {
 
 	}
 
@@ -44,12 +44,15 @@ public class Ace {
 	public String getPrincipalId() {
 		return principalId;
 	}
+
 	public void setPrincipalId(String principalId) {
 		this.principalId = principalId;
 	}
+
 	public List<String> getPermissions() {
 		return permissions;
 	}
+
 	public void setPermissions(List<String> permissions) {
 		this.permissions = permissions;
 	}
@@ -64,8 +67,7 @@ public class Ace {
 
 	@Override
 	public boolean equals(Object obj) {
-		return (obj instanceof Ace) 
-				&& ObjectUtils.equals(this.principalId, ((Ace)obj).getPrincipalId());
+		return (obj instanceof Ace) && ObjectUtils.equals(this.principalId, ((Ace) obj).getPrincipalId());
 	}
-	
+
 }

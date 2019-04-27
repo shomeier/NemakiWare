@@ -31,10 +31,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jp.aegif.nemaki.model.Archive;
 import jp.aegif.nemaki.model.Content;
-import jp.aegif.nemaki.util.DataUtil;
 import jp.aegif.nemaki.util.constant.SystemConst;
 
-public class CouchArchive extends CouchNodeBase{
+public class CouchArchive extends CouchNodeBase {
 
 	private static final long serialVersionUID = -1664675735259473057L;
 
@@ -50,11 +49,11 @@ public class CouchArchive extends CouchNodeBase{
 	private Boolean latestVersion;
 	private String mimeType;
 
-	public CouchArchive(){
+	public CouchArchive() {
 		super();
 	}
 
-	public CouchArchive(Archive a){
+	public CouchArchive(Archive a) {
 		super(a);
 		setOriginalId(a.getOriginalId());
 		setLastRevision(a.getLastRevision());
@@ -165,18 +164,30 @@ public class CouchArchive extends CouchNodeBase{
 		@SuppressWarnings("serial")
 		Map<String, Object> m = new HashMap<String, Object>() {
 			{
-				if(getId() != null) put("id", getId());
-				if(getOriginalId() != null) put("originalId", getOriginalId());
-				if(getLastRevision() != null) put("lastRevision", getLastRevision());
-				if(getName() != null) put("name", getName());
-				if(getType() != null) put("type", getType());
-				if(getParentId() != null) put("parentId", getParentId());
-				if(getPath() != null) put("path", getPath());
-				if(getAttachmentNodeId() != null) put("nemakiAttachments", getAttachmentNodeId().toString());
-				if(getVersionSeriesId() != null) put("versionSeriesId", getVersionSeriesId());
-				if(isLatestVersion() != null) put("isLatestVersion", isLatestVersion());
-				if(getCreated() != null) put("created", convertToDateFormat(getCreated()));
-				if(getCreator() != null) put("creator", getCreator());
+				if (getId() != null)
+					put("id", getId());
+				if (getOriginalId() != null)
+					put("originalId", getOriginalId());
+				if (getLastRevision() != null)
+					put("lastRevision", getLastRevision());
+				if (getName() != null)
+					put("name", getName());
+				if (getType() != null)
+					put("type", getType());
+				if (getParentId() != null)
+					put("parentId", getParentId());
+				if (getPath() != null)
+					put("path", getPath());
+				if (getAttachmentNodeId() != null)
+					put("nemakiAttachments", getAttachmentNodeId().toString());
+				if (getVersionSeriesId() != null)
+					put("versionSeriesId", getVersionSeriesId());
+				if (isLatestVersion() != null)
+					put("isLatestVersion", isLatestVersion());
+				if (getCreated() != null)
+					put("created", convertToDateFormat(getCreated()));
+				if (getCreator() != null)
+					put("creator", getCreator());
 			}
 		};
 		return m.toString();
@@ -189,8 +200,7 @@ public class CouchArchive extends CouchNodeBase{
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj != null && obj instanceof Content
-				&& ((Content) obj).getId().equals(this.getId());
+		return obj != null && obj instanceof Content && ((Content) obj).getId().equals(this.getId());
 	}
 
 	@Override
@@ -198,31 +208,35 @@ public class CouchArchive extends CouchNodeBase{
 		return this.getId().hashCode();
 	}
 
-	public Boolean isFolder(){
-		if("folder".equals(type)){
+	@Override
+	public Boolean isFolder() {
+		if ("folder".equals(type)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
-	public Boolean isDocument(){
-		if("document".equals(type)){
+	@Override
+	public Boolean isDocument() {
+		if ("document".equals(type)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
-	public Boolean isAttachment(){
-		if("attachment".equals(type)){
+	@Override
+	public Boolean isAttachment() {
+		if ("attachment".equals(type)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
-	public Archive convert(){
+	@Override
+	public Archive convert() {
 		Archive a = new Archive(super.convert());
 		a.setOriginalId(getOriginalId());
 		a.setLastRevision(getLastRevision());

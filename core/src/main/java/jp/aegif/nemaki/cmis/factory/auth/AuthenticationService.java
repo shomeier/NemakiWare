@@ -39,12 +39,12 @@ package jp.aegif.nemaki.cmis.factory.auth;
 
 import org.apache.chemistry.opencmis.commons.server.CallContext;
 
-
 /**
  * Authentication Service interface.
  */
 public interface AuthenticationService {
-	
+
 	public boolean login(CallContext callContext);
+
 	public boolean loginForNemakiConfDb(CallContext callContext);
 }
