@@ -114,6 +114,8 @@ public class SolrPredicateWalker {
 			return walkNotIn(node.getChild(0), node.getChild(1));
 		case CmisQlStrictLexer.ANY:
 			return walkInAny(node.getChild(0), node.getChild(1));
+		case CmisQlStrictLexer.IN_ANY:
+			return walkIn(node.getChild(0), node.getChild(1));
 		case CmisQlStrictLexer.NOT_IN_ANY:
 			return walkNotInAny(node.getChild(0), node.getChild(1));
 		case CmisQlStrictLexer.IS_NULL:
