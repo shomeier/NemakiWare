@@ -7,6 +7,7 @@ import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
+import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
@@ -32,10 +33,15 @@ public class SessionUtil {
 		// parameter.put(org.apache.chemistry.opencmis.commons.impl.Constants.PARAM_REPOSITORY_ID,
 		// NemakiConfig.getValue(PropertyKey.NEMAKI_CORE_URI_REPOSITORY));
 
-		parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+		parameter.put(SessionParameter.BINDING_TYPE, BindingType.BROWSER.value());
 
-		String coreAtomUri = "http://localhost:8080/core/atom/" + repositoryId; // TODO
+		String coreAtomUri = "http://localhost:8080/core/atom/" + repositoryId;
+
+		// TODO: Get rid of using a cmisselector for browser binding url
+		String coreBrowserUri = "http://localhost:8080/core/browser/" + repositoryId + "?cmisselector=repositoryInfo"; // TODO
+
 		parameter.put(SessionParameter.ATOMPUB_URL, coreAtomUri);
+		parameter.put(SessionParameter.BROWSER_URL, coreBrowserUri);
 
 		// timeout
 		// parameter.put(SessionParameter.CONNECT_TIMEOUT, "30000");
@@ -46,9 +52,14 @@ public class SessionUtil {
 
 		SessionFactory f = SessionFactoryImpl.newInstance();
 		Session session = f.createSession(parameter);
-		OperationContext operationContext = session.createOperationContext(null, true, true, false,
-				IncludeRelationships.BOTH, null, false, null, true, 100);
-		session.setDefaultContext(operationContext);
+
+		boolean includeAllowableActions = true;
+		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext();
+		opCtx.setIncludeAllowableActions(includeAllowableActions);
+
+//		OperationContext opCtx = session.createOperationContext(null, false, includeAllowableActions, false,
+//				IncludeRelationships.NONE, null, false, null, true, 100);
+		session.setDefaultContext(opCtx);
 
 		return session;
 	}
