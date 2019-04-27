@@ -27,22 +27,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jp.aegif.nemaki.tracker.CoreTracker;
-import jp.aegif.nemaki.tracker.CoreTrackerJob;
-import jp.aegif.nemaki.util.CmisSessionFactory;
-import jp.aegif.nemaki.util.Constant;
-import jp.aegif.nemaki.util.PropertyKey;
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.util.StringPool;
-import jp.aegif.nemaki.util.impl.PropertyManagerImpl;
-import jp.aegif.nemaki.util.yaml.RepositorySetting;
-import jp.aegif.nemaki.util.yaml.RepositorySettings;
-
 import org.apache.commons.lang3.StringUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.common.params.CoreAdminParams;
@@ -59,10 +44,23 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jp.aegif.nemaki.tracker.CoreTracker;
+import jp.aegif.nemaki.tracker.CoreTrackerJob;
+import jp.aegif.nemaki.util.CmisSessionFactory;
+import jp.aegif.nemaki.util.Constant;
+import jp.aegif.nemaki.util.PropertyKey;
+import jp.aegif.nemaki.util.PropertyManager;
+import jp.aegif.nemaki.util.StringPool;
+import jp.aegif.nemaki.util.impl.PropertyManagerImpl;
+import jp.aegif.nemaki.util.yaml.RepositorySetting;
+import jp.aegif.nemaki.util.yaml.RepositorySettings;
 
 /**
- * Solr core handler classs
- * Called on server start up & user request via RESTful
+ * Solr core handler classs Called on server start up & user request via RESTful
+ * 
  * @author linzhixing
  *
  */
@@ -73,7 +71,6 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 	ConcurrentHashMap<String, CoreTracker> trackers = new ConcurrentHashMap<String, CoreTracker>();
 	Scheduler scheduler = null;
 
-
 	public NemakiCoreAdminHandler() {
 		super();
 	}
@@ -81,8 +78,7 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 	public NemakiCoreAdminHandler(CoreContainer coreContainer) {
 		super(coreContainer);
 
-		PropertyManager pm = new PropertyManagerImpl(
-				StringPool.PROPERTIES_NAME);
+		PropertyManager pm = new PropertyManagerImpl(StringPool.PROPERTIES_NAME);
 
 		String repositoryCorename = pm.readValue(PropertyKey.SOLR_CORE_MAIN);
 		String tokenCoreName = pm.readValue(PropertyKey.SOLR_CORE_TOKEN);
@@ -94,15 +90,14 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 		CoreTracker tracker = new CoreTracker(this, core, repositoryServer, tokenServer);
 		logger.info("NemakiCoreAdminHandler successfully instantiated");
 
-		String  jobEnabled = pm.readValue(PropertyKey.SOLR_TRACKING_CRON_ENABLED);
-		if("true".equals(jobEnabled)){
+		String jobEnabled = pm.readValue(PropertyKey.SOLR_TRACKING_CRON_ENABLED);
+		if ("true".equals(jobEnabled)) {
 			// Configure Job
 			JobDataMap jobDataMap = new JobDataMap();
 			jobDataMap.put("ADMIN_HANDLER", this);
 			jobDataMap.put("TRACKER", tracker);
-			JobDetail job = newJob(CoreTrackerJob.class)
-					.withIdentity("CoreTrackerJob", "Solr")
-					.usingJobData(jobDataMap).build();
+			JobDetail job = newJob(CoreTrackerJob.class).withIdentity("CoreTrackerJob", "Solr").usingJobData(jobDataMap)
+					.build();
 
 			// Configure Trigger
 			// Cron expression is set in a property file
@@ -113,17 +108,12 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 			// Configure Scheduler
 			StdSchedulerFactory factory = new StdSchedulerFactory();
 			Properties properties = new Properties();
-			properties.setProperty("org.quartz.scheduler.instanceName",
-					"NemakiSolrTrackerScheduler");
-			properties.setProperty("org.quartz.threadPool.class",
-					"org.quartz.simpl.SimpleThreadPool");
+			properties.setProperty("org.quartz.scheduler.instanceName", "NemakiSolrTrackerScheduler");
+			properties.setProperty("org.quartz.threadPool.class", "org.quartz.simpl.SimpleThreadPool");
 			properties.setProperty("org.quartz.threadPool.threadCount", "1");
-			properties.setProperty("org.quartz.threadPool.makeThreadsDaemons",
-					"true");
-			properties.setProperty(
-					"org.quartz.scheduler.makeSchedulerThreadDaemon", "true");
-			properties.setProperty("org.quartz.jobStore.class",
-					"org.quartz.simpl.RAMJobStore");
+			properties.setProperty("org.quartz.threadPool.makeThreadsDaemons", "true");
+			properties.setProperty("org.quartz.scheduler.makeSchedulerThreadDaemon", "true");
+			properties.setProperty("org.quartz.jobStore.class", "org.quartz.simpl.RAMJobStore");
 
 			// Start quartz scheduler
 			try {
@@ -140,12 +130,11 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 	/**
 	 * Switch actions on REST API
 	 *
-	 * Boolean return value is used as "doPersist" parameter,
-	 * which relate to the persistence of action results to the core.
+	 * Boolean return value is used as "doPersist" parameter, which relate to the
+	 * persistence of action results to the core.
 	 */
 	@Override
-	protected void handleCustomAction(SolrQueryRequest req,
-			SolrQueryResponse rsp) {
+	protected void handleCustomAction(SolrQueryRequest req, SolrQueryResponse rsp) {
 
 		SolrParams params = req.getParams();
 
@@ -160,7 +149,8 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 
 		// Stop cron when executing action
 		try {
-			if(scheduler != null) scheduler.standby();
+			if (scheduler != null)
+				scheduler.standby();
 		} catch (SchedulerException e) {
 			logger.error("Stop cron when executing action error:", e);
 		}
@@ -170,15 +160,15 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 
 		// Restart cron
 		try {
-			if(scheduler != null) scheduler.start();
+			if (scheduler != null)
+				scheduler.start();
 		} catch (SchedulerException e) {
 			logger.error("Restart cron error:", e);
 		}
 
-
 	}
 
-	private void doAction(SolrQueryResponse rsp, CoreTracker tracker, SolrParams params){
+	private void doAction(SolrQueryResponse rsp, CoreTracker tracker, SolrParams params) {
 		String action = params.get(CoreAdminParams.ACTION);
 		String repositoryId = params.get("repositoryId");
 
@@ -191,7 +181,7 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 		}
 	}
 
-	private void index(SolrQueryResponse rsp, CoreTracker tracker, SolrParams params, String repositoryId){
+	private void index(SolrQueryResponse rsp, CoreTracker tracker, SolrParams params, String repositoryId) {
 		// Get tracking mode: FULL or DELTA
 		String tracking = params.get("tracking"); // tracking mode
 		if (tracking == null || !tracking.equals(Constant.MODE_FULL)) {
@@ -199,19 +189,19 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 		}
 
 		// Action=INDEX: track documents(by FULL or DELTA)
-		if(tracking.equals(Constant.MODE_FULL)){
+		if (tracking.equals(Constant.MODE_FULL)) {
 			// Init
-			if(StringUtils.isBlank(repositoryId)){
+			if (StringUtils.isBlank(repositoryId)) {
 				tracker.initCore();
-			}else{
+			} else {
 				tracker.initCore(repositoryId);
 			}
 		}
 
 		// Index
-		if(StringUtils.isBlank(repositoryId)){
+		if (StringUtils.isBlank(repositoryId)) {
 			tracker.index(tracking);
-		}else{
+		} else {
 			tracker.index(tracking, repositoryId);
 		}
 
@@ -219,45 +209,45 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 		rsp.add("Result", "Successfully tracked!");
 	}
 
-	private void init(SolrQueryResponse rsp, CoreTracker tracker, String repositoryId){
+	private void init(SolrQueryResponse rsp, CoreTracker tracker, String repositoryId) {
 		// Action=INIT: initialize core
 
-		if(StringUtils.isBlank(repositoryId)){
+		if (StringUtils.isBlank(repositoryId)) {
 			tracker.initCore();
-		}else{
+		} else {
 			tracker.initCore(repositoryId);
 		}
 
 		rsp.add("Result", "Successfully initialized!");
 	}
 
-	private void changePassword(SolrQueryResponse rsp, CoreTracker tracker, String repositoryId, SolrParams params){
-		//Validation
-		if(StringUtils.isEmpty(repositoryId)){
+	private void changePassword(SolrQueryResponse rsp, CoreTracker tracker, String repositoryId, SolrParams params) {
+		// Validation
+		if (StringUtils.isEmpty(repositoryId)) {
 			rsp.setException(new Exception("repositoryId is not set."));
 			return;
 		}
 
 		String password = params.get("password");
-		if(StringUtils.isEmpty(password)){
+		if (StringUtils.isEmpty(password)) {
 			rsp.setException(new Exception("New password is not set."));
 			return;
 		}
 
 		String currentPassword = params.get("currentPassword");
-		if(StringUtils.isEmpty(password)){
+		if (StringUtils.isEmpty(password)) {
 			rsp.setException(new Exception("Current password is not set."));
 			return;
 		}
 
-		//Execute
+		// Execute
 		RepositorySettings settings = CmisSessionFactory.getRepositorySettings();
 		RepositorySetting setting = settings.get(repositoryId);
-		if(setting == null){
+		if (setting == null) {
 			rsp.setException(new Exception("Specified repository does not exist."));
 			return;
 		}
-		if(!currentPassword.equals(setting.getPassword())){
+		if (!currentPassword.equals(setting.getPassword())) {
 			rsp.setException(new Exception("Current password does not match."));
 			return;
 		}

@@ -20,15 +20,15 @@ public class NemakiCacheManager {
 	String restEndPoint = "";
 	String repositoryId = "";
 
-	public NemakiCacheManager(String repositoryId){
+	public NemakiCacheManager(String repositoryId) {
 		RepositorySetting setting = CmisSessionFactory.getRepositorySettings().get(repositoryId);
 		this.userName = setting.getUser();
-		 this.password = setting.getPassword();
-		 this.restEndPoint = NemakiServer.getRestEndpoint();
-		 this.repositoryId = repositoryId;
+		this.password = setting.getPassword();
+		this.restEndPoint = NemakiServer.getRestEndpoint();
+		this.repositoryId = repositoryId;
 	}
 
-	public void delete(String objectId, GregorianCalendar date){
+	public void delete(String objectId, GregorianCalendar date) {
 		String apiResult = null;
 		String restUri = getRestUri(repositoryId);
 
@@ -39,22 +39,17 @@ public class NemakiCacheManager {
 			c.setFollowRedirects(Boolean.TRUE);
 			c.addFilter(new HTTPBasicAuthFilter(userName, password));
 
-			apiResult = c.resource(restUri)
-							.path(objectId)
-							.queryParam("date", date.toString())
-							.accept(MediaType.APPLICATION_JSON_TYPE)
-							.delete(String.class);
-
+			apiResult = c.resource(restUri).path(objectId).queryParam("date", date.toString())
+					.accept(MediaType.APPLICATION_JSON_TYPE).delete(String.class);
 
 		} catch (Exception e) {
 			logger.error("Cannot connect to Core REST API : {}", restUri, e);
 			throw e;
 		}
 
-
 	}
 
-	private  String getRestUri(String repositoryId){
+	private String getRestUri(String repositoryId) {
 		return restEndPoint + "/repo/" + repositoryId + "/cache/";
 	}
 

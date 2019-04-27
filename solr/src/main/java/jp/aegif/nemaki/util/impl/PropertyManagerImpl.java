@@ -22,62 +22,59 @@
 package jp.aegif.nemaki.util.impl;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import jp.aegif.nemaki.util.NemakiTokenManager;
-import jp.aegif.nemaki.util.PropertyKey;
-import jp.aegif.nemaki.util.PropertyManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.core.SolrResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PropertyManagerImpl implements PropertyManager{
+import jp.aegif.nemaki.util.PropertyKey;
+import jp.aegif.nemaki.util.PropertyManager;
+
+public class PropertyManagerImpl implements PropertyManager {
 	private static final Logger logger = LoggerFactory.getLogger(PropertyManagerImpl.class);
 
 	private String propertiesFile;
 	private Properties config;
 	private List<String> overrideFiles = new ArrayList<String>();
 
-	private PropertyManagerImpl(){
+	private PropertyManagerImpl() {
 
 	}
 
 	/**
 	 * Constructor setting specified properties file and config object
+	 * 
 	 * @param propertiesFile
 	 */
-	public PropertyManagerImpl(String propertiesFile){
+	public PropertyManagerImpl(String propertiesFile) {
 		this.setPropertiesFile(propertiesFile);
 
 		Properties config = new Properties();
 		SolrResourceLoader loader = new SolrResourceLoader(null);
 		try {
-			//Set key values
+			// Set key values
 			InputStream inputStream = loader.openResource(propertiesFile);
-			if(inputStream != null){
+			if (inputStream != null) {
 				config.load(inputStream);
 				this.setConfig(config);
 			}
 
-			//Set override files
+			// Set override files
 			String _overrideFiles = config.getProperty(PropertyKey.OVERRIDE_FILES);
-			if(StringUtils.isNotBlank(_overrideFiles)){
+			if (StringUtils.isNotBlank(_overrideFiles)) {
 				overrideFiles = split(_overrideFiles);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			logger.error("Error occurred during setting of PropertyManager.", e);
-		}finally{
+		} finally {
 			try {
 				loader.close();
 			} catch (Exception e) {
@@ -87,47 +84,47 @@ public class PropertyManagerImpl implements PropertyManager{
 	}
 
 	@Override
-	public String readValue(String key){
+	public String readValue(String key) {
 		String val = config.getProperty(key);
 		return override(key, val);
 	}
 
 	@Override
-	public List<String> readValues(String key){
+	public List<String> readValues(String key) {
 		String val = readValue(key);
 		String _val = override(key, val);
 		return split(_val);
 	}
 
 	@Override
-	public String readHeadValue(String key){
+	public String readHeadValue(String key) {
 		String val = config.getProperty(key);
 		String _val = override(key, val);
 		String[] vals = _val.split(",");
 		return vals[0];
 	}
 
-	private List<String> split(String str){
-		if(StringUtils.isBlank(str)){
+	private List<String> split(String str) {
+		if (StringUtils.isBlank(str)) {
 			return new ArrayList<String>();
 		}
 		final String delimiter = ",";
 		String[] splitted = StringUtils.split(str, delimiter);
 
 		List<String> result = new ArrayList<String>();
-		for(int i=0; i < splitted.length; i++){
+		for (int i = 0; i < splitted.length; i++) {
 			result.add(splitted[i]);
 		}
 		return result;
 	}
 
-	private String override(String key, String value){
+	private String override(String key, String value) {
 		String result = value;
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		for(String file : overrideFiles){
-			//Load file
+		for (String file : overrideFiles) {
+			// Load file
 			InputStream is = cl.getResourceAsStream(file);
-			if (is == null){
+			if (is == null) {
 				continue;
 			}
 			Properties properties = new Properties();
@@ -138,7 +135,7 @@ public class PropertyManagerImpl implements PropertyManager{
 			}
 
 			String _value = properties.getProperty(key);
-			if(_value != null){
+			if (_value != null) {
 				result = _value;
 			}
 		}
@@ -157,12 +154,11 @@ public class PropertyManagerImpl implements PropertyManager{
 		URL url = classLoader.getResource(propertiesFile);
 
 		try {
-		    if ( url == null ) {
-			config.store(new FileOutputStream(new File(loader.locateSolrHome() + "/conf/" + propertiesFile)), null);
-		    }
-		    else {
-			config.store(new FileOutputStream(new File(url.toURI())), null);
-		    }
+			if (url == null) {
+				config.store(new FileOutputStream(new File(SolrResourceLoader.locateSolrHome() + "/conf/" + propertiesFile)), null);
+			} else {
+				config.store(new FileOutputStream(new File(url.toURI())), null);
+			}
 		} catch (Exception e) {
 			logger.error("Error occurred during modification of porperty value.", e);
 		}
@@ -173,13 +169,13 @@ public class PropertyManagerImpl implements PropertyManager{
 	 * Override is not supported for update
 	 */
 	@Override
-	public void addValue(String key, String value){
+	public void addValue(String key, String value) {
 		String currentVal = config.getProperty(key);
 		String[] currentVals = (StringUtils.isEmpty(currentVal)) ? new String[0] : currentVal.split(",");
-		List<String>valList = new ArrayList<String>();
+		List<String> valList = new ArrayList<String>();
 		Collections.addAll(valList, currentVals);
 
-		valList.add(0,value);
+		valList.add(0, value);
 		String newVal = StringUtils.join(valList.toArray(), ",");
 		config.setProperty(key, newVal);
 
@@ -196,14 +192,14 @@ public class PropertyManagerImpl implements PropertyManager{
 	 * Override is not supported for update
 	 */
 	@Override
-	public void removeValue(String key, String value){
+	public void removeValue(String key, String value) {
 		String currentVal = config.getProperty(key);
 		String[] currentVals = currentVal.split(",");
-		List<String>valList = new ArrayList<String>();
+		List<String> valList = new ArrayList<String>();
 		Collections.addAll(valList, currentVals);
 
 		boolean success = valList.remove(value);
-		if(success){
+		if (success) {
 			String newVal = StringUtils.join(valList.toArray(), ",");
 			config.setProperty(key, newVal);
 

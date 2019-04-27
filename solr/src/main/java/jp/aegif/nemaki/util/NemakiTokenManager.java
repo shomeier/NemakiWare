@@ -1,22 +1,15 @@
 package jp.aegif.nemaki.util;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import jp.aegif.nemaki.util.impl.PropertyManagerImpl;
-
 import org.apache.commons.lang.StringUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
@@ -43,8 +36,7 @@ public class NemakiTokenManager {
 			c.setFollowRedirects(Boolean.TRUE);
 			c.addFilter(new HTTPBasicAuthFilter(userName, password));
 
-			apiResult = c.resource(restUri).path(userName + "/register")
-					.queryParam("app", "solr")
+			apiResult = c.resource(restUri).path(userName + "/register").queryParam("app", "solr")
 					.accept(MediaType.APPLICATION_JSON_TYPE).get(String.class);
 		} catch (Exception e) {
 			logger.error("Cannot connect to Core REST API : {}", restUri, e);
@@ -59,11 +51,11 @@ public class NemakiTokenManager {
 				long expiration = (Long) value.get("expiration");
 				tokenMap.put(userName, new Token(repositoryId, userName, token, expiration));
 				return token;
-			}else{
-				logger.error("Return failure status from REST API response : {}",restUri  );
+			} else {
+				logger.error("Return failure status from REST API response : {}", restUri);
 			}
 		} catch (Exception e) {
-			logger.error("Cannot export token from REST API response : {}",restUri, e);
+			logger.error("Cannot export token from REST API response : {}", restUri, e);
 		}
 
 		return null;
@@ -83,7 +75,7 @@ public class NemakiTokenManager {
 		Token token = tokenMap.get(userName);
 		if (token != null) {
 			if (token.getExpiration() < System.currentTimeMillis()) {
-				logger.info("{}: Basic auth token has expired!", userName );
+				logger.info("{}: Basic auth token has expired!", userName);
 				return null;
 			} else {
 				return token.getToken();
@@ -93,10 +85,9 @@ public class NemakiTokenManager {
 		}
 	}
 
-	private String getRestUri(String repositoryId){
+	private String getRestUri(String repositoryId) {
 		return restEndpoint + "/repo/" + repositoryId + "/authtoken/";
 	}
-
 
 	private class Token {
 		private String repositoryId;

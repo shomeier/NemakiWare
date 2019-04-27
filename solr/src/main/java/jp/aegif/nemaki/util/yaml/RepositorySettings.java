@@ -4,21 +4,21 @@ import java.util.Collection;
 import java.util.Map;
 
 public class RepositorySettings {
-	
+
 	private Map<String, RepositorySetting> settings;
-	
-	public RepositorySettings(){
-		
+
+	public RepositorySettings() {
+
 	}
 
-	public Collection<String> getIds(){
+	public Collection<String> getIds() {
 		return settings.keySet();
 	}
-	
-	public RepositorySetting get(String repositoryId){
+
+	public RepositorySetting get(String repositoryId) {
 		return settings.get(repositoryId);
 	}
-	
+
 	public Map<String, RepositorySetting> getSettings() {
 		return settings;
 	}

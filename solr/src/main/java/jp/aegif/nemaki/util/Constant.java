@@ -41,7 +41,7 @@ public interface Constant {
 
 	String SEPARATOR = ".";
 
-	//Auth token
+	// Auth token
 	String AUTH_TOKEN = "nemaki_auth_token";
 	String AUTH_TOKEN_APP = "nemaki_auth_token_app";
 }

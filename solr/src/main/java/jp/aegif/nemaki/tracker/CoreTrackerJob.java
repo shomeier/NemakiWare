@@ -21,18 +21,15 @@
  ******************************************************************************/
 package jp.aegif.nemaki.tracker;
 
-import jp.aegif.nemaki.util.CmisSessionFactory;
-import jp.aegif.nemaki.util.Constant;
-import jp.aegif.nemaki.util.yaml.RepositorySettings;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.ibm.icu.text.MessageFormat;
+import jp.aegif.nemaki.util.CmisSessionFactory;
+import jp.aegif.nemaki.util.Constant;
+import jp.aegif.nemaki.util.yaml.RepositorySettings;
 
 /**
  * Job class of index tracking
@@ -50,15 +47,14 @@ public class CoreTrackerJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext jec) throws JobExecutionException {
-		CoreTracker coreTracker = (CoreTracker) jec.getJobDetail()
-				.getJobDataMap().get("TRACKER");
+		CoreTracker coreTracker = (CoreTracker) jec.getJobDetail().getJobDataMap().get("TRACKER");
 
 		RepositorySettings settings = CmisSessionFactory.getRepositorySettings();
-		for(String repositoryId : settings.getIds()){
-			try{
+		for (String repositoryId : settings.getIds()) {
+			try {
 				coreTracker.index(Constant.MODE_DELTA, repositoryId);
-			}catch(Exception ex){
-				logger.error("(job)Indexing error repository={}",repositoryId, ex);
+			} catch (Exception ex) {
+				logger.error("(job)Indexing error repository={}", repositoryId, ex);
 			}
 		}
 	}

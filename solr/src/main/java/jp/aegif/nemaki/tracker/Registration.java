@@ -22,13 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import jp.aegif.nemaki.util.PropertyKey;
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.util.StringPool;
-import jp.aegif.nemaki.util.impl.PropertyManagerImpl;
-import jp.aegif.nemaki.util.Constant;
-import jp.aegif.nemaki.util.NemakiCacheManager;
-
 import org.apache.chemistry.opencmis.client.api.ChangeEvent;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.SecondaryType;
@@ -38,13 +31,8 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.data.ObjectParentData;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.request.AbstractUpdateRequest;
@@ -54,6 +42,11 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.SolrCore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jp.aegif.nemaki.util.Constant;
+import jp.aegif.nemaki.util.NemakiCacheManager;
 
 public class Registration implements Runnable {
 
@@ -69,7 +62,8 @@ public class Registration implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(Registration.class);
 
 	public Registration(Session cmisSession, SolrCore core, SolrServer repositoryServer, List<ChangeEvent> list,
-			boolean fulltextEnabled, boolean mimeTypeFilterEnabled, List<String> allowedMimeTypeFilter, NemakiCacheManager cache) {
+			boolean fulltextEnabled, boolean mimeTypeFilterEnabled, List<String> allowedMimeTypeFilter,
+			NemakiCacheManager cache) {
 		this.cmisSession = cmisSession;
 		this.core = core;
 		this.repositoryServer = repositoryServer;
@@ -86,7 +80,7 @@ public class Registration implements Runnable {
 
 		// Read MIME-Type filtering
 		for (ChangeEvent ce : list) {
-			logger.info("Run Registration : Type={}, Id={}" ,ce.getChangeType(), ce.getObjectId());
+			logger.info("Run Registration : Type={}, Id={}", ce.getChangeType(), ce.getObjectId());
 
 			// cache clean
 			cache.delete(ce.getObjectId(), ce.getChangeTime());
@@ -102,7 +96,7 @@ public class Registration implements Runnable {
 				deleteSolrDocument(ce);
 				continue;
 			default:
-				//SECURITY is iqnore
+				// SECURITY is iqnore
 				break;
 			}
 		}
@@ -112,8 +106,7 @@ public class Registration implements Runnable {
 	 * Create/Update Solr document
 	 *
 	 * @param ce
-	 * @param fulltextEnabled
-	 *            TODO
+	 * @param fulltextEnabled TODO
 	 */
 	private void registerSolrDocument(ChangeEvent ce, boolean fulltextEnabled, boolean mimeTypeFilter,
 			List<String> allowedMimeTypes) {
@@ -358,8 +351,8 @@ public class Registration implements Runnable {
 			map.put(Constant.FIELD_CONTENT_ID, object.getPropertyValue(PropertyIds.CONTENT_STREAM_ID));
 			map.put(Constant.FIELD_CONTENT_NAME, object.getPropertyValue(PropertyIds.CONTENT_STREAM_FILE_NAME));
 			map.put(Constant.FIELD_CONTENT_MIMETYPE, object.getPropertyValue(PropertyIds.CONTENT_STREAM_MIME_TYPE));
-            String contentStreamLength = (object.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null) ? null
-                    : object.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH).toString();
+			String contentStreamLength = (object.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null) ? null
+					: object.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH).toString();
 			map.put(Constant.FIELD_CONTENT_LENGTH, contentStreamLength);
 			map.put(Constant.FIELD_VERSION_LABEL, object.getPropertyValue(PropertyIds.VERSION_LABEL));
 			String isMajorVersion = (object.getPropertyValue(PropertyIds.IS_MAJOR_VERSION) == null) ? null
@@ -433,8 +426,8 @@ public class Registration implements Runnable {
 	}
 
 	/**
-	 * For properties other than those of baseType. They are indexed regardless
-	 * of its "queryable" flag in case the flag is changed later.
+	 * For properties other than those of baseType. They are indexed regardless of
+	 * its "queryable" flag in case the flag is changed later.
 	 *
 	 * @param map
 	 * @param object

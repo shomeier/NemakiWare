@@ -34,17 +34,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import jp.aegif.nemaki.NemakiCoreAdminHandler;
-import jp.aegif.nemaki.util.CmisSessionFactory;
-import jp.aegif.nemaki.util.Constant;
-import jp.aegif.nemaki.util.NemakiCacheManager;
-import jp.aegif.nemaki.util.PropertyKey;
-import jp.aegif.nemaki.util.PropertyManager;
-import jp.aegif.nemaki.util.StringPool;
-import jp.aegif.nemaki.util.NemakiTokenManager;
-import jp.aegif.nemaki.util.impl.PropertyManagerImpl;
-import jp.aegif.nemaki.util.yaml.RepositorySettings;
-
 import org.apache.chemistry.opencmis.client.api.ChangeEvent;
 import org.apache.chemistry.opencmis.client.api.ChangeEvents;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -52,10 +41,6 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.spi.CmisBinding;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -66,7 +51,19 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.core.CloseHook;
 import org.apache.solr.core.SolrCore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import jp.aegif.nemaki.NemakiCoreAdminHandler;
+import jp.aegif.nemaki.util.CmisSessionFactory;
+import jp.aegif.nemaki.util.Constant;
+import jp.aegif.nemaki.util.NemakiCacheManager;
+import jp.aegif.nemaki.util.NemakiTokenManager;
+import jp.aegif.nemaki.util.PropertyKey;
+import jp.aegif.nemaki.util.PropertyManager;
+import jp.aegif.nemaki.util.StringPool;
+import jp.aegif.nemaki.util.impl.PropertyManagerImpl;
+import jp.aegif.nemaki.util.yaml.RepositorySettings;
 
 /**
  * Index tracking class
@@ -174,7 +171,7 @@ public class CoreTracker extends CloseHook {
 		synchronized (LOCK) {
 			do {
 				ChangeEvents changeEvents = getCmisChangeLog(trackingType, repositoryId);
-				
+
 				if (changeEvents == null) {
 					logger.info("change evensts is null");
 					return;
@@ -186,9 +183,9 @@ public class CoreTracker extends CloseHook {
 
 				// After 2nd crawling, discard the first item
 				// Because the specs say that it's included in the results
-logger.info("actual num of events: " + events.size());
+				logger.info("actual num of events: " + events.size());
 				String token = readLatestChangeToken(repositoryId);
-logger.info("latest token: +" + token);
+				logger.info("latest token: +" + token);
 				if (StringUtils.isNotEmpty(token) && CollectionUtils.isNotEmpty(events)) {
 					events.remove(0);
 				}
@@ -210,12 +207,13 @@ logger.info("latest token: +" + token);
 				}
 
 				// Extract only the last events of each objectId
-logger.info("extraction start");
+				logger.info("extraction start");
 				List<ChangeEvent> list = extractChangeEvent(events);
 				logger.info("Extracted indexing of events : Repo={} Count={}", repositoryId, list.size());
 
 //				PropertyManager propMgr = new PropertyManagerImpl(StringPool.PROPERTIES_NAME);
-				int numberOfThread = Integer.valueOf(propertyManager.readValue(PropertyKey.SOLR_TRACKING_NUMBER_OF_THREAD));
+				int numberOfThread = Integer
+						.valueOf(propertyManager.readValue(PropertyKey.SOLR_TRACKING_NUMBER_OF_THREAD));
 				int numberPerThread = list.size() / numberOfThread;
 				if (list.size() < numberOfThread || numberPerThread == 0) {
 					numberOfThread = list.size();
@@ -254,7 +252,8 @@ logger.info("extraction start");
 				// Save the latest token
 				storeLatestChangeToken(changeEvents.getLatestChangeLogToken(), repositoryId);
 
-			} while (Constant.MODE_FULL.equals(trackingType));// In case of FUll mode, repeat until indexing all change logs
+			} while (Constant.MODE_FULL.equals(trackingType));// In case of FUll mode, repeat until indexing all change
+																// logs
 		}
 	}
 
@@ -329,10 +328,10 @@ logger.info("extraction start");
 		}
 
 		long numItems = (-1 == _numItems) ? Long.MAX_VALUE : Long.valueOf(_numItems);
-		logger.info("Call CMIS LastChangeToken={} Items={}", latestToken,numItems);
+		logger.info("Call CMIS LastChangeToken={} Items={}", latestToken, numItems);
 
 		Session cmisSession = CmisSessionFactory.getSession(repositoryId);
-logger.info("Session aquired");
+		logger.info("Session aquired");
 		if (cmisSession == null) {
 			logger.info("Cannot create cmis session to {}.", repositoryId);
 			return null;
