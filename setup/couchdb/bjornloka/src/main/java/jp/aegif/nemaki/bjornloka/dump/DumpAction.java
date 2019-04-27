@@ -18,12 +18,12 @@ import jp.aegif.nemaki.bjornloka.util.Indicator;
 import jp.aegif.nemaki.bjornloka.util.Util;
 
 public abstract class DumpAction {
-	
+
 	protected String url;
 	String repositoryId;
 	protected File file;
 	protected boolean omitTimestamp;
-	
+
 	public DumpAction(String url, String repositoryId, File file, boolean omitTimestamp) {
 		super();
 		this.url = Util.sanitizeUrl(url);
@@ -31,10 +31,10 @@ public abstract class DumpAction {
 		this.file = file;
 		this.omitTimestamp = omitTimestamp;
 	}
-	
-	public static DumpAction getInstance (String url, String repositoryId, File file, boolean omitTimestamp){
-		switch(Util.checkProxyType(url)){
-		case EKTORP: 
+
+	public static DumpAction getInstance(String url, String repositoryId, File file, boolean omitTimestamp) {
+		switch (Util.checkProxyType(url)) {
+		case EKTORP:
 			return new DumpEktorp(url, repositoryId, file, omitTimestamp);
 		case CLOUDANT:
 			return new DumpCloudant(url, repositoryId, file, omitTimestamp);
@@ -43,9 +43,8 @@ public abstract class DumpAction {
 	}
 
 	public abstract String dump();
-	
-	public static String action(CouchProxy client,
-			File file, boolean omitTimestamp){
+
+	public static String action(CouchProxy client, File file, boolean omitTimestamp) {
 		List<String> docIds = client.getAllDocIds();
 		System.out.println("alldoc keys:" + docIds.toString());
 
@@ -54,21 +53,21 @@ public abstract class DumpAction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		Indicator indicator = new Indicator(docIds.size());
 
 		int unit = 5000;
 		int turn = docIds.size() / unit;
 		System.out.println("Writing to " + file.getAbsolutePath() + " ...");
-		for(int i=0; i <= turn ; i++){
-			int toIndex = (unit*(i+1) > docIds.size()) ? docIds.size() : unit*(i+1);
+		for (int i = 0; i <= turn; i++) {
+			int toIndex = (unit * (i + 1) > docIds.size()) ? docIds.size() : unit * (i + 1);
 
-			List<String> keys = docIds.subList(i*unit, toIndex);
+			List<String> keys = docIds.subList(i * unit, toIndex);
 			System.out.println("subsystem keys:" + keys.toString());
 			List<ObjectNode> results = client.getDocs(keys);
-			
+
 			List<Entry> entries = new ArrayList<Entry>();
-			for(ObjectNode document : results){
+			for (ObjectNode document : results) {
 				Entry entry = new Entry();
 				entry.setDocument(document);
 				entry.setAttachments(client.getAttachments(document));
@@ -76,7 +75,8 @@ public abstract class DumpAction {
 				indicator.indicate();
 			}
 			try {
-				new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(new FileOutputStream(file, true), entries);
+				new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(new FileOutputStream(file, true),
+						entries);
 			} catch (JsonGenerationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -91,8 +91,8 @@ public abstract class DumpAction {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return file.getAbsolutePath();
-		
+
 	}
 }

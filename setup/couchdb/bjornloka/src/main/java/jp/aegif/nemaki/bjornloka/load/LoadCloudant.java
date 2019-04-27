@@ -5,7 +5,7 @@ import java.io.File;
 import jp.aegif.nemaki.bjornloka.proxy.CloudantFactory;
 import jp.aegif.nemaki.bjornloka.proxy.CloudantProxy;
 
-public class LoadCloudant extends LoadAction{
+public class LoadCloudant extends LoadAction {
 	private String url;
 	private String repositoryId;
 	private File file;

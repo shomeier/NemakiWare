@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import com.cloudant.client.api.model.Document;
@@ -40,12 +41,12 @@ public class CloudantProxy implements CouchProxy {
 	}
 
 	@Override
-	//TODO can get just ids somehow?
+	// TODO can get just ids somehow?
 	public List<String> getAllDocIds() {
 		List<Document> docs = database.view("_all_docs").includeDocs(true).query(Document.class);
 		System.out.println("docs num:" + docs.size());
 		List<String> result = new ArrayList<String>();
-		for(Document doc : docs){
+		for (Document doc : docs) {
 			result.add(doc.getId());
 		}
 		return result;
@@ -54,28 +55,29 @@ public class CloudantProxy implements CouchProxy {
 	@Override
 	public List<ObjectNode> getDocs(List<String> keys) {
 		List<ObjectNode> result = new ArrayList<ObjectNode>();
-		for(String key : keys){
-			if(key == null){
+		for (String key : keys) {
+			if (key == null) {
 				continue;
 			}
 			System.out.println(key);
-			
+
 			InputStream is = database.find(key);
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				JsonNode jackson = mapper.readTree(is);
-				result.add((ObjectNode)jackson);
+				result.add((ObjectNode) jackson);
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
-		
+
 		return result;
 	}
 
+	@Override
 	public Map<String, Map<String, Object>> getAttachments(JsonNode o) {
 
 		String docId = o.get(StringPool.FIELD_ID).textValue();

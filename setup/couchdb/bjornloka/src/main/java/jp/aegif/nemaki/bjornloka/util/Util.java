@@ -39,35 +39,34 @@ public class Util {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		return sdf.format(date);
 	}
-	
-	public static ProxyType checkProxyType(String url){
+
+	public static ProxyType checkProxyType(String url) {
 		try {
 			URL _url = new URL(url);
-			//TODO trim slash
-			if(_url.getHost().endsWith("cloudant.com") || 
-				_url.getHost().endsWith("cloudant.com/")){
+			// TODO trim slash
+			if (_url.getHost().endsWith("cloudant.com") || _url.getHost().endsWith("cloudant.com/")) {
 				return ProxyType.CLOUDANT;
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return ProxyType.EKTORP;
 	}
-	
-	public static JsonObject convertToGson(ObjectNode jackson){
+
+	public static JsonObject convertToGson(ObjectNode jackson) {
 		String json = jackson.toString();
 		JsonObject gson = new Gson().fromJson(json, JsonObject.class);
 		return gson;
 	}
-	
-	public static ObjectNode convertToJackson(JsonObject gson){
+
+	public static ObjectNode convertToJackson(JsonObject gson) {
 		String json = gson.toString();
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jackson;
 		try {
 			jackson = mapper.readTree(json);
-			return (ObjectNode)jackson;
+			return (ObjectNode) jackson;
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -75,9 +74,9 @@ public class Util {
 		}
 		return null;
 	}
-	
-	//izPack replace "/" to "¥" in arguments
-	public static String sanitizeUrl(String url){
+
+	// izPack replace "/" to "¥" in arguments
+	public static String sanitizeUrl(String url) {
 		return url.replaceAll("\\\\", "/");
 	}
 }

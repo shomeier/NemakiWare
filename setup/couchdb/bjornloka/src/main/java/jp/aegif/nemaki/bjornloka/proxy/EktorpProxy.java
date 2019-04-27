@@ -17,15 +17,14 @@ import org.ektorp.ViewQuery;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.gson.JsonObject;
 
 import jp.aegif.nemaki.bjornloka.StringPool;
 import jp.aegif.nemaki.bjornloka.util.Util;
 
-public class EktorpProxy implements CouchProxy{
+public class EktorpProxy implements CouchProxy {
 	CouchDbInstance dbInstance;
 	CouchDbConnector connector;
-	
+
 	public EktorpProxy(CouchDbInstance dbInstance, CouchDbConnector connector) {
 		super();
 		this.connector = connector;
@@ -68,8 +67,7 @@ public class EktorpProxy implements CouchProxy{
 				Map<String, Object> attachment = new HashMap<String, Object>();
 
 				// Content type
-				String contentType = _attachment.get(
-						StringPool.FIELD_CONTENT_TYPE).textValue();
+				String contentType = _attachment.get(StringPool.FIELD_CONTENT_TYPE).textValue();
 				attachment.put(StringPool.FIELD_CONTENT_TYPE, contentType);
 
 				// Data
@@ -82,50 +80,53 @@ public class EktorpProxy implements CouchProxy{
 					System.err.println("Fail to read binary data: docId=" + docId + ", attachment=" + attachmentId);
 					e.printStackTrace();
 				}
-				
+
 				attachments.put(attachmentId, attachment);
 			}
 		}
 
 		return attachments;
 	}
-	
-	//Return error list
-	public List<String> bulkInsert(List<ObjectNode> subList){
-		//List<DocumentOperationResult> result = connector.executeAllOrNothing(subList);
+
+	// Return error list
+	@Override
+	public List<String> bulkInsert(List<ObjectNode> subList) {
+		// List<DocumentOperationResult> result =
+		// connector.executeAllOrNothing(subList);
 		List<DocumentOperationResult> result = new ArrayList<DocumentOperationResult>();
-		for(Object o : subList){
-			System.out.println(((ObjectNode)o).toString());
-			connector.create((ObjectNode)o);
+		for (Object o : subList) {
+			System.out.println(((ObjectNode) o).toString());
+			connector.create(o);
 		}
-		
+
 		List<String> list = new ArrayList<String>();
-		if(result == null || (result != null && result.size() > 0)){ //TODO
-			for(DocumentOperationResult r : result){
+		if (result == null || (result != null && result.size() > 0)) { // TODO
+			for (DocumentOperationResult r : result) {
 				list.add(r.getId());
 			}
 		}
-		
+
 		return list;
 	}
-	
-	//docId = entry.getKey()
-	public void createAttachment(String docId, String attachmentId, ObjectNode attachment) throws Exception{
-		//Binary data
+
+	// docId = entry.getKey()
+	@Override
+	public void createAttachment(String docId, String attachmentId, ObjectNode attachment) throws Exception {
+		// Binary data
 		byte[] data = null;
 		data = attachment.get(StringPool.FIELD_DATA).binaryValue();
 		InputStream _data = new ByteArrayInputStream(data);
 
-		//Content type
+		// Content type
 		String contentType = attachment.get(StringPool.FIELD_CONTENT_TYPE).asText();
 
-		//Build attachment input stream
+		// Build attachment input stream
 		AttachmentInputStream ais = new AttachmentInputStream(attachmentId, _data, contentType);
 
-		//Get revision to avoid a conflict
+		// Get revision to avoid a conflict
 		String revision = connector.getCurrentRevision(docId);
 
-		//Create attachement
+		// Create attachement
 		connector.createAttachment(docId, revision, ais);
 	}
 }
