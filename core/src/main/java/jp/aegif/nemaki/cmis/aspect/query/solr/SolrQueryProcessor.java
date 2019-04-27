@@ -38,6 +38,7 @@ import org.apache.chemistry.opencmis.commons.data.ObjectList;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinitionContainer;
 import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ObjectListImpl;
 import org.apache.chemistry.opencmis.commons.server.CallContext;
 import org.apache.chemistry.opencmis.server.support.query.QueryObject;
@@ -151,11 +152,13 @@ public class SolrQueryProcessor implements QueryProcessor {
 		// Get where caluse as Tree
 		Tree whereTree = null;
 		try {
-			util.processStatement();
-			Tree tree = util.parseStatement();
-			whereTree = extractWhereTree(tree);
+			util.processStatementUsingCmisExceptions();
+//			Tree tree = util.parseStatement();
+			whereTree = util.getWalker().getWherePredicateTree();
+//			whereTree = extractWhereTree(tree);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new CmisRuntimeException("Error while parsing SQL statement", e);
 		}
 
 		// Build solr statement of WHERE
@@ -202,10 +205,10 @@ public class SolrQueryProcessor implements QueryProcessor {
 			tables.add(table.replaceAll(":", "\\\\:"));
 		}
 
-//		Term t = new Term(
-//				solrUtil.getPropertyNameInSolr(PropertyIds.OBJECT_TYPE_ID),
-//				StringUtils.join(tables, " "));
-//		fromQueryString += new TermQuery(t).toString();
+		// Term t = new Term(
+		// solrUtil.getPropertyNameInSolr(PropertyIds.OBJECT_TYPE_ID),
+		// StringUtils.join(tables, " "));
+		// fromQueryString += new TermQuery(t).toString();
 		fromQueryString += "(" + solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.OBJECT_TYPE_ID) + ":"
 				+ StringUtils.join(tables,
 						" " + solrUtil.getPropertyNameInSolr(repositoryId, PropertyIds.OBJECT_TYPE_ID) + ":")
@@ -213,7 +216,8 @@ public class SolrQueryProcessor implements QueryProcessor {
 
 		// Execute query
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setQuery(whereQueryString);
+		String replaced = whereQueryString.replaceAll("\\\\\\\\\\\\:", "\\\\:");
+		solrQuery.setQuery(replaced);
 		solrQuery.setFilterQueries(fromQueryString);
 
 		logger.info(solrQuery.toString());
