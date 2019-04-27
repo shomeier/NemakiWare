@@ -26,7 +26,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.junit.jupiter.api.Test;
 
-public class MultiThreadTest extends TestBase {
+public class MultiThreadTest extends TestBaseMultiThread {
 	@Test
 	public void readTest_All() throws InterruptedException {
 		// document ids
