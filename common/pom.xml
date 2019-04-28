@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 	<name>common</name>
 	<description>Nemakiware Common Library</description>
-	<url>https://github.com/aegif/NemakiWare</url>
+	<url>https://github.com/shomeier/NemakiWare</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

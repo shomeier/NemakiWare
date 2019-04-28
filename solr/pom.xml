@@ -7,7 +7,7 @@
 	<version>${nemakiware.version}</version>
 	<name>solr</name>
 	<description>Solr customized for Nemakiware</description>
-	<url>https://github.com/aegif/NemakiWare</url>
+	<url>https://github.com/shomeier/NemakiWare</url>
 
 	<parent>
 		<groupId>jp.aegif.nemakiware</groupId>

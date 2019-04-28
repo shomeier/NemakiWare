@@ -8,7 +8,7 @@
 	<version>0.0.6</version>
 	<name>action</name>
 	<description>NemakiWare Action Interface</description>
-	<url>https://github.com/aegif/NemakiWare</url>
+	<url>https://github.com/shomeier/NemakiWare</url>
 
 	<properties>
 		<org.springframework.version>4.1.1.RELEASE</org.springframework.version>

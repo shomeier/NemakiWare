@@ -9,7 +9,7 @@
 	<version>${nemakiware.version}</version>
 	<name>core</name>
 	<description>NemakiWare Core Server</description>
-	<url>https://github.com/aegif/NemakiWare</url>
+	<url>https://github.com/shomeier/NemakiWare</url>
 
 	<parent>
 		<groupId>jp.aegif.nemakiware</groupId>
