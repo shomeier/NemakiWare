@@ -22,7 +22,7 @@ public abstract class AbstractITest {
 
 	@BeforeAll
 	public static void before() throws Exception {
-		session = SessionUtil.createCmisSession("bedroom", "admin", "admin");
+		session = SessionUtil.createCmisSession("itest", "admin", "admin");
 		testFolderId = createTestFolder();
 	}
 

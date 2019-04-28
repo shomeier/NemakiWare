@@ -14,6 +14,8 @@ import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ObjectId;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -32,7 +34,8 @@ public class CreateDocumentItest extends AbstractITest {
 		String documentId = createDocument(testFolderId, testName, testContent);
 		assertNotNull(documentId);
 
-		CmisObject object = session.getObject(documentId);
+		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME);
+		CmisObject object = session.getObject(documentId, opCtx);
 		Document document = (Document) object;
 		List<Folder> parents = document.getParents();
 		assertTrue(parents.size() == 1);
@@ -40,7 +43,8 @@ public class CreateDocumentItest extends AbstractITest {
 		String parentFolderId = parentFolder.getId();
 		assertTrue(testFolderId.equals(parentFolderId));
 
-		assertTrue(testName.equals(document.getName()));
+		String documentName = document.getName();
+		assertTrue(testName.equals(documentName));
 
 		ContentStream contentStream = document.getContentStream();
 		String contentString = new BufferedReader(new InputStreamReader(contentStream.getStream()))
