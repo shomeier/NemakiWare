@@ -5,6 +5,9 @@ repositories:
   - id: bedroom
     name: bedroom
     archive: bedroom_closet
+  - id: itest
+    name: itest
+    archive: itest_closet
   - id: lingo
     name: lingo
     archive: lingo_closet

@@ -6,6 +6,9 @@ settings:
 #   bedroom: !jp.aegif.nemaki.util.yaml.RepositorySetting
 #      password: solr
 #      user: solr
+   itest: !jp.aegif.nemaki.util.yaml.RepositorySetting
+      password: solr
+      user: solr
    lingo: !jp.aegif.nemaki.util.yaml.RepositorySetting
       password: solr
       user: solr
