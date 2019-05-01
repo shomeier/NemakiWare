@@ -40,8 +40,8 @@ import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient.Builder;
 
 import jp.aegif.nemaki.businesslogic.TypeService;
 import jp.aegif.nemaki.model.NemakiPropertyDefinitionCore;
@@ -98,9 +98,9 @@ public class SolrUtil {
 	 *
 	 * @return
 	 */
-	public SolrServer getSolrServer() {
+	public SolrClient getSolrServer() {
 		String url = getSolrUrl();
-		return new HttpSolrServer(url);
+		return new Builder(url).build();
 	}
 
 	/**

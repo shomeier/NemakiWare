@@ -21,6 +21,7 @@
  ******************************************************************************/
 package jp.aegif.nemaki.cmis.aspect.query.solr;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,8 +49,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.search.Query;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -138,7 +139,7 @@ public class SolrQueryProcessor implements QueryProcessor {
 			Boolean includeAllowableActions, IncludeRelationships includeRelationships, String renditionFilter,
 			BigInteger maxItems, BigInteger skipCount, ExtensionsData extension) {
 
-		SolrServer solrServer = solrUtil.getSolrServer();
+		SolrClient solrServer = solrUtil.getSolrServer();
 		// replacing backslashed for TIMESTAMP only
 		Pattern time_p = Pattern.compile("(TIMESTAMP\\s?'[\\-\\d]*T\\d{2})\\\\:(\\d{2})\\\\:([\\.\\d]*Z')",
 				Pattern.CASE_INSENSITIVE);
@@ -238,7 +239,7 @@ public class SolrQueryProcessor implements QueryProcessor {
 		QueryResponse resp = null;
 		try {
 			resp = solrServer.query(solrQuery);
-		} catch (SolrServerException e) {
+		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();
 		}
 
