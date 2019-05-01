@@ -27,34 +27,40 @@
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-core</artifactId>
 			<version>${org.apache.solr.version}</version>
+			<!--
 			<exclusions>
 				<exclusion>
 					<groupId>log4j</groupId>
 					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
+			-->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
 			<version>${org.apache.solr.version}</version>
+			<!--
 			<exclusions>
 				<exclusion>
 					<groupId>log4j</groupId>
 					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
+			-->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-cell</artifactId>
 			<version>${org.apache.solr.version}</version>
+			<!--
 			<exclusions>
 				<exclusion>
 					<groupId>log4j</groupId>
 					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
+			-->
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
@@ -202,7 +208,7 @@
 			<plugin>
 				  <groupId>org.eclipse.jetty</groupId>
 				  <artifactId>jetty-maven-plugin</artifactId>
-				  <version>9.3.12.v20160915</version>
+				  <version>9.4.18.v20190429</version>
 				<configuration>
 					<scanIntervalSeconds>1</scanIntervalSeconds>
 					<stopPort>9968</stopPort>
