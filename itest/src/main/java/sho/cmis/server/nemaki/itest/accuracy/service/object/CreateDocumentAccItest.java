@@ -5,27 +5,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
-import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
-import org.apache.chemistry.opencmis.commons.enums.VersioningState;
-import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.junit.jupiter.api.Test;
 
 import sho.cmis.server.nemaki.itest.AbstractITest;
 
-public class CreateDocumentItest extends AbstractITest {
+public class CreateDocumentAccItest extends AbstractITest {
 
 	@Test
 	public void test_createDocument() {
@@ -47,21 +41,8 @@ public class CreateDocumentItest extends AbstractITest {
 		assertTrue(testName.equals(documentName));
 
 		ContentStream contentStream = document.getContentStream();
-		String contentString = new BufferedReader(new InputStreamReader(contentStream.getStream()))
-				  .lines().collect(Collectors.joining("\n"));
+		String contentString = new BufferedReader(new InputStreamReader(contentStream.getStream())).lines()
+				.collect(Collectors.joining("\n"));
 		assertTrue(testContent.equals(contentString));
-	}
-
-	private String createDocument(String parentId, String name, String string) {
-		Map<String, Object> map = new HashMap<>();
-		map.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
-		map.put(PropertyIds.NAME, name);
-
-		ContentStream contentStream = new ContentStreamImpl(name, "text/plain", string);
-
-		ObjectId objectId = session.createDocument(map, session.createObjectId(parentId), contentStream,
-				VersioningState.MAJOR);
-
-		return objectId.getId();
 	}
 }

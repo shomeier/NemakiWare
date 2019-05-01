@@ -8,8 +8,11 @@ import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -41,5 +44,18 @@ public abstract class AbstractITest {
 		map.put(PropertyIds.NAME, "testFolder_" + System.currentTimeMillis());
 		ObjectId result = session.createFolder(map, new ObjectIdImpl(rootFolderId));
 		return result.getId();
+	}
+
+	protected static String createDocument(String parentId, String name, String string) {
+		Map<String, Object> map = new HashMap<>();
+		map.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
+		map.put(PropertyIds.NAME, name);
+
+		ContentStream contentStream = new ContentStreamImpl(name, "text/plain", string);
+
+		ObjectId objectId = session.createDocument(map, session.createObjectId(parentId), contentStream,
+				VersioningState.MAJOR);
+
+		return objectId.getId();
 	}
 }
