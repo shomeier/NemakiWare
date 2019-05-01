@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<solr>
+	<str name="adminHandler">jp.aegif.nemaki.NemakiCoreAdminHandler</str>
+	<str name="sharedLib">lib</str>
+</solr>
+
+<!--
 <solr persistent="true" sharedLib="lib">
   <cores defaultCoreName="nemaki" adminHandler="jp.aegif.nemaki.NemakiCoreAdminHandler" adminPath="/admin/cores" zkClientTimeout="${zkClientTimeout:15000}" hostPort="8983" hostContext="solr">
     <core instanceDir="nemaki/" name="nemaki"/>
-	<core instanceDir="token/" name="token"/>    
+	<core instanceDir="token/" name="token"/>
   </cores>
 </solr>
+-->

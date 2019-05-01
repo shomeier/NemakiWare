@@ -28,7 +28,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.common.params.CoreAdminParams;
 import org.apache.solr.common.params.SolrParams;
@@ -60,7 +60,7 @@ import jp.aegif.nemaki.util.yaml.RepositorySettings;
 
 /**
  * Solr core handler classs Called on server start up & user request via RESTful
- * 
+ *
  * @author linzhixing
  *
  */
@@ -83,8 +83,8 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 		String repositoryCorename = pm.readValue(PropertyKey.SOLR_CORE_MAIN);
 		String tokenCoreName = pm.readValue(PropertyKey.SOLR_CORE_TOKEN);
 
-		SolrServer repositoryServer = new EmbeddedSolrServer(coreContainer, repositoryCorename);
-		SolrServer tokenServer = new EmbeddedSolrServer(coreContainer, tokenCoreName);
+		SolrClient repositoryServer = new EmbeddedSolrServer(coreContainer, repositoryCorename);
+		SolrClient tokenServer = new EmbeddedSolrServer(coreContainer, tokenCoreName);
 
 		SolrCore core = getCoreContainer().getCore(repositoryCorename);
 		CoreTracker tracker = new CoreTracker(this, core, repositoryServer, tokenServer);
@@ -142,8 +142,8 @@ public class NemakiCoreAdminHandler extends CoreAdminHandler {
 		String indexCoreName = params.get(CoreAdminParams.CORE);
 		String tokenCoreName = "token";
 
-		SolrServer indexServer = new EmbeddedSolrServer(coreContainer, indexCoreName);
-		SolrServer tokenServer = new EmbeddedSolrServer(coreContainer, tokenCoreName);
+		SolrClient indexServer = new EmbeddedSolrServer(coreContainer, indexCoreName);
+		SolrClient tokenServer = new EmbeddedSolrServer(coreContainer, tokenCoreName);
 		SolrCore core = getCoreContainer().getCore(indexCoreName);
 		CoreTracker tracker = new CoreTracker(this, core, indexServer, tokenServer);
 
