@@ -38,7 +38,7 @@
     catchall "text" field, and use that for searching.
 -->
 
-<schema name="token" version="1.6">
+<schema name="nemaki" version="1.6">
     <!-- attribute "name" is the name of this schema and is only used for display purposes.
        version="x.y" is Solr's version number for the schema syntax and
        semantics.  It should not normally be changed by applications.
@@ -99,9 +99,39 @@
       trailing underscores (e.g. _version_) are reserved.
     -->
 
-    <!-- id is use as repositoryId -->
-   <field name="repository_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+	<!-- Latest change token-->
    <field name="change_token" type="string" indexed="true" stored="true" required="false" multiValued="false" />
+
+   <!-- NemakiWare CMIS properties -->
+	<field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+   <field name="repository_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+   <field name="object_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+   <field name="name" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="cmis_description" type="string" indexed="true" stored="true"/>
+   <field name="created" type="pdate" indexed="true" stored="true" multiValued="false" />
+   <field name="creator" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="modified" type="pdate" indexed="true" stored="true" multiValued="false" />
+   <field name="modifier" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="basetype" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="objecttype" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="secondary_object_type_ids" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="is_latest_version" type="boolean" indexed="true" stored="true" multiValued="false" />
+   <field name="is_major_version" type="boolean" indexed="true" stored="true" multiValued="false" />
+   <field name="is_pwc" type="boolean" indexed="true" stored="true" multiValued="false" />
+   <field name="is_checkedout" type="boolean" indexed="true" stored="true" multiValued="false" />
+   <field name="checkedout_id" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="checkedout_by" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="checkein_comment" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="version_label" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="version_series_id" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="content_name" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="content_id" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="content_length" type="plong" indexed="true" stored="true" multiValued="false" />
+   <field name="content_mimetype" type="string" indexed="true" stored="true" multiValued="false" />
+
+   <field name="parent_id" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="path" type="string" indexed="true" stored="true" multiValued="false" />
 
     <!-- In this _default configset, only four fields are pre-declared:
          id, _version_, and _text_ and _root_. All other fields will be type guessed and added via the
@@ -172,7 +202,7 @@
     <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field
     -->
-     <uniqueKey>repository_id</uniqueKey>
+    <uniqueKey>id</uniqueKey>
 
     <!-- copyField commands copy one field to another at the time a document
        is added to the index.  It's used either to index the same field differently,
