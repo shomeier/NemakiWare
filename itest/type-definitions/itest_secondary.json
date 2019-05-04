@@ -1,0 +1,96 @@
+{
+	"id": "S:itest:secondary",
+	"localName": "itest:secondary",
+	"localNamespace": "sho\/model\/itest",
+	"displayName": "itest:secondary",
+	"queryName": "itest:secondary",
+	"description": "itest:secondary",
+	"baseId": "cmis:secondary",
+	"parentId": "cmis:secondary",
+	"creatable": false,
+	"fileable": false,
+	"queryable": true,
+	"fulltextIndexed": true,
+	"includedInSupertypeQuery": true,
+	"controllablePolicy": false,
+	"controllableACL": false,
+	"typeMutability": {
+		"create": true,
+		"update": false,
+		"delete": false
+	},
+	"propertyDefinitions": {
+		"itest:part_of_speech": {
+			"defaultValue": "noun",
+			"choice": [
+				{
+					"displayName": "noun",
+					"value": "noun"
+				},
+				{
+					"displayName": "verb",
+					"value": "verb"
+				},
+				{
+					"displayName": "adjective",
+					"value": "adjective"
+				},
+				{
+					"displayName": "adverb",
+					"value": "adverb"
+				},
+				{
+					"displayName": "pronoun",
+					"value": "pronoun"
+				},
+				{
+					"displayName": "preposition",
+					"value": "preposition"
+				},
+				{
+					"displayName": "determiner",
+					"value": "determiner"
+				},
+				{
+					"displayName": "conjunction",
+					"value": "conjunction"
+				},
+				{
+					"displayName": "interjection",
+					"value": "interjection"
+				}
+			],
+			"id": "itest:part_of_speech",
+			"localName": "part_of_speech",
+			"localNamespace": "sho\/model\/itest",
+			"displayName": "itest:part_of_speech",
+			"queryName": "itest:part_of_speech",
+			"description": "itest:part_of_speech",
+			"propertyType": "string",
+			"cardinality": "single",
+			"updatability": "readwrite",
+			"inherited": false,
+			"required": true,
+			"queryable": true,
+			"orderable": true,
+			"openChoice": false
+		},
+		"itest:multi_string": {
+			"defaultValue": "default",
+			"id": "itest:multi_string",
+			"localName": "itest:multi_string",
+			"localNamespace": "sho\/model\/itest",
+			"displayName": "itest:multi_string",
+			"queryName": "itest:multi_string",
+			"description": "itest:multi_string",
+			"propertyType": "string",
+			"cardinality": "multi",
+			"updatability": "readwrite",
+			"inherited": false,
+			"required": true,
+			"queryable": true,
+			"orderable": false,
+			"openChoice": false
+		}
+	}
+}

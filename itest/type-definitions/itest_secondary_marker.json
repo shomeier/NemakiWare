@@ -1,0 +1,22 @@
+{
+	"id": "S:itest:secondary_marker",
+	"localName": "itest:secondary_marker",
+	"localNamespace": "sho\/model\/itest",
+	"displayName": "itest:secondary_marker",
+	"queryName": "itest:secondary_marker",
+	"description": "itest:secondary_marker",
+	"baseId": "cmis:secondary",
+	"parentId": "cmis:secondary",
+	"creatable": false,
+	"fileable": false,
+	"queryable": true,
+	"fulltextIndexed": true,
+	"includedInSupertypeQuery": true,
+	"controllablePolicy": false,
+	"controllableACL": false,
+	"typeMutability": {
+		"create": true,
+		"update": false,
+		"delete": false
+	}
+}
