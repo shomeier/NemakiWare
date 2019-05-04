@@ -1,7 +1,6 @@
 package sho.cmis.server.nemaki.itest.accuracy.service.discovery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -27,8 +26,9 @@ public class QueryAccItest extends AbstractITest {
 
 	private static final Logger LOG = LoggerFactory.getLogger(QueryAccItest.class);
 
-	private static String URL_REINDEX = "http://localhost:8983/solr/admin/cores?core=nemaki&action=init?repositoryId=itest";
-	private static String URL_REINDEX_FROM_LAST_TOKEN = "http://localhost:8983/solr/admin/cores?core=nemaki&action=index&tracking=FULL?repositoryId=itest";
+	private static String URL_INIT = "http://localhost:8983/solr/admin/cores?core=nemaki&action=init&repositoryId=itest";
+	private static String URL_REINDEX_FROM_LAST_TOKEN = "http://localhost:8983/solr/admin/cores?core=nemaki&action=index&tracking=DELTA&repositoryId=itest";
+	private static String URL_REINDEX_FULL = "http://localhost:8983/solr/admin/cores?core=nemaki&action=index&tracking=FULL&repositoryId=itest";
 
 	private static String documentName = "testDocument";
 	private static String documentContent = "testContent";
@@ -39,32 +39,28 @@ public class QueryAccItest extends AbstractITest {
 		AbstractITest.before();
 		documentId = createDocument(testFolderId, documentName, documentContent);
 
-		URL url = new URL(URL_REINDEX);
-//		URL url = new URL(URL_REINDEX_FROM_LAST_TOKEN);
+		URL url = new URL(URL_REINDEX_FULL);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		String contentString = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
 				.collect(Collectors.joining("\n"));
 		LOG.info(contentString);
-		Thread.sleep(10000);
 	}
 
 	@AfterAll
 	public static void after() throws Exception {
 		AbstractITest.after();
 
-		URL url = new URL(URL_REINDEX);
-//		URL url = new URL(URL_REINDEX_FROM_LAST_TOKEN);
+		URL url = new URL(URL_INIT);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		String contentString = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
 				.collect(Collectors.joining("\n"));
 		LOG.info(contentString);
-		Thread.sleep(10000);
 	}
 
 	@Test
-	public void test_query() {
+	public void test_query_equalsCmisName() {
 
 		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME);
 		opCtx.setIncludeAllowableActions(true);
@@ -72,7 +68,7 @@ public class QueryAccItest extends AbstractITest {
 		ItemIterable<QueryResult> query = session.query(statement, false, opCtx);
 		assertEquals(1, query.getTotalNumItems());
 		QueryResult result = query.iterator().next();
-		PropertyData<Object> retName = result.getPropertyById(PropertyIds.NAME);
-		assertTrue(documentName.equals(retName));
+		PropertyData<Object> propName = result.getPropertyById(PropertyIds.NAME);
+		assertEquals(documentName, propName.getFirstValue());
 	}
 }
