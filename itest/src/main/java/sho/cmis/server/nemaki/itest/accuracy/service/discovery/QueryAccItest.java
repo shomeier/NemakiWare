@@ -15,6 +15,7 @@ import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.PropertyData;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -38,7 +39,22 @@ public class QueryAccItest extends AbstractITest {
 		AbstractITest.before();
 		documentId = createDocument(testFolderId, documentName, documentContent);
 
-		URL url = new URL(URL_REINDEX_FROM_LAST_TOKEN);
+		URL url = new URL(URL_REINDEX);
+//		URL url = new URL(URL_REINDEX_FROM_LAST_TOKEN);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		String contentString = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
+				.collect(Collectors.joining("\n"));
+		LOG.info(contentString);
+		Thread.sleep(10000);
+	}
+
+	@AfterAll
+	public static void after() throws Exception {
+		AbstractITest.after();
+
+		URL url = new URL(URL_REINDEX);
+//		URL url = new URL(URL_REINDEX_FROM_LAST_TOKEN);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		String contentString = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
@@ -51,6 +67,7 @@ public class QueryAccItest extends AbstractITest {
 	public void test_query() {
 
 		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME);
+		opCtx.setIncludeAllowableActions(true);
 		String statement = "SELECT cmis:name FROM cmis:document WHERE cmis:name='" + documentName + "'";
 		ItemIterable<QueryResult> query = session.query(statement, false, opCtx);
 		assertEquals(1, query.getTotalNumItems());
