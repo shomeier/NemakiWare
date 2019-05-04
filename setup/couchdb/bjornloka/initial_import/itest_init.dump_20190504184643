@@ -1,0 +1,1431 @@
+[ {
+  "document" : {
+    "_id" : "18d9eb1d9a6c624a63013e9e2a2ca16c",
+    "_rev" : "1-024e41d0dd6b3597be78fc5db866c76b",
+    "creator" : "system",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "queryName" : "nemaki:tag",
+    "propertyType" : "STRING",
+    "cardinality" : "MULTI",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:tag"
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb03be13",
+    "_rev" : "2-8ef419375ef2b721b115bce05027a2c7",
+    "type" : "cmis:folder",
+    "created" : "2019-05-04T11:03:14.961+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:14.961+0000",
+    "modifier" : "system",
+    "name" : ".system",
+    "parentId" : "e02f784f8360a02cc14d1314c10038ff",
+    "acl" : {
+      "entries" : [ {
+        "principal" : "system",
+        "permissions" : [ "cmis:all" ]
+      }, {
+        "principal" : "GROUP_EVERYONE",
+        "permissions" : [ "cmis:none" ]
+      } ]
+    },
+    "aclInherited" : true,
+    "subTypeProperties" : [ ],
+    "aspects" : [ ],
+    "objectType" : "cmis:folder",
+    "changeToken" : "4db8cfa24884751cf7336dc3eb03c787",
+    "allowedChildTypeIds" : [ "cmis:folder", "cmis:document", "cmis:item" ],
+    "folder" : true,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : true
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb03c787",
+    "_rev" : "1-d653450b462a114e4acee9d10f58c7aa",
+    "type" : "change",
+    "created" : "2019-05-04T11:03:15.084+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:15.084+0000",
+    "modifier" : "system",
+    "name" : ".system",
+    "baseType" : "cmis:folder",
+    "objectType" : "cmis:folder",
+    "objectId" : "4db8cfa24884751cf7336dc3eb03be13",
+    "token" : 1556967795084,
+    "changeType" : "CREATED",
+    "time" : "2019-05-04T11:03:14.961+0000",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb03d649",
+    "_rev" : "2-1c27b2c08d7557a89ab8f00c7609c279",
+    "type" : "configuration",
+    "configuration" : {
+      "system.folder" : "4db8cfa24884751cf7336dc3eb03be13"
+    },
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb03e2e8",
+    "_rev" : "1-77c916341ab4c425c32e55442f31923c",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:email",
+    "propertyType" : "STRING",
+    "queryName" : "nemaki:email",
+    "cardinality" : "SINGLE",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb03ec79",
+    "_rev" : "1-eaae02feb6d5ffda08c1505b9ad61662",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb03e2e8",
+    "localName" : "nemaki:email",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "nemaki:email",
+    "updatability" : "READWRITE",
+    "required" : false,
+    "queryable" : true,
+    "orderable" : true,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb03f9f4",
+    "_rev" : "1-a32656bd72d7560688bd28555f041d7f",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:firstName",
+    "propertyType" : "STRING",
+    "queryName" : "nemaki:firstName",
+    "cardinality" : "SINGLE",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb03fea6",
+    "_rev" : "1-ea73b082657647afa9d0aa5e4dc94abf",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb03f9f4",
+    "localName" : "nemaki:firstName",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "nemaki:firstName",
+    "updatability" : "READWRITE",
+    "required" : false,
+    "queryable" : true,
+    "orderable" : true,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb040190",
+    "_rev" : "1-ca648840179a7d0a7f4f4eaa8ce9ac32",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:userId",
+    "propertyType" : "STRING",
+    "queryName" : "nemaki:userId",
+    "cardinality" : "SINGLE",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb040880",
+    "_rev" : "1-fb4eeed226d885beea0d00df0a85440c",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb040190",
+    "localName" : "nemaki:userId",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "nemaki:userId",
+    "updatability" : "ONCREATE",
+    "required" : true,
+    "queryable" : true,
+    "orderable" : true,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb0412c1",
+    "_rev" : "1-fe96c6df0e7a7d4b5d68a32f4f601335",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:lastName",
+    "propertyType" : "STRING",
+    "queryName" : "nemaki:lastName",
+    "cardinality" : "SINGLE",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb041db4",
+    "_rev" : "1-1b4a02f5ad5e0b40e7e6adb74c401c55",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb0412c1",
+    "localName" : "nemaki:lastName",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "nemaki:lastName",
+    "updatability" : "READWRITE",
+    "required" : false,
+    "queryable" : true,
+    "orderable" : true,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb042031",
+    "_rev" : "1-5dd3f66fa988b547455f7176f3f5f9b5",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:favorites",
+    "propertyType" : "STRING",
+    "queryName" : "nemaki:favorites",
+    "cardinality" : "MULTI",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb042c0a",
+    "_rev" : "1-1498f6d03e61ee71d48333c0f82b7167",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb042031",
+    "localName" : "nemaki:favorites",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "nemaki:favorites",
+    "updatability" : "READWRITE",
+    "required" : false,
+    "queryable" : true,
+    "orderable" : false,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb043884",
+    "_rev" : "1-7c663c31cbf9c40d5e340533c02535f2",
+    "type" : "typeDefinition",
+    "typeId" : "nemaki:user",
+    "localName" : "nemaki:user",
+    "queryName" : "nemaki:user",
+    "displayName" : "nemaki:user",
+    "baseId" : "CMIS_ITEM",
+    "parentId" : "cmis:item",
+    "description" : "nemaki:user",
+    "creatable" : true,
+    "filable" : true,
+    "queryable" : true,
+    "controllablePolicy" : false,
+    "controllableACL" : true,
+    "fulltextIndexed" : false,
+    "includedInSupertypeQuery" : true,
+    "typeMutabilityCreate" : true,
+    "typeMutabilityUpdate" : false,
+    "typeMutabilityDelete" : false,
+    "properties" : [ "4db8cfa24884751cf7336dc3eb03ec79", "4db8cfa24884751cf7336dc3eb03fea6", "4db8cfa24884751cf7336dc3eb040880", "4db8cfa24884751cf7336dc3eb041db4", "4db8cfa24884751cf7336dc3eb042c0a" ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb044816",
+    "_rev" : "1-dced3fc531d18533d5e516e971bfbf7a",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:groups",
+    "propertyType" : "STRING",
+    "queryName" : "nemaki:groups",
+    "cardinality" : "MULTI",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb044eac",
+    "_rev" : "1-2e5395e5c2a9509c03cd7b5343710e65",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb044816",
+    "localName" : "nemaki:groups",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "nemaki:groups",
+    "updatability" : "READWRITE",
+    "required" : false,
+    "queryable" : true,
+    "orderable" : false,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb045345",
+    "_rev" : "1-062623fc87b48ebe6bae5293bd50087c",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:groupId",
+    "propertyType" : "STRING",
+    "queryName" : "nemaki:groupId",
+    "cardinality" : "SINGLE",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb045b6f",
+    "_rev" : "1-e27ee28acfee69d13ee29c23aa4d1bab",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb045345",
+    "localName" : "nemaki:groupId",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "nemaki:groupId",
+    "updatability" : "ONCREATE",
+    "required" : true,
+    "queryable" : true,
+    "orderable" : true,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb046afd",
+    "_rev" : "1-8086f9006bc0f5946cb2ad4d6e96b6af",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "nemaki:users",
+    "propertyType" : "STRING",
+    "queryName" : "nemaki:users",
+    "cardinality" : "MULTI",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb047254",
+    "_rev" : "1-536da394d8e0c2a94469363f04540027",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb046afd",
+    "localName" : "nemaki:users",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "nemaki:users",
+    "updatability" : "READWRITE",
+    "required" : false,
+    "queryable" : true,
+    "orderable" : false,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb0481c4",
+    "_rev" : "1-b4be6cda7e148ed2ceaeecae1cc3a981",
+    "type" : "typeDefinition",
+    "typeId" : "nemaki:group",
+    "localName" : "nemaki:group",
+    "queryName" : "nemaki:group",
+    "displayName" : "nemaki:group",
+    "baseId" : "CMIS_ITEM",
+    "parentId" : "cmis:item",
+    "description" : "nemaki:group",
+    "creatable" : true,
+    "filable" : true,
+    "queryable" : true,
+    "controllablePolicy" : false,
+    "controllableACL" : true,
+    "fulltextIndexed" : false,
+    "includedInSupertypeQuery" : true,
+    "typeMutabilityCreate" : true,
+    "typeMutabilityUpdate" : false,
+    "typeMutabilityDelete" : false,
+    "properties" : [ "4db8cfa24884751cf7336dc3eb044eac", "4db8cfa24884751cf7336dc3eb045b6f", "4db8cfa24884751cf7336dc3eb047254" ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb0486b2",
+    "_rev" : "2-0eef9ab9d26c7306b11ad4e3727b72af",
+    "type" : "cmis:folder",
+    "created" : "2019-05-04T11:03:17.412+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:17.412+0000",
+    "modifier" : "system",
+    "name" : "users",
+    "parentId" : "4db8cfa24884751cf7336dc3eb03be13",
+    "acl" : {
+      "entries" : [ ]
+    },
+    "aclInherited" : true,
+    "subTypeProperties" : [ ],
+    "aspects" : [ ],
+    "objectType" : "cmis:folder",
+    "changeToken" : "4db8cfa24884751cf7336dc3eb048f4f",
+    "allowedChildTypeIds" : [ "cmis:folder", "cmis:document", "cmis:item" ],
+    "folder" : true,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : true
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb048f4f",
+    "_rev" : "1-f99fd3cc784a8d9653701207d1cdde14",
+    "type" : "change",
+    "created" : "2019-05-04T11:03:17.441+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:17.441+0000",
+    "modifier" : "system",
+    "name" : "users",
+    "baseType" : "cmis:folder",
+    "objectType" : "cmis:folder",
+    "objectId" : "4db8cfa24884751cf7336dc3eb0486b2",
+    "token" : 1556967797441,
+    "changeType" : "CREATED",
+    "time" : "2019-05-04T11:03:17.412+0000",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb049bb4",
+    "_rev" : "1-4ae4120fa29fb42c272fb2584eb54878",
+    "type" : "change",
+    "created" : "2019-05-04T11:03:17.728+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:17.728+0000",
+    "modifier" : "system",
+    "name" : "admin",
+    "baseType" : "cmis:item",
+    "objectType" : "nemaki:user",
+    "objectId" : "94ee2cb22e260d582b5d66903f001436",
+    "token" : 1556967797728,
+    "changeType" : "UPDATED",
+    "time" : "2013-01-01T00:00:00.000+0000",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04a0f3",
+    "_rev" : "1-aee758a386bbbe05f218184769400cc7",
+    "type" : "change",
+    "created" : "2019-05-04T11:03:17.898+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:17.898+0000",
+    "modifier" : "system",
+    "name" : "solr",
+    "baseType" : "cmis:item",
+    "objectType" : "nemaki:user",
+    "objectId" : "6174536bc714bfc3294b00306f000d5d",
+    "token" : 1556967797898,
+    "changeType" : "UPDATED",
+    "time" : "2013-01-01T00:00:00.000+0000",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04aead",
+    "_rev" : "1-d1926f39309c84fdb055e75e02d46fa7",
+    "type" : "change",
+    "created" : "2019-05-04T11:03:18.068+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:18.068+0000",
+    "modifier" : "system",
+    "name" : "system",
+    "baseType" : "cmis:item",
+    "objectType" : "nemaki:user",
+    "objectId" : "94ee2cb22e260d582b5d66903f002175",
+    "token" : 1556967798068,
+    "changeType" : "UPDATED",
+    "time" : "2013-01-01T00:00:00.000+0000",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04be52",
+    "_rev" : "2-e8f842fd93a2530a91abb0a1f284cbe0",
+    "type" : "cmis:folder",
+    "created" : "2019-05-04T11:03:18.208+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:18.208+0000",
+    "modifier" : "system",
+    "name" : "groups",
+    "parentId" : "4db8cfa24884751cf7336dc3eb03be13",
+    "acl" : {
+      "entries" : [ ]
+    },
+    "aclInherited" : true,
+    "subTypeProperties" : [ ],
+    "aspects" : [ ],
+    "objectType" : "cmis:folder",
+    "changeToken" : "4db8cfa24884751cf7336dc3eb04c96a",
+    "allowedChildTypeIds" : [ "cmis:folder", "cmis:document", "cmis:item" ],
+    "folder" : true,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : true
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04c96a",
+    "_rev" : "1-6b37b5f0cc8b62f5312604e7ff2a2d62",
+    "type" : "change",
+    "created" : "2019-05-04T11:03:18.233+0000",
+    "creator" : "system",
+    "modified" : "2019-05-04T11:03:18.233+0000",
+    "modifier" : "system",
+    "name" : "groups",
+    "baseType" : "cmis:folder",
+    "objectType" : "cmis:folder",
+    "objectId" : "4db8cfa24884751cf7336dc3eb04be52",
+    "token" : 1556967798233,
+    "changeType" : "CREATED",
+    "time" : "2019-05-04T11:03:18.208+0000",
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04d436",
+    "_rev" : "1-d1806c39b918d1266f796facac5b7baf",
+    "type" : "patch",
+    "name" : "patch_20160815",
+    "applied" : true,
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04d479",
+    "_rev" : "1-00fc879883549d3bed1cb35f1eb52f0d",
+    "type" : "typeDefinition",
+    "typeId" : "nemaki:parentChildRelationship",
+    "localName" : "nemaki:parentChildRelationship",
+    "queryName" : "nemaki:parentChildRelationship",
+    "displayName" : "nemaki:parentChildRelationship",
+    "baseId" : "CMIS_RELATIONSHIP",
+    "parentId" : "cmis:relationship",
+    "description" : "nemaki:parentChildRelationship",
+    "creatable" : true,
+    "filable" : false,
+    "queryable" : true,
+    "controllablePolicy" : false,
+    "controllableACL" : true,
+    "fulltextIndexed" : false,
+    "includedInSupertypeQuery" : true,
+    "typeMutabilityCreate" : true,
+    "typeMutabilityUpdate" : false,
+    "typeMutabilityDelete" : false,
+    "properties" : [ ],
+    "allowedSourceTypes" : [ ],
+    "allowedTargetTypes" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04d830",
+    "_rev" : "1-1e062789d23f10f933c302c6ab03a70c",
+    "type" : "typeDefinition",
+    "typeId" : "nemaki:bidirectionalRelationship",
+    "localName" : "nemaki:bidirectionalRelationship",
+    "queryName" : "nemaki:bidirectionalRelationship",
+    "displayName" : "nemaki:bidirectionalRelationship",
+    "baseId" : "CMIS_RELATIONSHIP",
+    "parentId" : "cmis:relationship",
+    "description" : "nemaki:bidirectionalRelationship",
+    "creatable" : true,
+    "filable" : false,
+    "queryable" : true,
+    "controllablePolicy" : false,
+    "controllableACL" : true,
+    "fulltextIndexed" : false,
+    "includedInSupertypeQuery" : true,
+    "typeMutabilityCreate" : true,
+    "typeMutabilityUpdate" : false,
+    "typeMutabilityDelete" : false,
+    "properties" : [ ],
+    "allowedSourceTypes" : [ ],
+    "allowedTargetTypes" : [ ],
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04e279",
+    "_rev" : "1-5225ce7f4a457a281b411d7d6a59dec4",
+    "type" : "patch",
+    "name" : "patch_20170425",
+    "applied" : true,
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04ef80",
+    "_rev" : "1-5fa5b26925a5fa3f89970f74b62b45da",
+    "type" : "patch",
+    "name" : "patch_20170602",
+    "applied" : true,
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb04f991",
+    "_rev" : "1-8b707b6535b280784726972d8d9cdb57",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "itest:multi_string",
+    "propertyType" : "STRING",
+    "queryName" : "itest:multi_string",
+    "cardinality" : "MULTI",
+    "document" : false,
+    "folder" : false,
+    "policy" : false,
+    "attachment" : false,
+    "relationship" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb050230",
+    "_rev" : "1-d41885929955d7303d6fd0dbeae9580c",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb04f991",
+    "localName" : "itest:multi_string",
+    "localNameSpace" : "http://www.aegif.jp/Nemaki",
+    "displayName" : "itest:multi_string",
+    "updatability" : "READWRITE",
+    "required" : false,
+    "queryable" : true,
+    "orderable" : false,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ "defaultValue" ],
+    "document" : false,
+    "folder" : false,
+    "policy" : false,
+    "attachment" : false,
+    "relationship" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb050e02",
+    "_rev" : "1-7c2fd86015247aa543914e75e82661e1",
+    "type" : "typeDefinition",
+    "typeId" : "D:itest:document",
+    "localName" : "itest:document",
+    "queryName" : "itest:document",
+    "displayName" : "itest:document",
+    "baseId" : "CMIS_DOCUMENT",
+    "parentId" : "cmis:document",
+    "description" : "itest:document",
+    "creatable" : true,
+    "filable" : true,
+    "queryable" : true,
+    "controllablePolicy" : false,
+    "controllableACL" : true,
+    "fulltextIndexed" : true,
+    "includedInSupertypeQuery" : true,
+    "typeMutabilityCreate" : true,
+    "typeMutabilityUpdate" : true,
+    "typeMutabilityDelete" : true,
+    "properties" : [ "4db8cfa24884751cf7336dc3eb050230" ],
+    "contentStreamAllowed" : "ALLOWED",
+    "versionable" : true,
+    "document" : false,
+    "folder" : false,
+    "policy" : false,
+    "attachment" : false,
+    "relationship" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb051d4a",
+    "_rev" : "1-cfe7d5fce9cb6df6a9d786bde6ade123",
+    "type" : "propertyDefinitionCore",
+    "propertyId" : "itest:part_of_speech",
+    "propertyType" : "STRING",
+    "queryName" : "itest:part_of_speech",
+    "cardinality" : "SINGLE",
+    "document" : false,
+    "folder" : false,
+    "policy" : false,
+    "attachment" : false,
+    "relationship" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb052861",
+    "_rev" : "1-433e1e18a7b93af0fe07ad7ace051dba",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb051d4a",
+    "localName" : "part_of_speech",
+    "localNameSpace" : "sho/model/itest",
+    "displayName" : "itest:part_of_speech",
+    "updatability" : "READWRITE",
+    "required" : true,
+    "queryable" : true,
+    "orderable" : true,
+    "choices" : [ {
+      "displayName" : "noun",
+      "value" : [ "noun" ],
+      "children" : [ ]
+    }, {
+      "displayName" : "verb",
+      "value" : [ "verb" ],
+      "children" : [ ]
+    }, {
+      "displayName" : "adjective",
+      "value" : [ "adjective" ],
+      "children" : [ ]
+    }, {
+      "displayName" : "adverb",
+      "value" : [ "adverb" ],
+      "children" : [ ]
+    }, {
+      "displayName" : "pronoun",
+      "value" : [ "pronoun" ],
+      "children" : [ ]
+    }, {
+      "displayName" : "preposition",
+      "value" : [ "preposition" ],
+      "children" : [ ]
+    }, {
+      "displayName" : "determiner",
+      "value" : [ "determiner" ],
+      "children" : [ ]
+    }, {
+      "displayName" : "conjunction",
+      "value" : [ "conjunction" ],
+      "children" : [ ]
+    }, {
+      "displayName" : "interjection",
+      "value" : [ "interjection" ],
+      "children" : [ ]
+    } ],
+    "openChoice" : false,
+    "defaultValue" : [ "noun" ],
+    "document" : false,
+    "folder" : false,
+    "policy" : false,
+    "attachment" : false,
+    "relationship" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb0530f0",
+    "_rev" : "1-3ac88a95858f29ab89fc30d129e1cb9f",
+    "type" : "propertyDefinitionDetail",
+    "coreNodeId" : "4db8cfa24884751cf7336dc3eb04f991",
+    "localName" : "itest:multi_string",
+    "localNameSpace" : "sho/model/itest",
+    "displayName" : "itest:multi_string",
+    "updatability" : "READWRITE",
+    "required" : true,
+    "queryable" : true,
+    "orderable" : false,
+    "choices" : [ ],
+    "openChoice" : false,
+    "defaultValue" : [ "default" ],
+    "document" : false,
+    "folder" : false,
+    "policy" : false,
+    "attachment" : false,
+    "relationship" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb05408a",
+    "_rev" : "1-41b8fcaf6aa3630c29c56c1d1972aeb4",
+    "type" : "typeDefinition",
+    "typeId" : "S:itest:secondary",
+    "localName" : "itest:secondary",
+    "localNameSpace" : "sho/model/itest",
+    "queryName" : "itest:secondary",
+    "displayName" : "itest:secondary",
+    "baseId" : "CMIS_SECONDARY",
+    "parentId" : "cmis:secondary",
+    "description" : "itest:secondary",
+    "creatable" : false,
+    "filable" : false,
+    "queryable" : true,
+    "controllablePolicy" : false,
+    "controllableACL" : false,
+    "fulltextIndexed" : true,
+    "includedInSupertypeQuery" : true,
+    "typeMutabilityCreate" : true,
+    "typeMutabilityUpdate" : false,
+    "typeMutabilityDelete" : false,
+    "properties" : [ "4db8cfa24884751cf7336dc3eb052861", "4db8cfa24884751cf7336dc3eb0530f0" ],
+    "document" : false,
+    "folder" : false,
+    "policy" : false,
+    "attachment" : false,
+    "relationship" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "4db8cfa24884751cf7336dc3eb054e5d",
+    "_rev" : "1-88059251757f8271735bb0ecece1697b",
+    "type" : "typeDefinition",
+    "typeId" : "S:itest:secondary_marker",
+    "localName" : "itest:secondary_marker",
+    "localNameSpace" : "sho/model/itest",
+    "queryName" : "itest:secondary_marker",
+    "displayName" : "itest:secondary_marker",
+    "baseId" : "CMIS_SECONDARY",
+    "parentId" : "cmis:secondary",
+    "description" : "itest:secondary_marker",
+    "creatable" : false,
+    "filable" : false,
+    "queryable" : true,
+    "controllablePolicy" : false,
+    "controllableACL" : false,
+    "fulltextIndexed" : true,
+    "includedInSupertypeQuery" : true,
+    "typeMutabilityCreate" : true,
+    "typeMutabilityUpdate" : false,
+    "typeMutabilityDelete" : false,
+    "properties" : [ ],
+    "document" : false,
+    "folder" : false,
+    "policy" : false,
+    "attachment" : false,
+    "relationship" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "6174536bc714bfc3294b00306f000d5d",
+    "_rev" : "3-0623d232b80b04eb33570c7dc1f2427d",
+    "type" : "cmis:item",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "creator" : "system",
+    "modified" : "2013-01-01T00:00:00.000+0000",
+    "modifier" : "system",
+    "name" : "solr",
+    "parentId" : "4db8cfa24884751cf7336dc3eb0486b2",
+    "acl" : {
+      "entries" : [ {
+        "principal" : "solr",
+        "permissions" : [ "cmis:read", "cmis:write" ]
+      } ]
+    },
+    "subTypeProperties" : [ {
+      "key" : "nemaki:userId",
+      "value" : "solr",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:firstName",
+      "value" : "",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:lastName",
+      "value" : "solr",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:favorites",
+      "value" : null,
+      "queryName" : null
+    } ],
+    "aspects" : [ ],
+    "secondaryIds" : [ ],
+    "objectType" : "nemaki:user",
+    "changeToken" : "4db8cfa24884751cf7336dc3eb04a0f3",
+    "userId" : "solr",
+    "password" : "$2a$10$YTaQCKmmf.f2XkcOPjVAVe1q3RR.Z2/YD6sotC/Kz.ZVlBYqhjIW6",
+    "admin" : true,
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "83c150a42ffdcc49bb08041078b85b57",
+    "_rev" : "1-b59d6f44b380e453acc48f553288a356",
+    "creator" : "system",
+    "policyIds" : [ ],
+    "objectType" : "cmis:folder",
+    "name" : "/",
+    "objectId" : "e02f784f8360a02cc14d1314c10038ff",
+    "baseType" : "cmis:folder",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "modified" : "2013-01-01T00:00:00.000+0000",
+    "time" : "2013-01-01T00:00:00.000+0000",
+    "modifier" : "admin",
+    "type" : "change",
+    "changeType" : "CREATED",
+    "latest" : false,
+    "token" : 1356998400000
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "83c150a42ffdcc49bb08041078b85c77",
+    "_rev" : "1-daebf58c10b8662b9d35d9cf49413398",
+    "creator" : "system",
+    "policyIds" : [ ],
+    "objectType" : "cmis:folder",
+    "name" : "sites",
+    "objectId" : "e02f784f8360a02cc14d1314c1003f06",
+    "baseType" : "cmis:folder",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "modified" : "2013-01-01T00:00:00.000+0000",
+    "time" : "2013-01-01T00:00:00.000+0000",
+    "modifier" : "admin",
+    "type" : "change",
+    "changeType" : "CREATED",
+    "latest" : false,
+    "token" : 1356998460000
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "94ee2cb22e260d582b5d66903f001436",
+    "_rev" : "3-e438efee26498bbf6aed6b409c53a71e",
+    "type" : "cmis:item",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "creator" : "system",
+    "modified" : "2013-01-01T00:00:00.000+0000",
+    "modifier" : "system",
+    "name" : "admin",
+    "parentId" : "4db8cfa24884751cf7336dc3eb0486b2",
+    "acl" : {
+      "entries" : [ {
+        "principal" : "admin",
+        "permissions" : [ "cmis:read", "cmis:write" ]
+      } ]
+    },
+    "subTypeProperties" : [ {
+      "key" : "nemaki:userId",
+      "value" : "admin",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:firstName",
+      "value" : "admin",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:lastName",
+      "value" : "",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:favorites",
+      "value" : null,
+      "queryName" : null
+    } ],
+    "aspects" : [ ],
+    "secondaryIds" : [ ],
+    "objectType" : "nemaki:user",
+    "changeToken" : "4db8cfa24884751cf7336dc3eb049bb4",
+    "userId" : "admin",
+    "password" : "$2a$10$0goveaxLj.2UJAlVN1Ru2OmGID6q04ugln/HAkVpzb5bwvZ.kvEne",
+    "admin" : true,
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "94ee2cb22e260d582b5d66903f002175",
+    "_rev" : "3-d960b67b9864d5f28c7e46ecfe802471",
+    "type" : "cmis:item",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "creator" : "system",
+    "modified" : "2013-01-01T00:00:00.000+0000",
+    "modifier" : "system",
+    "name" : "system",
+    "parentId" : "4db8cfa24884751cf7336dc3eb0486b2",
+    "acl" : {
+      "entries" : [ {
+        "principal" : "system",
+        "permissions" : [ "cmis:read", "cmis:write" ]
+      } ]
+    },
+    "subTypeProperties" : [ {
+      "key" : "nemaki:userId",
+      "value" : "system",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:firstName",
+      "value" : "system",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:lastName",
+      "value" : "",
+      "queryName" : null
+    }, {
+      "key" : "nemaki:favorites",
+      "value" : null,
+      "queryName" : null
+    } ],
+    "aspects" : [ ],
+    "secondaryIds" : [ ],
+    "objectType" : "nemaki:user",
+    "changeToken" : "4db8cfa24884751cf7336dc3eb04aead",
+    "userId" : "system",
+    "admin" : true,
+    "folder" : false,
+    "document" : false,
+    "relationship" : false,
+    "policy" : false,
+    "attachment" : false,
+    "content" : false
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "_design/_repo",
+    "_rev" : "12-566efca117efccb0758f542ddb6f2d54",
+    "views" : {
+      "attachments" : {
+        "map" : "function(doc) { if (doc.type == 'attachment')  emit(doc._id, doc) }"
+      },
+      "countByObjectType" : {
+        "map" : "function(doc) { if (['cmis:document', 'cmis:folder', 'cmis:relationship', 'cmis:policy', 'cmis:item','cmis:secondary'].indexOf(doc.type) >= 0)  emit(doc.objectType, doc) }",
+        "reduce" : "function(key,values){return values.length}"
+      },
+      "propertyDefinitionCoresByPropertyId" : {
+        "map" : "function(doc) { if (doc.type == 'propertyDefinitionCore')  emit(doc.propertyId, doc) }"
+      },
+      "children" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:folder' || doc.type == 'cmis:document' && doc.latestVersion || doc.type == 'cmis:item') emit(doc.parentId, doc) }"
+      },
+      "relationships" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:relationship')  emit(doc._id, doc) }"
+      },
+      "documents" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:document')  emit(doc._id, doc) }"
+      },
+      "privateWorkingCopies" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:document' && doc.privateWorkingCopy) emit(doc.parentId, doc) }"
+      },
+      "childByName" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:folder' || doc.type == 'cmis:document' && doc.latestVersion) emit({parentId: doc.parentId, name:doc.name}, doc) }"
+      },
+      "propertyDefinitionCores" : {
+        "map" : "function(doc) { if (doc.type == 'propertyDefinitionCore')  emit(doc._id, doc) }"
+      },
+      "folders" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:folder')  emit(doc._id, doc) }"
+      },
+      "propertyDefinitionDetailsByCoreNodeId" : {
+        "map" : "function(doc) { if (doc.type == 'propertyDefinitionDetail')  emit(doc.coreNodeId, doc) }"
+      },
+      "contentsById" : {
+        "map" : "function(doc) { if (['cmis:document', 'cmis:folder', 'cmis:relationship', 'cmis:policy', 'cmis:item','cmis:secondary'].indexOf(doc.type) >= 0)  emit(doc._id, doc) }"
+      },
+      "relationshipsByTarget" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:relationship') emit(doc.targetId, doc) }"
+      },
+      "policiesByAppliedObject" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:policy') for(i in doc.appliedIds){emit(i, doc)} }"
+      },
+      "documentsByVersionSeriesId" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:document') emit(doc.versionSeriesId, doc) }"
+      },
+      "foldersByPath" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:folder')  emit(doc.path, doc) }"
+      },
+      "versionSeries" : {
+        "map" : "function(doc) { if (doc.type == 'versionSeries')  emit(doc._id, doc) }"
+      },
+      "relationshipsBySource" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:relationship') emit(doc.sourceId, doc) }"
+      },
+      "propertyDefinitionDetails" : {
+        "map" : "function(doc) { if (doc.type == 'propertyDefinitionDetail')  emit(doc._id, doc) }"
+      },
+      "admin" : {
+        "map" : "function(doc) { if (doc.type == 'user' && doc.admin)  emit(doc._id, doc) }"
+      },
+      "items" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:item')  emit(doc._id, doc) }"
+      },
+      "latestMajorVersions" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:document' && doc.latestMajorVersion)  emit(doc.versionSeriesId, doc) }"
+      },
+      "typeDefinitions" : {
+        "map" : "function(doc) { if (doc.type == 'typeDefinition')  emit(doc.typeId, doc) }"
+      },
+      "policies" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:policy')  emit(doc._id, doc) }"
+      },
+      "renditions" : {
+        "map" : "function(doc) { if (doc.type == 'rendition')  emit(doc._id, doc) }"
+      },
+      "latestVersions" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:document' && doc.latestVersion)  emit(doc.versionSeriesId, doc) }"
+      },
+      "changesByToken" : {
+        "map" : "function(doc) { if (doc.type == 'change')  emit(doc.token, doc) }"
+      },
+      "changes" : {
+        "map" : "function(doc) { if (doc.type == 'change')  emit(doc._id, doc) }"
+      },
+      "childrenNames" : {
+        "map" : "function(doc) {var result={}; result[doc.name]=doc._id; if (doc.type == 'cmis:document' && doc.latestVersion || doc.type == 'cmis:folder')   emit(doc.parentId, doc.name);}"
+      },
+      "patch" : {
+        "map" : "function(doc) { if (doc.type == 'patch')  emit(doc.name, doc) }"
+      },
+      "configuration" : {
+        "map" : "function(doc) { if (doc.type == 'configuration')  emit(doc._id, doc) }"
+      },
+      "userItemsById" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:item' && doc.userId)  emit(doc.userId, doc) }"
+      },
+      "groupItemsById" : {
+        "map" : "function(doc) { if (doc.type == 'cmis:item' && doc.groupId)  emit(doc.groupId, doc) }"
+      },
+      "joinedDirectGroupsByUserId" : {
+        "map" : "function(doc) {if (doc.type == 'cmis:item' && doc.groupId) {if ( doc.subTypeProperties ) {for(var i in doc.subTypeProperties ) {if ( doc.subTypeProperties[i].key == 'nemaki:users' ) {for(var user in doc.subTypeProperties[i].value) {emit(doc.subTypeProperties[i].value[user], doc)}}}}}}"
+      },
+      "joinedDirectGroupsByGroupId" : {
+        "map" : "function(doc) {if (doc.type == 'cmis:item' && doc.groupId) {if ( doc.subTypeProperties ) {for(var i in doc.subTypeProperties ) {if ( doc.subTypeProperties[i].key == 'nemaki:groups' ) {for(var group in doc.subTypeProperties[i].value) {emit([doc.subTypeProperties[i].value[group],0], doc);emit([doc.subTypeProperties[i].value[group],1], doc);emit([doc.subTypeProperties[i].value[group],2], doc);emit([doc.subTypeProperties[i].value[group],3], doc);emit([doc.subTypeProperties[i].value[group],4], doc);emit([doc.subTypeProperties[i].value[group],5], doc);emit([doc.subTypeProperties[i].value[group],6], doc);emit([doc.subTypeProperties[i].value[group],7], doc);emit([doc.subTypeProperties[i].value[group],8], doc);emit([doc.subTypeProperties[i].value[group],9], doc);emit([doc.subTypeProperties[i].value[group],10], doc);emit([doc.subTypeProperties[i].value[group],11], doc);emit([doc.subTypeProperties[i].value[group],12], doc);emit([doc.subTypeProperties[i].value[group],13], doc);emit([doc.subTypeProperties[i].value[group],14], doc);emit([doc.subTypeProperties[i].value[group],15], doc);emit([doc.subTypeProperties[i].value[group],16], doc);emit([doc.subTypeProperties[i].value[group],17], doc);emit([doc.subTypeProperties[i].value[group],18], doc);emit([doc.subTypeProperties[i].value[group],19], doc);}}}}}}"
+      },
+      "changesByObjectId" : {
+        "map" : "function(doc) { if (doc.type == 'change')  emit(doc.objectId, doc) }"
+      }
+    },
+    "lists" : { },
+    "shows" : { },
+    "language" : "javascript",
+    "filters" : { },
+    "updates" : { }
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "b11bf1bf25317a8fa2941b8f140148b6",
+    "_rev" : "1-43b53806f0c4bad630eff0aa0c1da294",
+    "changeToken" : "b11bf1bf25317a8fa2941b8f14014d7e",
+    "name" : "Sample Site",
+    "creator" : "admin",
+    "created" : "2013-06-03T06:43:31.322+0000",
+    "modified" : "2013-06-03T06:43:31.322+0000",
+    "acl" : {
+      "entries" : [ ]
+    },
+    "secondaryIds" : [ ],
+    "aclInherited" : true,
+    "parentId" : "e02f784f8360a02cc14d1314c1003f06",
+    "modifier" : "admin",
+    "type" : "cmis:folder",
+    "objectType" : "cmis:folder"
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "b11bf1bf25317a8fa2941b8f14014d7e",
+    "_rev" : "1-a8ab25ea3f3b10a81811759d269d3b9f",
+    "creator" : "admin",
+    "policyIds" : [ ],
+    "objectType" : "cmis:folder",
+    "name" : "Sample Site",
+    "objectId" : "b11bf1bf25317a8fa2941b8f140148b6",
+    "baseType" : "cmis:folder",
+    "created" : "2013-06-03T06:43:31.391+0000",
+    "modified" : "2013-06-03T06:43:31.391+0000",
+    "time" : "2013-06-03T06:43:31.391+0000",
+    "modifier" : "admin",
+    "type" : "change",
+    "changeType" : "CREATED",
+    "latest" : true,
+    "token" : 1356998520000
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "ceeea12ac47d659d88c0d46e67000566",
+    "_rev" : "1-f1b816c74fdc2e186e9b0ab4036054ce",
+    "typeId" : "nemaki:document",
+    "displayName" : "nemaki:document",
+    "description" : "nemaki:document",
+    "baseId" : "CMIS_DOCUMENT",
+    "creator" : "system",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "queryName" : "nemaki:document",
+    "parentId" : "cmis:document",
+    "localName" : "nemaki:document",
+    "type" : "typeDefinition",
+    "properties" : [ "ceeea12ac47d659d88c0d46e67001184" ],
+    "typeMutabilityCreate" : true,
+    "typeMutabilityUpdate" : true,
+    "typeMutabilityDelete" : true
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "ceeea12ac47d659d88c0d46e67001184",
+    "_rev" : "1-840cc0b19f384a94d56737fe075545ed",
+    "displayName" : "Tag",
+    "description" : "Tag",
+    "creator" : "system",
+    "coreNodeId" : "18d9eb1d9a6c624a63013e9e2a2ca16c",
+    "required" : false,
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "orderable" : true,
+    "updatability" : "READWRITE",
+    "localName" : "nemaki:tag",
+    "type" : "propertyDefinitionDetail",
+    "queryable" : true
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "e02f784f8360a02cc14d1314c10038ff",
+    "_rev" : "1-a23ddb7ad1a6a1a54038e9e2e7ef1ce9",
+    "acl" : {
+      "entries" : [ {
+        "principal" : "CMIS_ANYONE",
+        "direct" : true,
+        "permissions" : [ "cmis:read" ]
+      } ]
+    },
+    "aspects" : [ ],
+    "changeToken" : "83c150a42ffdcc49bb08041078b85b57",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "creator" : "system",
+    "modified" : "2013-01-01T00:00:00.000+0000",
+    "modifier" : "system",
+    "name" : "/",
+    "objectType" : "cmis:folder",
+    "type" : "cmis:folder"
+  },
+  "attachments" : { }
+}, {
+  "document" : {
+    "_id" : "e02f784f8360a02cc14d1314c1003f06",
+    "_rev" : "1-d98f6d4457fc0a15aef16fe95d184ce7",
+    "acl" : {
+      "entries" : [ ]
+    },
+    "aclInherited" : true,
+    "aspects" : [ ],
+    "changeToken" : "83c150a42ffdcc49bb08041078b85c77",
+    "created" : "2013-01-01T00:00:00.000+0000",
+    "creator" : "system",
+    "modified" : "2013-01-01T00:00:00.000+0000",
+    "modifier" : "system",
+    "name" : "sites",
+    "objectType" : "cmis:folder",
+    "parentId" : "e02f784f8360a02cc14d1314c10038ff",
+    "type" : "cmis:folder"
+  },
+  "attachments" : { }
+} ]
