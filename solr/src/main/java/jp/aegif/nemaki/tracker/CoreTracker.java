@@ -41,8 +41,8 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.spi.CmisBinding;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.AbstractUpdateRequest;
 import org.apache.solr.client.solrj.request.UpdateRequest;
@@ -79,15 +79,15 @@ public class CoreTracker extends CloseHook {
 
 	NemakiCoreAdminHandler adminHandler;
 	SolrCore core;
-	SolrServer indexServer;
-	SolrServer tokenServer;
+	SolrClient indexServer;
+	SolrClient tokenServer;
 
 	CmisBinding cmisBinding;
 	NemakiTokenManager nemakiTokenManager;
 	PropertyManagerImpl propertyManager;
 
-	public CoreTracker(NemakiCoreAdminHandler adminHandler, SolrCore core, SolrServer indexServer,
-			SolrServer tokenServer) {
+	public CoreTracker(NemakiCoreAdminHandler adminHandler, SolrCore core, SolrClient indexServer,
+			SolrClient tokenServer) {
 		super();
 
 		this.adminHandler = adminHandler;
@@ -98,7 +98,7 @@ public class CoreTracker extends CloseHook {
 		this.propertyManager = new PropertyManagerImpl(StringPool.PROPERTIES_NAME);
 	}
 
-	public SolrServer getIndexServer() {
+	public SolrClient getIndexServer() {
 		return indexServer;
 	}
 
@@ -193,7 +193,7 @@ public class CoreTracker extends CloseHook {
 					return;
 
 				// Parse filtering configuration
-//				PropertyManager pm = new PropertyManagerImpl(StringPool.PROPERTIES_NAME);
+				// PropertyManager pm = new PropertyManagerImpl(StringPool.PROPERTIES_NAME);
 				boolean fulltextEnabled = Boolean.TRUE.toString()
 						.equalsIgnoreCase(propertyManager.readValue(PropertyKey.SOLR_TRACKING_FULLTEXT_ENABLED));
 				boolean mimeTypeFilterEnabled = false; // default
@@ -211,7 +211,8 @@ public class CoreTracker extends CloseHook {
 				List<ChangeEvent> list = extractChangeEvent(events);
 				logger.info("Extracted indexing of events : Repo={} Count={}", repositoryId, list.size());
 
-//				PropertyManager propMgr = new PropertyManagerImpl(StringPool.PROPERTIES_NAME);
+				// PropertyManager propMgr = new
+				// PropertyManagerImpl(StringPool.PROPERTIES_NAME);
 				int numberOfThread = Integer
 						.valueOf(propertyManager.readValue(PropertyKey.SOLR_TRACKING_NUMBER_OF_THREAD));
 				int numberPerThread = list.size() / numberOfThread;
@@ -253,7 +254,7 @@ public class CoreTracker extends CloseHook {
 				storeLatestChangeToken(changeEvents.getLatestChangeLogToken(), repositoryId);
 
 			} while (Constant.MODE_FULL.equals(trackingType));// In case of FUll mode, repeat until indexing all change
-																// logs
+			// logs
 		}
 	}
 
@@ -270,7 +271,7 @@ public class CoreTracker extends CloseHook {
 		QueryResponse resp = null;
 		try {
 			resp = tokenServer.query(solrQuery);
-		} catch (SolrServerException e) {
+		} catch (SolrServerException | IOException e) {
 			logger.error("Read latest ChangeToken query failed : {} ", solrQuery, e);
 		}
 

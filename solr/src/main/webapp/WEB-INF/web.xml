@@ -44,7 +44,7 @@
        <env-entry-type>java.lang.String</env-entry-type>
     </env-entry>
    -->
-   
+
   <!-- Any path (name) registered in solrconfig.xml will be sent to that filter -->
   <filter>
     <filter-name>SolrRequestFilter</filter-name>
@@ -87,16 +87,18 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <!--
   <servlet>
     <servlet-name>Zookeeper</servlet-name>
     <servlet-class>org.apache.solr.servlet.ZookeeperInfoServlet</servlet-class>
   </servlet>
-  
+  -->
+
   <servlet>
     <servlet-name>LoadAdminUI</servlet-name>
     <servlet-class>org.apache.solr.servlet.LoadAdminUiServlet</servlet-class>
   </servlet>
-  
+
   <!-- Remove in Solr 5.0 -->
   <!-- This sends SC_MOVED_PERMANENTLY (301) for resources that changed in 4.0 -->
   <servlet>
@@ -107,7 +109,7 @@
       <param-value>${context}/#/</param-value>
     </init-param>
   </servlet>
-  
+
   <servlet>
     <servlet-name>RedirectOldZookeeper</servlet-name>
     <servlet-class>org.apache.solr.servlet.RedirectServlet</servlet-class>
@@ -116,7 +118,7 @@
       <param-value>${context}/zookeeper</param-value>
     </init-param>
   </servlet>
-  
+
   <servlet>
     <servlet-name>RedirectLogging</servlet-name>
     <servlet-class>org.apache.solr.servlet.RedirectServlet</servlet-class>
@@ -125,7 +127,7 @@
       <param-value>${context}/#/~logging</param-value>
     </init-param>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>RedirectOldAdminUI</servlet-name>
     <url-pattern>/admin/</url-pattern>
@@ -144,16 +146,18 @@
   </servlet-mapping>
 
   <!-- Servlet Mapping -->
+  <!--
   <servlet-mapping>
     <servlet-name>Zookeeper</servlet-name>
     <url-pattern>/zookeeper</url-pattern>
   </servlet-mapping>
-  
+  -->
+
   <servlet-mapping>
     <servlet-name>LoadAdminUI</servlet-name>
     <url-pattern>/admin.html</url-pattern>
   </servlet-mapping>
-  
+
   <mime-mapping>
     <extension>.xsl</extension>
     <!-- per http://www.w3.org/TR/2006/PR-xslt20-20061121/ -->

@@ -21,6 +21,7 @@
  ******************************************************************************/
 package jp.aegif.nemaki.cmis.aspect.query.solr;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,8 +47,8 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.util.BytesRef;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -151,23 +152,23 @@ public class SolrPredicateWalker {
 	// Definition of Boolean walks
 	// //////////////////////////////////////////////////////////////////////////////
 	private BooleanQuery walkNot(Tree node) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		q.add(walkPredicate(node), Occur.MUST_NOT);
-		return q;
+		return q.build();
 	}
 
 	private BooleanQuery walkOr(Tree leftNode, Tree rightNode) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		q.add(walkPredicate(leftNode), Occur.SHOULD);
 		q.add(walkPredicate(rightNode), Occur.SHOULD);
-		return q;
+		return q.build();
 	}
 
 	private BooleanQuery walkAnd(Tree leftNode, Tree rightNode) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		q.add(walkPredicate(leftNode), Occur.MUST);
 		q.add(walkPredicate(rightNode), Occur.MUST);
-		return q;
+		return q.build();
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////
@@ -181,9 +182,9 @@ public class SolrPredicateWalker {
 	}
 
 	private Query walkNotEquals(Tree leftNode, Tree rightNode) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		q.add(walkEquals(leftNode, rightNode), Occur.MUST_NOT);
-		return q;
+		return q.build();
 	}
 
 	private Query walkGreaterThan(Tree leftNode, Tree rightNode) {
@@ -260,9 +261,9 @@ public class SolrPredicateWalker {
 	}
 
 	private Query walkNotLike(Tree colNode, Tree stringNode) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		q.add(walkLike(colNode, stringNode), Occur.MUST);
-		return q;
+		return q.build();
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////
@@ -274,7 +275,7 @@ public class SolrPredicateWalker {
 
 		// Build a statement
 		// Combine queries with "OR" because Solr doesn't have "IN" syntax
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		String field = solrUtil.getPropertyNameInSolr(repositoryId, colRef.getPropertyQueryName().toString());
 		List<?> list = (List<?>) walkExpr(listNode);
 		for (Object elm : list) {
@@ -282,13 +283,13 @@ public class SolrPredicateWalker {
 			TermQuery tq = new TermQuery(t);
 			q.add(tq, Occur.SHOULD);
 		}
-		return q;
+		return q.build();
 	}
 
 	private Query walkNotIn(Tree colNode, Tree listNode) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		q.add(walkIn(colNode, listNode), Occur.MUST_NOT);
-		return q;
+		return q.build();
 	}
 
 	private Query walkInAny(Tree leftNode, Tree rightNode) {
@@ -313,10 +314,10 @@ public class SolrPredicateWalker {
 
 	private Query walkIsNull(Tree colNode) {
 		String field = walkExpr(colNode).toString();
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		TermRangeQuery q1 = new TermRangeQuery(field, null, null, false, false);
 		q.add(q1, Occur.MUST_NOT);
-		return q;
+		return q.build();
 	}
 
 	private Query walkIsNotNull(Tree colNode) {
@@ -343,10 +344,10 @@ public class SolrPredicateWalker {
 			String qualifier = walkExpr(qualNode).toString();
 			Term tQual = new Term("type", buildQualField(qualifier));
 			Query qQual = new TermQuery(tQual);
-			BooleanQuery bq = new BooleanQuery();
+			BooleanQuery.Builder bq = new BooleanQuery.Builder();
 			bq.add(qQual, Occur.MUST);
 			bq.add(q, Occur.MUST);
-			return bq;
+			return bq.build();
 		}
 		return q;
 	}
@@ -364,17 +365,17 @@ public class SolrPredicateWalker {
 			String qualifier = walkExpr(qualNode).toString();
 			Term tQual = new Term("type", buildQualField(qualifier));
 			Query qQual = new TermQuery(tQual);
-			BooleanQuery bq = new BooleanQuery();
+			BooleanQuery.Builder bq = new BooleanQuery.Builder();
 			bq.add(qQual, Occur.MUST);
 			bq.add(q, Occur.MUST);
-			return bq;
+			return bq.build();
 		}
 		return q;
 	}
 
 	private Query walkInTreeInternal(Tree paramNode, String repositoryId) {
 		// Build first query for descendant folders
-		BooleanQuery query1 = new BooleanQuery();
+		BooleanQuery.Builder query1 = new BooleanQuery.Builder();
 
 		String s = paramNode.getText();
 		String folderId = s.substring(1, s.length() - 1);
@@ -398,7 +399,7 @@ public class SolrPredicateWalker {
 		}
 
 		// Set Solr server
-		SolrServer solrServer = solrUtil.getSolrServer();
+		SolrClient solrServer = solrUtil.getSolrServer();
 
 		// Get all the descending folder objectIds(including direct children)
 		List<String> descendantIds = new ArrayList<String>();
@@ -406,7 +407,7 @@ public class SolrPredicateWalker {
 		try {
 			QueryResponse resp = solrServer.query(new SolrQuery(query1.toString()));
 			children = resp.getResults();
-		} catch (SolrServerException e) {
+		} catch (SolrServerException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -422,7 +423,7 @@ public class SolrPredicateWalker {
 
 		// Build the second query for getting all the objects under descending folders
 		Iterator<String> iterator = descendantIds.iterator();
-		BooleanQuery query2 = new BooleanQuery();
+		BooleanQuery.Builder query2 = new BooleanQuery.Builder();
 		while (iterator.hasNext()) {
 			String descendantId = iterator.next();
 			String _descendantId = descendantId.replaceAll("\\/", "\\\\/");
@@ -431,7 +432,7 @@ public class SolrPredicateWalker {
 			query2.add(tq, Occur.SHOULD);
 		}
 
-		return query2;
+		return query2.build();
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////
@@ -446,11 +447,11 @@ public class SolrPredicateWalker {
 			// Term tQual = new Term("type", buildQualField(qualifier));
 			// Query qQual = new TermQuery(tQual);
 
-			BooleanQuery q = new BooleanQuery();
+			BooleanQuery.Builder q = new BooleanQuery.Builder();
 			// q.add(qQual, Occur.MUST);
 			q.add(walkSearchExpr(queryNode), Occur.MUST);
 
-			return q;
+			return q.build();
 		}
 		return walkSearchExpr(queryNode);
 	}
@@ -476,30 +477,30 @@ public class SolrPredicateWalker {
 	}
 
 	private Query walkTextAnd(Tree node) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		for (int i = 0; i < node.getChildCount(); i++) {
 			Tree child = node.getChild(i);
 			q.add(walkSearchExpr(child), Occur.MUST);
 		}
-		return q;
+		return q.build();
 	}
 
 	private Query walkTextOr(Tree node) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		for (int i = 0; i < node.getChildCount(); i++) {
 			Tree child = node.getChild(i);
 			q.add(walkSearchExpr(child), Occur.SHOULD);
 		}
-		return q;
+		return q.build();
 	}
 
 	private Query walkTextMinus(Tree node) {
-		BooleanQuery q = new BooleanQuery();
+		BooleanQuery.Builder q = new BooleanQuery.Builder();
 		for (int i = 0; i < node.getChildCount(); i++) {
 			Tree child = node.getChild(i);
 			q.add(walkSearchExpr(child), Occur.MUST);
 		}
-		return q;
+		return q.build();
 	}
 
 	private Query walkTextWord(Tree node) {
@@ -691,7 +692,7 @@ public class SolrPredicateWalker {
 	 * @param solrServer
 	 * @return
 	 */
-	private List<String> getDescendantFolderId(String folderId, SolrServer solrServer) {
+	private List<String> getDescendantFolderId(String folderId, SolrClient solrServer) {
 		List<String> list = new ArrayList<String>();
 
 		list.add(folderId); // Add oneself to the list in advance
@@ -723,7 +724,7 @@ public class SolrPredicateWalker {
 				}
 				return list;
 			}
-		} catch (SolrServerException e) {
+		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();
 			return null;
 		}
