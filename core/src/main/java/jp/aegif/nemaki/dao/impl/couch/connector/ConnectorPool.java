@@ -91,7 +91,15 @@ public class ConnectorPool {
 		if (connector == null) {
 			HttpClient httpClient = builder.build();
 			CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-			connector = dbInstance.createConnector(repositoryId, true);
+			boolean dbExists = dbInstance.checkIfDbExists(repositoryId);
+
+			// createConnector throws DbAccessException if db already exists so we need to
+			// make this ugly workaround
+			if (!dbExists) {
+				connector = dbInstance.createConnector(repositoryId, true);
+			} else {
+				connector = dbInstance.createConnector(repositoryId, false);
+			}
 			pool.put(repositoryId, connector);
 		}
 
