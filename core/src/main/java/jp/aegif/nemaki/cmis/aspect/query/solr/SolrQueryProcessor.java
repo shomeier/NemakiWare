@@ -159,7 +159,7 @@ public class SolrQueryProcessor implements QueryProcessor {
 //			whereTree = extractWhereTree(tree);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new CmisRuntimeException("Error while parsing SQL statement", e);
+			throw new CmisRuntimeException("Error while parsing SQL statement: " + statement, e);
 		}
 
 		// Build solr statement of WHERE
