@@ -45,7 +45,7 @@ public class SolrAllResource extends ResourceBase {
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
-		String solrUrl = solrUtil.getSolrUrl();
+		String solrUrl = solrUtil.getSolrBaseUrl();
 
 		result.put("url", solrUrl);
 
@@ -69,7 +69,7 @@ public class SolrAllResource extends ResourceBase {
 
 		// Call Solr
 		HttpClient httpClient = HttpClientBuilder.create().build();
-		String solrUrl = solrUtil.getSolrUrl();
+		String solrUrl = solrUtil.getSolrBaseUrl();
 		String url = solrUrl + "admin/cores?core=nemaki&action=init";
 		HttpGet httpGet = new HttpGet(url);
 		try {
@@ -112,7 +112,7 @@ public class SolrAllResource extends ResourceBase {
 
 		// Call Solr
 		HttpClient httpClient = HttpClientBuilder.create().build();
-		String solrUrl = solrUtil.getSolrUrl();
+		String solrUrl = solrUtil.getSolrBaseUrl();
 		String url = solrUrl + "admin/cores?core=nemaki&action=index&tracking=FULL";
 		HttpGet httpGet = new HttpGet(url);
 		try {

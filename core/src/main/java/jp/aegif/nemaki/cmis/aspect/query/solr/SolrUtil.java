@@ -99,7 +99,11 @@ public class SolrUtil {
 	 * @return
 	 */
 	public SolrClient getSolrServer() {
-		String url = getSolrUrl();
+
+		// for queries we need to add the core name to the context
+		String core = propertyManager.readValue(PropertyKey.SOLR_CORE);
+		String url = getSolrBaseUrl() + core + "/";
+
 		return new Builder(url).build();
 	}
 
@@ -119,7 +123,8 @@ public class SolrUtil {
 				val = "dynamicDate.property." + cmisColName;
 			} else {
 				// case for STRING
-				val = "dynamic.property." + cmisColName.replace(":", "\\:").replace("\\\\:", "\\:");
+//				val = "dynamixc.property." + cmisColName.replace(":", "\\:").replace("\\\\:", "\\:");
+				val = "dynamic.property." + cmisColName.replace(":", "_");
 			}
 
 		}
@@ -142,7 +147,7 @@ public class SolrUtil {
 		if (!force)
 			return;
 
-		String url = getSolrUrl();
+		String url = getSolrBaseUrl();
 
 		Client client = ClientBuilder.newClient();
 		WebTarget webTarget = client
@@ -160,7 +165,7 @@ public class SolrUtil {
 		// TODO log according to the response status
 	}
 
-	public String getSolrUrl() {
+	public String getSolrBaseUrl() {
 		String protocol = propertyManager.readValue(PropertyKey.SOLR_PROTOCOL);
 		String host = propertyManager.readValue(PropertyKey.SOLR_HOST);
 		int port = Integer.valueOf(propertyManager.readValue(PropertyKey.SOLR_PORT));

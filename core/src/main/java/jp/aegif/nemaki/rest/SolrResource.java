@@ -40,7 +40,7 @@ public class SolrResource extends ResourceBase {
 		JSONObject result = new JSONObject();
 		JSONArray errMsg = new JSONArray();
 
-		String solrUrl = solrUtil.getSolrUrl();
+		String solrUrl = solrUtil.getSolrBaseUrl();
 
 		result.put("url", solrUrl);
 
@@ -64,7 +64,7 @@ public class SolrResource extends ResourceBase {
 
 		// Call Solr
 		HttpClient httpClient = HttpClientBuilder.create().build();
-		String solrUrl = solrUtil.getSolrUrl();
+		String solrUrl = solrUtil.getSolrBaseUrl();
 		String url = solrUrl + "admin/cores?core=nemaki&action=init&repositoryId=" + repositoryId;
 		HttpGet httpGet = new HttpGet(url);
 		try {
@@ -107,7 +107,7 @@ public class SolrResource extends ResourceBase {
 
 		// Call Solr
 		HttpClient httpClient = HttpClientBuilder.create().build();
-		String solrUrl = solrUtil.getSolrUrl();
+		String solrUrl = solrUtil.getSolrBaseUrl();
 		String url = solrUrl + "admin/cores?core=nemaki&action=index&tracking=FULL&repositoryId=" + repositoryId;
 		HttpGet httpGet = new HttpGet(url);
 		try {
@@ -158,7 +158,7 @@ public class SolrResource extends ResourceBase {
 
 		// Call Solr
 		HttpClient httpClient = HttpClientBuilder.create().build();
-		String solrUrl = solrUtil.getSolrUrl();
+		String solrUrl = solrUtil.getSolrBaseUrl();
 		String url = solrUrl + "admin/cores?core=nemaki&action=CHANGE_PASSWORD&tracking=FULL&repositoryId="
 				+ repositoryId + "&password=" + password + "&currentPassword=" + currentPassword;
 		HttpGet httpAction = new HttpGet(url);

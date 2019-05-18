@@ -20,6 +20,7 @@ public interface PropertyKey {
 	final String SOLR_HOST = "solr.host";
 	final String SOLR_PORT = "solr.port";
 	final String SOLR_CONTEXT = "solr.context";
+	final String SOLR_CORE = "solr.core";
 	final String SOLR_INDEXING_FORCE = "solr.indexing.force";
 	final String SOLR_NEMAKI_USERID = "solr.nemaki.userid";
 
