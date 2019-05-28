@@ -459,11 +459,11 @@ public class ExceptionServiceImpl implements ExceptionService, ApplicationContex
 			PropertyDefinition<T> propertyDefinition = (PropertyDefinition<T>) propertyDefinitions.get(pd.getId());
 			// If an input property is not defined one, output error.
 			if (propertyDefinition == null)
-				constraint(objectId, "An undefined property is provided!");
+				constraint(objectId, "An undefined property is provided: " + pd.getId());
 
 			// Check "required" flag
 			if (propertyDefinition.isRequired() && !DataUtil.valueExist(pd.getValues()))
-				constraint(objectId, "An required property is not provided!");
+				constraint(objectId, "An required property is not provided: " + pd.getId());
 
 			// Check choices
 			constraintChoices(propertyDefinition, pd, objectId);
