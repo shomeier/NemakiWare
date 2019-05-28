@@ -153,7 +153,7 @@ public class SolrUtil {
 		WebTarget webTarget = client
 				.target(url + "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
 		Invocation.Builder invocationBuilder = webTarget.request();
-		Response response = invocationBuilder.accept(MediaType.APPLICATION_XML_TYPE).get();
+		Response response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 
 //		Client client = Client.create();
 //		// TODO Regardless a slash on the last, build the correct URL
