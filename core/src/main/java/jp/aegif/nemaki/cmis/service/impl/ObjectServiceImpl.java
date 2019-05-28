@@ -140,7 +140,7 @@ public class ObjectServiceImpl implements ObjectService {
 			Boolean includeAllowableActions, IncludeRelationships includeRelationships, String renditionFilter,
 			Boolean includePolicyIds, Boolean includeAcl, ExtensionsData extension) {
 
-		log.info(MessageFormat.format("ObjcetService#getObject START: Repo={0}, Id={1}", repositoryId, objectId));
+		log.info(MessageFormat.format("ObjectService#getObject START: Repo={0}, Id={1}", repositoryId, objectId));
 
 		exceptionService.invalidArgumentRequired("objectId", objectId);
 
@@ -695,6 +695,9 @@ public class ObjectServiceImpl implements ObjectService {
 	public void updateProperties(CallContext callContext, String repositoryId, Holder<String> objectId,
 			Properties properties, Holder<String> changeToken, ExtensionsData extension) {
 
+		log.info(
+				MessageFormat.format("ObjectService#updateProperties START: Repo={0}, Id={1}", repositoryId, objectId));
+
 		exceptionService.invalidArgumentRequiredHolderString("objectId", objectId);
 
 		Lock lock = threadLockService.getWriteLock(repositoryId, objectId.getValue());
@@ -713,6 +716,9 @@ public class ObjectServiceImpl implements ObjectService {
 			contentService.updateProperties(callContext, repositoryId, properties, content);
 
 			nemakiCachePool.get(repositoryId).removeCmisCache(objectId.getValue());
+
+			log.info(MessageFormat.format("ObjectService#updateProperties END: Repo={0}, Id={1} Type={2} Name={3}",
+					repositoryId, objectId, content.getObjectType(), content.getObjectType(), content.getName()));
 		} finally {
 			lock.unlock();
 		}
