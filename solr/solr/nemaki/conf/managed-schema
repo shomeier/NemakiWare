@@ -2,7 +2,7 @@
 <!-- Solr managed schema - automatically generated - DO NOT EDIT -->
 <schema name="nemaki" version="1.6">
   <uniqueKey>id</uniqueKey>
-  <fieldType name="_nest_path_" class="solr.NestPathField" omitTermFreqAndPositions="true" omitNorms="true" maxCharsForDocValues="-1" stored="false"/>
+  <fieldType name="_nest_path_" class="solr.NestPathField" maxCharsForDocValues="-1" omitNorms="true" omitTermFreqAndPositions="true" stored="false"/>
   <fieldType name="ancestor_path" class="solr.TextField">
     <analyzer type="index">
       <tokenizer class="solr.KeywordTokenizerFactory"/>
@@ -454,6 +454,7 @@
   <field name="content_name" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="created" type="pdate" multiValued="false" indexed="true" stored="true"/>
   <field name="creator" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="dynamic.property.lingo_part_of_speech.lingo_part_of_speech" type="text_general"/>
   <field name="dynamic.property.lingo_text" type="text_general"/>
   <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
   <field name="is_checkedout" type="boolean" multiValued="false" indexed="true" stored="true"/>
@@ -540,4 +541,5 @@
   <dynamicField name="*_d" type="pdouble" indexed="true" stored="true"/>
   <dynamicField name="*_p" type="location" indexed="true" stored="true"/>
   <copyField source="dynamic.property.lingo_text" dest="dynamic.property.lingo_text_str" maxChars="256"/>
+  <copyField source="dynamic.property.lingo_part_of_speech.lingo_part_of_speech" dest="dynamic.property.lingo_part_of_speech.lingo_part_of_speech_str" maxChars="256"/>
 </schema>
