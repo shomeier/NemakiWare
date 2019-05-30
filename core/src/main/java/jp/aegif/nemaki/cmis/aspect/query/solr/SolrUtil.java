@@ -141,6 +141,37 @@ public class SolrUtil {
 	}
 
 	public void callSolrIndexing(String repositoryId) {
+
+		String _force = propertyManager.readValue(PropertyKey.SOLR_INDEXING_FORCE);
+		boolean force = (Boolean.TRUE.toString().equals(_force)) ? true : false;
+
+		if (force)
+			return;
+
+		String url = getSolrBaseUrl();
+
+		log.info("11111");
+		Client client = ClientBuilder.newClient();
+		WebTarget webTarget = client
+				.target(url + "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
+		log.info("22222");
+		Invocation.Builder invocationBuilder = webTarget.request();
+		log.info("3333");
+		Response response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+		log.info("44444");
+
+//		Client client = Client.create();
+//		// TODO Regardless a slash on the last, build the correct URL
+//		WebResource webResource = client.resource(url
+//				+ "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
+
+		String xml = response.readEntity(String.class);
+		// String xml = webResource.accept("application/xml").get(String.class);
+		// TODO log according to the response status
+	}
+
+	public void callSolrIndexingNew(String repositoryId) {
+
 		String _force = propertyManager.readValue(PropertyKey.SOLR_INDEXING_FORCE);
 		boolean force = (Boolean.TRUE.toString().equals(_force)) ? true : false;
 
@@ -149,11 +180,15 @@ public class SolrUtil {
 
 		String url = getSolrBaseUrl();
 
+		log.info("11111");
 		Client client = ClientBuilder.newClient();
 		WebTarget webTarget = client
 				.target(url + "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
+		log.info("22222");
 		Invocation.Builder invocationBuilder = webTarget.request();
+		log.info("3333");
 		Response response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+		log.info("44444");
 
 //		Client client = Client.create();
 //		// TODO Regardless a slash on the last, build the correct URL

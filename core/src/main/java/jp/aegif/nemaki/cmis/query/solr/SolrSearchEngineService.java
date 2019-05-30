@@ -11,12 +11,11 @@ import jp.aegif.nemaki.cmis.aspect.query.solr.SolrUtil;
 public class SolrSearchEngineService implements SearchEngineService {
 
 	@Autowired
-	private SolrUtil sorlUtil;
+	private SolrUtil solrUtil;
 
 	@Override
 	public void updateIndex(CallContext callContext) {
-		System.out.println("SolrUtil is: " + sorlUtil);
-
+		solrUtil.callSolrIndexingNew(callContext.getRepositoryId());
 	}
 
 }
