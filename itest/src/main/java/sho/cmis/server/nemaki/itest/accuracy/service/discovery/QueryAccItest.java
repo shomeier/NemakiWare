@@ -2,12 +2,6 @@ package sho.cmis.server.nemaki.itest.accuracy.service.discovery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.stream.Collectors;
-
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
@@ -38,25 +32,39 @@ public class QueryAccItest extends AbstractITest {
 	public static void before() throws Exception {
 		AbstractITest.before();
 		documentId = createDocument(testFolderId, documentName, documentContent);
+		// add two secondary types
+//		List<String> secondaryTypes = new ArrayList<String>();
+//		secondaryTypes.add("S:itest:secondary");
+//		secondaryTypes.add("S:itest:secondary_marker");
+//
+//		Map<String, Object> props = new HashMap<String, Object>();
+//		props.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
+//
+//		// set secondary type properties
+////		props.put("lingo:language", "en");
+//
+//		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.CHANGE_TOKEN);
+//		CmisObject object = session.getObject(documentId, opCtx);
+//		CmisObject newObject = object.updateProperties(props);
 
-		URL url = new URL(URL_REINDEX_FULL);
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET");
-		String contentString = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
-				.collect(Collectors.joining("\n"));
-		LOG.info(contentString);
+//		URL url = new URL(URL_REINDEX_FULL);
+//		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//		con.setRequestMethod("GET");
+//		String contentString = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
+//				.collect(Collectors.joining("\n"));
+//		LOG.info(contentString);
 	}
 
 	@AfterAll
 	public static void after() throws Exception {
 		AbstractITest.after();
 
-		URL url = new URL(URL_INIT);
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET");
-		String contentString = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
-				.collect(Collectors.joining("\n"));
-		LOG.info(contentString);
+//		URL url = new URL(URL_INIT);
+//		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//		con.setRequestMethod("GET");
+//		String contentString = new BufferedReader(new InputStreamReader(con.getInputStream())).lines()
+//				.collect(Collectors.joining("\n"));
+//		LOG.info(contentString);
 	}
 
 	@Test

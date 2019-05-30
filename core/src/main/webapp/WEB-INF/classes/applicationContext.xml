@@ -39,6 +39,7 @@
 				<value>classpath*:${context.businesslogic}</value>
 				<value>classpath:serviceContext.xml</value>
 				<value>classpath*:patchContext.xml</value>
+				<value>classpath*:solrQueryContext.xml</value>
 			</list>
 		</property>
 	</bean>
