@@ -10,6 +10,7 @@ import org.apache.chemistry.opencmis.commons.data.Properties;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.server.CallContext;
+import org.apache.chemistry.opencmis.commons.spi.Holder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ public class SearchEngineServiceWrapper extends AbstractCmisServiceWrapper {
 				policies, extension);
 
 		CallContext callContext = getCallContext();
-		log.info("Created object -> updating index");
 		searchEngineService.updateIndex(callContext);
 
 		return cmisId;
@@ -53,7 +53,6 @@ public class SearchEngineServiceWrapper extends AbstractCmisServiceWrapper {
 				versioningState, policies, addAces, removeAces, extension);
 
 		CallContext callContext = getCallContext();
-		log.info("Created document -> updating index");
 		searchEngineService.updateIndex(callContext);
 
 		return cmisId;
@@ -66,10 +65,30 @@ public class SearchEngineServiceWrapper extends AbstractCmisServiceWrapper {
 				removeAces, extension);
 
 		CallContext callContext = getCallContext();
-		log.info("Created folder -> updating index");
 		searchEngineService.updateIndex(callContext);
 
 		return cmisId;
+	}
+
+	@Override
+	public String createRelationship(String repositoryId, Properties properties, List<String> policies, Acl addAces,
+			Acl removeAces, ExtensionsData extension) {
+		String cmisId = getWrappedService().createRelationship(repositoryId, properties, policies, addAces, removeAces,
+				extension);
+
+		CallContext callContext = getCallContext();
+		searchEngineService.updateIndex(callContext);
+
+		return cmisId;
+	}
+
+	@Override
+	public void updateProperties(String repositoryId, Holder<String> objectId, Holder<String> changeToken,
+			Properties properties, ExtensionsData extension) {
+		getWrappedService().updateProperties(repositoryId, objectId, changeToken, properties, extension);
+
+		CallContext callContext = getCallContext();
+		searchEngineService.updateIndex(callContext);
 	}
 
 	@Override
@@ -79,7 +98,6 @@ public class SearchEngineServiceWrapper extends AbstractCmisServiceWrapper {
 				unfileObjects, continueOnFailure, extension);
 
 		CallContext callContext = getCallContext();
-		log.info("Deleted tree -> updating index");
 		searchEngineService.updateIndex(callContext);
 
 		return deleteTree;
