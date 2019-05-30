@@ -100,6 +100,8 @@ public class CmisServiceFactory extends AbstractServiceFactory
 				outmostWrapper = wrapperService;
 			}
 
+			// call context is only set on outmost wrapper because it is passed through
+			outmostWrapper.setCallContext(callContext);
 			return outmostWrapper;
 		} else {
 			String msg = String.format("[Repository=%1$s][UserName=%2$s]Authentication failed", repositoryId, userName);
