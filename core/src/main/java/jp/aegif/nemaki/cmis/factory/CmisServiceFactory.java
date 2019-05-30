@@ -1,6 +1,7 @@
 package jp.aegif.nemaki.cmis.factory;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -11,9 +12,11 @@ import org.apache.chemistry.opencmis.commons.server.CallContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import jp.aegif.nemaki.cmis.api.NemakiCmisServiceWrapper;
 import jp.aegif.nemaki.cmis.factory.auth.AuthenticationService;
 import jp.aegif.nemaki.cmis.factory.auth.CmisServiceWrapper;
 import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
@@ -41,6 +44,9 @@ public class CmisServiceFactory extends AbstractServiceFactory
 	private static BigInteger DEFAULT_DEPTH_OBJECTS;
 
 	private static final Log log = LogFactory.getLog(CmisServiceFactory.class);
+
+	@Autowired
+	private List<NemakiCmisServiceWrapper> wrapperServices;
 
 	public CmisServiceFactory() {
 		super();
@@ -88,7 +94,13 @@ public class CmisServiceFactory extends AbstractServiceFactory
 						+ callContext.getUsername() + "] is generated");
 			}
 
-			return wrapper;
+			NemakiCmisServiceWrapper outmostWrapper = null;
+			for (NemakiCmisServiceWrapper wrapperService : wrapperServices) {
+				wrapperService.setWrappedService(wrapper);
+				outmostWrapper = wrapperService;
+			}
+
+			return outmostWrapper;
 		} else {
 			String msg = String.format("[Repository=%1$s][UserName=%2$s]Authentication failed", repositoryId, userName);
 			throw new CmisUnauthorizedException(msg, BigInteger.valueOf(401));
