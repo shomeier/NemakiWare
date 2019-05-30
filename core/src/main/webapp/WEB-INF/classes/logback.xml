@@ -58,7 +58,7 @@
 	<root level="WARN">
 		<appender-ref ref="FILE" />
 	</root>
-	<logger name="jp.aegif.nemaki" level="DEBUG" additivity="false">
+	<logger name="jp.aegif.nemaki" level="TRACE" additivity="false">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
 	</logger>

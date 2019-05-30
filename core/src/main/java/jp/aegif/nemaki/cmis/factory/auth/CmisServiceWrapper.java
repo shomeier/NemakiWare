@@ -11,9 +11,10 @@ import org.apache.chemistry.opencmis.commons.server.CmisService;
 import org.apache.chemistry.opencmis.server.support.wrapper.CmisServiceWrapperManager;
 import org.apache.chemistry.opencmis.server.support.wrapper.ConformanceCmisServiceWrapper;
 
+import jp.aegif.nemaki.cmis.api.NemakiCmisService;
 import jp.aegif.nemaki.util.constant.CallContextKey;
 
-public class CmisServiceWrapper extends ConformanceCmisServiceWrapper {
+public class CmisServiceWrapper extends ConformanceCmisServiceWrapper implements NemakiCmisService {
 	/**
 	 * Constructor used by {@link CmisServiceWrapperManager}.
 	 */

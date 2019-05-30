@@ -1,6 +1,7 @@
 package jp.aegif.nemaki.cmis.factory;
 
 import java.math.BigInteger;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -94,15 +95,22 @@ public class CmisServiceFactory extends AbstractServiceFactory
 						+ callContext.getUsername() + "] is generated");
 			}
 
-			NemakiCmisServiceWrapper outmostWrapper = null;
+			NemakiCmisServiceWrapper lastServiceWrapper = null;
 			for (NemakiCmisServiceWrapper wrapperService : wrapperServices) {
-				wrapperService.setWrappedService(wrapper);
-				outmostWrapper = wrapperService;
+				log.trace(MessageFormat.format("Wrapper Service {0} is applied ...",
+						wrapperService.getClass().getName()));
+				if (lastServiceWrapper == null) {
+					wrapperService.setWrappedService(wrapper);
+				} else {
+					wrapperService.setWrappedService(lastServiceWrapper);
+				}
+				lastServiceWrapper = wrapperService;
 			}
 
 			// call context is only set on outmost wrapper because it is passed through
-			outmostWrapper.setCallContext(callContext);
-			return outmostWrapper;
+			log.trace(MessageFormat.format("Outmost Wrapper Service is: {0}", lastServiceWrapper.getClass().getName()));
+			lastServiceWrapper.setCallContext(callContext);
+			return lastServiceWrapper;
 		} else {
 			String msg = String.format("[Repository=%1$s][UserName=%2$s]Authentication failed", repositoryId, userName);
 			throw new CmisUnauthorizedException(msg, BigInteger.valueOf(401));

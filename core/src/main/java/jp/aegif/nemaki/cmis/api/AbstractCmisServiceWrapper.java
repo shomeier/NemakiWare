@@ -60,8 +60,7 @@ import org.apache.chemistry.opencmis.server.support.wrapper.CmisServiceWrapperMa
  */
 public abstract class AbstractCmisServiceWrapper implements NemakiCmisServiceWrapper {
 
-	private CmisService service;
-	private CallContext context;
+	private NemakiCmisService service;
 
 	/**
 	 * Initializes the wrapper with a set of parameters.
@@ -77,12 +76,12 @@ public abstract class AbstractCmisServiceWrapper implements NemakiCmisServiceWra
 	 * @return the wrapped service
 	 */
 	@Override
-	public CmisService getWrappedService() {
+	public NemakiCmisService getWrappedService() {
 		return service;
 	}
 
 	@Override
-	public void setWrappedService(CmisService service) {
+	public void setWrappedService(NemakiCmisService service) {
 		if (service == null) {
 			throw new IllegalArgumentException("Service must be set!");
 		}
@@ -96,11 +95,7 @@ public abstract class AbstractCmisServiceWrapper implements NemakiCmisServiceWra
 	 */
 	@Override
 	public void setCallContext(CallContext callContext) {
-		this.context = callContext;
-
-		if (service instanceof CallContextAwareCmisService) {
-			((CallContextAwareCmisService) service).setCallContext(callContext);
-		}
+		service.setCallContext(callContext);
 	}
 
 	/**
@@ -108,7 +103,7 @@ public abstract class AbstractCmisServiceWrapper implements NemakiCmisServiceWra
 	 */
 	@Override
 	public CallContext getCallContext() {
-		return context;
+		return service.getCallContext();
 	}
 
 	// --- processing ---
@@ -477,6 +472,5 @@ public abstract class AbstractCmisServiceWrapper implements NemakiCmisServiceWra
 	@Override
 	public void close() {
 		service.close();
-		context = null;
 	}
 }
