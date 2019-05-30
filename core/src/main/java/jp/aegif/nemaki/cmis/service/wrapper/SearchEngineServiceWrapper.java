@@ -92,6 +92,15 @@ public class SearchEngineServiceWrapper extends AbstractCmisServiceWrapper {
 	}
 
 	@Override
+	public void deleteObject(String repositoryId, String objectId, Boolean allVersions, ExtensionsData extension) {
+
+		getWrappedService().deleteObject(repositoryId, objectId, allVersions, extension);
+
+		CallContext callContext = getCallContext();
+		searchEngineService.updateIndex(callContext);
+	}
+
+	@Override
 	public FailedToDeleteData deleteTree(String repositoryId, String folderId, Boolean allVersions,
 			UnfileObject unfileObjects, Boolean continueOnFailure, ExtensionsData extension) {
 		FailedToDeleteData deleteTree = getWrappedService().deleteTree(repositoryId, folderId, allVersions,
