@@ -25,6 +25,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Named;
+
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.Acl;
 import org.apache.chemistry.opencmis.commons.data.AllowableActions;
@@ -62,11 +64,13 @@ import org.apache.chemistry.opencmis.commons.server.CallContext;
 import org.apache.chemistry.opencmis.commons.server.ObjectInfo;
 import org.apache.chemistry.opencmis.commons.server.RenditionInfo;
 import org.apache.chemistry.opencmis.commons.spi.Holder;
-import org.apache.chemistry.opencmis.server.support.wrapper.CallContextAwareCmisService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 
+import jp.aegif.nemaki.cmis.api.NemakiCmisService;
 import jp.aegif.nemaki.cmis.service.AclService;
 import jp.aegif.nemaki.cmis.service.DiscoveryService;
 import jp.aegif.nemaki.cmis.service.NavigationService;
@@ -79,7 +83,9 @@ import jp.aegif.nemaki.cmis.service.VersioningService;
 /**
  * Nemaki CMIS service.
  */
-public class CmisService extends AbstractCmisService implements CallContextAwareCmisService {
+@Named
+@Scope("prototype")
+public class CmisService extends AbstractCmisService implements NemakiCmisService {
 
 	/**
 	 * Context data of the current CMIS call.
@@ -90,23 +96,24 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	 * Map containing all Nemaki repositories.
 	 */
 
+	@Autowired
 	private AclService aclService;
+	@Autowired
 	private DiscoveryService discoveryService;
+	@Autowired
 	private NavigationService navigationService;
+	@Autowired
 	private ObjectService objectService;
+	@Autowired
 	private RepositoryService repositoryService;
+	@Autowired
 	private VersioningService versioningService;
+	@Autowired
 	private PolicyService policyService;
+	@Autowired
 	private RelationshipService relationshipService;
 
 	private static final Log log = LogFactory.getLog(CmisService.class);
-
-	/**
-	 * Create a new NemakiCmisService.
-	 */
-	public CmisService() {
-
-	}
 
 	// --- Navigation Service Implementation ---
 
@@ -878,6 +885,8 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 	 */
 	@Override
 	public void setCallContext(CallContext context) {
+		if (context == null)
+			System.out.println("CallCtx is NULL");
 		this.context = context;
 
 		if (log.isTraceEnabled()) {
@@ -934,7 +943,17 @@ public class CmisService extends AbstractCmisService implements CallContextAware
 		}
 
 		super.close();
+		this.context = null;
+	}
 
+	@Override
+	public Progress beforeServiceCall() {
+		return Progress.CONTINUE;
+	}
+
+	@Override
+	public Progress afterServiceCall() {
+		return Progress.CONTINUE;
 	}
 
 }

@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.annotation.Resource;
+import javax.inject.Named;
+
 import org.apache.chemistry.opencmis.commons.data.Acl;
 import org.apache.chemistry.opencmis.commons.data.AllowableActions;
 import org.apache.chemistry.opencmis.commons.data.BulkUpdateObjectIdAndChangeToken;
@@ -29,20 +32,19 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.server.CallContext;
 import org.apache.chemistry.opencmis.commons.server.ObjectInfo;
 import org.apache.chemistry.opencmis.commons.spi.Holder;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import jp.aegif.nemaki.cmis.api.AbstractCmisServiceWrapper;
 import jp.aegif.nemaki.cmis.api.ServiceCallInterceptor;
 
-@Component
-@Scope("prototype")
+@Named
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Order(value = 40000)
 public class ServiceCallInterceptorBus extends AbstractCmisServiceWrapper {
 
-	@Autowired
+	@Resource
 	private List<ServiceCallInterceptor> interceptors;
 
 	// --- service methods ---

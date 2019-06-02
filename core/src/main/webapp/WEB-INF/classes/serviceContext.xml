@@ -12,7 +12,13 @@
     	http://www.springframework.org/schema/context
     	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="jp.aegif.nemaki.cmis.service.wrapper" />
+
+	<context:component-scan
+		base-package="jp.aegif.nemaki.cmis.factory" />
+	<context:component-scan
+		base-package="jp.aegif.nemaki.cmis.service.wrapper" />
+	<context:component-scan
+		base-package="jp.aegif.nemaki.cmis.service.interceptor" />
 
 	<!-- CMIS Repository Beans -->
 	<bean id="CmisLifecycleBean"
@@ -34,33 +40,16 @@
 		</property>
 	</bean>
 
-	<bean id="cmisService"
-		class="jp.aegif.nemaki.cmis.factory.CmisService" scope="prototype">
-		<property name="repositoryService">
-			<ref bean="RepositoryService" />
-		</property>
-		<property name="navigationService">
-			<ref bean="NavigationService" />
-		</property>
-		<property name="objectService">
-			<ref bean="ObjectService" />
-		</property>
-		<property name="discoveryService">
-			<ref bean="DiscoveryService" />
-		</property>
-		<property name="versioningService">
-			<ref bean="VersioningService" />
-		</property>
-		<property name="RelationshipService">
-			<ref bean="RelationshipService" />
-		</property>
-		<property name="policyService">
-			<ref bean="PolicyService" />
-		</property>
-		<property name="aclService">
-			<ref bean="AclService" />
-		</property>
-	</bean>
+	<!-- <bean id="cmisService" class="jp.aegif.nemaki.cmis.factory.CmisService"
+		scope="prototype"> <property name="repositoryService"> <ref bean="RepositoryService"
+		/> </property> <property name="navigationService"> <ref bean="NavigationService"
+		/> </property> <property name="objectService"> <ref bean="ObjectService"
+		/> </property> <property name="discoveryService"> <ref bean="DiscoveryService"
+		/> </property> <property name="versioningService"> <ref bean="VersioningService"
+		/> </property> <property name="RelationshipService"> <ref bean="RelationshipService"
+		/> </property> <property name="policyService"> <ref bean="PolicyService"
+		/> </property> <property name="aclService"> <ref bean="AclService" /> </property>
+		</bean> -->
 
 	<bean id="repositoryInfoMap"
 		class="jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap"

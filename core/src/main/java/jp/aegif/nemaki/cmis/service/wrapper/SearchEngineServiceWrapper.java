@@ -2,6 +2,9 @@ package jp.aegif.nemaki.cmis.service.wrapper;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.inject.Named;
+
 import org.apache.chemistry.opencmis.commons.data.Acl;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.data.ExtensionsData;
@@ -13,22 +16,21 @@ import org.apache.chemistry.opencmis.commons.server.CallContext;
 import org.apache.chemistry.opencmis.commons.spi.Holder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import jp.aegif.nemaki.cmis.api.AbstractCmisServiceWrapper;
 import jp.aegif.nemaki.cmis.api.SearchEngineService;
 
-@Component
-@Scope("prototype")
+@Named
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Order(value = 10000)
 public class SearchEngineServiceWrapper extends AbstractCmisServiceWrapper {
 
 	private static final Log log = LogFactory.getLog(SearchEngineServiceWrapper.class);
 
-	@Autowired
+	@Resource
 	private SearchEngineService searchEngineService;
 
 	@Override
