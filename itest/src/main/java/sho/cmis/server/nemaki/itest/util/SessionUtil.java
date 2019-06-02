@@ -24,8 +24,8 @@ public class SessionUtil {
 		parameter.put(SessionParameter.PASSWORD, password);
 
 		// session locale
-		parameter.put(SessionParameter.LOCALE_ISO3166_COUNTRY, "");
-		parameter.put(SessionParameter.LOCALE_ISO639_LANGUAGE, "");
+//		parameter.put(SessionParameter.LOCALE_ISO3166_COUNTRY, "");
+//		parameter.put(SessionParameter.LOCALE_ISO639_LANGUAGE, "");
 
 		// repository
 		parameter.put(SessionParameter.REPOSITORY_ID, repositoryId);
@@ -39,7 +39,7 @@ public class SessionUtil {
 		// TODO: Get rid of using a cmisselector for browser binding url
 		String coreBrowserUri = "http://localhost:8080/core/browser/" + repositoryId + "?cmisselector=repositoryInfo"; // TODO
 
-		parameter.put(SessionParameter.ATOMPUB_URL, coreAtomUri);
+//		parameter.put(SessionParameter.ATOMPUB_URL, coreAtomUri);
 		parameter.put(SessionParameter.BROWSER_URL, coreBrowserUri);
 
 		// timeout

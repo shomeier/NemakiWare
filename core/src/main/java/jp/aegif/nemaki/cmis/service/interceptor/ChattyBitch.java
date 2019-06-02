@@ -27,7 +27,7 @@ public class ChattyBitch implements ServiceCallInterceptor {
 	public Object onServiceCallExit(CallContext callContext, Object result) {
 
 		CmisService cmisService = (CmisService) callContext.get(CallContextKey.SERVICE);
-		log.info("\nOUT <<-- " + cmisService);
+		log.info("\nOUT <<-- " + cmisService + "\n\tResult: " + result);
 
 		return result;
 	}

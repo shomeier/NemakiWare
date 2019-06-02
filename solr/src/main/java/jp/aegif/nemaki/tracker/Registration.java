@@ -28,17 +28,17 @@ import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.data.ObjectParentData;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.request.AbstractUpdateRequest;
 import org.apache.solr.client.solrj.request.ContentStreamUpdateRequest;
 import org.apache.solr.client.solrj.request.UpdateRequest;
-import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.SolrCore;
@@ -205,22 +205,17 @@ public class Registration implements Runnable {
 	private void deleteSolrDocument(ChangeEvent ce) {
 		logger.info("Start deleteSolrDocument");
 		try {
-			// Check if the SolrDocument exists
-			SolrQuery solrQuery = new SolrQuery();
-			solrQuery.setQuery(Constant.FIELD_OBJECT_ID + ":" + ce.getObjectId());
-			QueryResponse resp = repositoryServer.query(solrQuery);
-			if (resp != null && resp.getResults() != null) {
-				if (resp.getResults().getNumFound() == 0) {
-					logger.info("[ObjectId={}]DELETED type change event is skipped because there is no SolrDocument",
-							ce.getObjectId());
-					return;
-				}
-			} else {
-				logger.error("{}:Something wrong in the connection to Solr server", core.getName());
+			String repositoryId = cmisSession.getSessionParameters().get(SessionParameter.REPOSITORY_ID);
+			String uniqueId = buildUniqueId(repositoryId, ce.getObjectId());
+			SolrDocument solrDocument = repositoryServer.getById(uniqueId);
+			if (solrDocument == null) {
+				logger.info("[ObjectId={}]DELETED type change event is skipped because there is no SolrDocument",
+						ce.getObjectId());
+				return;
 			}
 
 			// Delete
-			repositoryServer.deleteById(ce.getObjectId());
+			repositoryServer.deleteById(uniqueId);
 			repositoryServer.commit();
 			logger.info("[ObjectId={}]Successfully deleted.", ce.getObjectId());
 		} catch (Exception e) {
@@ -390,7 +385,7 @@ public class Registration implements Runnable {
 
 	private void buildBaseParamMap(Map<String, Object> map, CmisObject object) {
 		logger.info("Build BaseParam: " + object.toString());
-		String repositoryId = cmisSession.getRepositoryInfo().getId();
+		String repositoryId = cmisSession.getSessionParameters().get(SessionParameter.REPOSITORY_ID);
 
 		String objectId = object.getId();
 		map.put(Constant.FIELD_ID, buildUniqueId(repositoryId, objectId));
