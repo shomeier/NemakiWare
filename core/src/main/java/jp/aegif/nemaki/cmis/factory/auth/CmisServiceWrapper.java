@@ -22,6 +22,11 @@ public class CmisServiceWrapper extends ConformanceCmisServiceWrapper implements
 		super(service);
 	}
 
+	@Override
+	public CallContext getCallContext() {
+		return ((NemakiCmisService) getWrappedService()).getCallContext();
+	}
+
 	/**
 	 * Alternative constructor.
 	 */

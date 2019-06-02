@@ -14,9 +14,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import jp.aegif.nemaki.cmis.api.NemakiCmisService;
 import jp.aegif.nemaki.cmis.api.NemakiCmisServiceWrapper;
 import jp.aegif.nemaki.cmis.factory.auth.AuthenticationService;
 import jp.aegif.nemaki.cmis.factory.auth.CmisServiceWrapper;
@@ -24,7 +26,6 @@ import jp.aegif.nemaki.cmis.factory.info.RepositoryInfoMap;
 import jp.aegif.nemaki.util.DataUtil;
 import jp.aegif.nemaki.util.PropertyManager;
 import jp.aegif.nemaki.util.constant.PropertyKey;
-import jp.aegif.nemaki.util.spring.SpringUtil;
 
 /**
  * Service factory class, specified in repository.properties.
@@ -46,8 +47,13 @@ public class CmisServiceFactory extends AbstractServiceFactory
 
 	private static final Log log = LogFactory.getLog(CmisServiceFactory.class);
 
+	@Lookup("cmisService")
+	public NemakiCmisService getMainCmisService() {
+		return null;
+	}
+
 	@Autowired
-	private List<NemakiCmisServiceWrapper> wrapperServices;
+	private List<NemakiCmisServiceWrapper> wrappers;
 
 	public CmisServiceFactory() {
 		super();
@@ -74,6 +80,7 @@ public class CmisServiceFactory extends AbstractServiceFactory
 
 	@Override
 	public org.apache.chemistry.opencmis.commons.server.CmisService getService(CallContext callContext) {
+
 		String repositoryId = callContext.getRepositoryId();
 		String userName = callContext.getUsername();
 
@@ -81,23 +88,19 @@ public class CmisServiceFactory extends AbstractServiceFactory
 		boolean auth = authenticationService.login(callContext);
 
 		if (auth) {
-			// Create CmisService
-			CmisService calledCmisService = SpringUtil.getBeanByType(applicationContext, CmisService.class);
-			if (calledCmisService == null) {
-				log.error("RepositoryId=" + repositoryId + " does not exist", new Throwable());
-			}
 
-			CmisServiceWrapper wrapper = new CmisServiceWrapper(calledCmisService, DEFAULT_MAX_ITEMS_TYPES,
+			NemakiCmisService cmisService = getMainCmisService();
+			CmisServiceWrapper wrapper = new CmisServiceWrapper(cmisService, DEFAULT_MAX_ITEMS_TYPES,
 					DEFAULT_DEPTH_TYPES, DEFAULT_MAX_ITEMS_OBJECTS, DEFAULT_DEPTH_OBJECTS, callContext);
 			if (log.isTraceEnabled()) {
-				log.trace("nemaki_log[FACTORY]" + "CmisService@" + calledCmisService.hashCode() + " with CallContext@"
+				log.trace("nemaki_log[FACTORY]" + "CmisService@" + cmisService.hashCode() + " with CallContext@"
 						+ callContext.hashCode() + "[repositoryId=" + callContext.getRepositoryId() + ", userId="
 						+ callContext.getUsername() + "] is generated");
 			}
 
 			NemakiCmisServiceWrapper lastServiceWrapper = null;
-			for (NemakiCmisServiceWrapper wrapperService : wrapperServices) {
-				log.trace(MessageFormat.format("Wrapper Service {0} is applied ...",
+			for (NemakiCmisServiceWrapper wrapperService : wrappers) {
+				log.debug(MessageFormat.format("Wrapper Service {0} is applied ...",
 						wrapperService.getClass().getName()));
 				if (lastServiceWrapper == null) {
 					wrapperService.setWrappedService(wrapper);
@@ -108,7 +111,7 @@ public class CmisServiceFactory extends AbstractServiceFactory
 			}
 
 			// call context is only set on outmost wrapper because it is passed through
-			log.trace(MessageFormat.format("Outmost Wrapper Service is: {0}", lastServiceWrapper.getClass().getName()));
+			log.debug(MessageFormat.format("Outmost Wrapper Service is: {0}", lastServiceWrapper.getClass().getName()));
 			lastServiceWrapper.setCallContext(callContext);
 			return lastServiceWrapper;
 		} else {

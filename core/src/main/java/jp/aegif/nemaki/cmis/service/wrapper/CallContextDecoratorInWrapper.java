@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Named;
+
 import org.apache.chemistry.opencmis.commons.data.Acl;
 import org.apache.chemistry.opencmis.commons.data.AllowableActions;
 import org.apache.chemistry.opencmis.commons.data.BulkUpdateObjectIdAndChangeToken;
@@ -32,20 +34,24 @@ import org.apache.chemistry.opencmis.commons.server.ObjectInfo;
 import org.apache.chemistry.opencmis.commons.spi.Holder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import jp.aegif.nemaki.cmis.api.AbstractCmisServiceWrapper;
 import jp.aegif.nemaki.util.constant.CallContextKey;
 import jp.aegif.nemaki.util.constant.CmisService;
 
-@Component
-@Scope("prototype")
+@Named
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 // must be one of the very first wrappers
 @Order(value = 50000)
 public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 	private static final Log log = LogFactory.getLog(CallContextDecoratorInWrapper.class);
+
+	public CallContextDecoratorInWrapper() {
+		super();
+	}
 
 	@Override
 	public List<RepositoryInfo> getRepositoryInfos(ExtensionsData extension) {
@@ -55,9 +61,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 		Map<String, Object> params = new HashMap<>();
 		params.put(CallContextKey.PARAM_EXTENSION, extension);
 		callContext.put(CallContextKey.SERVICE_PARAMS, params);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getRepositoryInfos(extension);
+		return super.getRepositoryInfos(extension);
 	}
 
 	@Override
@@ -69,9 +75,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 		params.put(CallContextKey.PARAM_REPOSITORY_ID, repositoryId);
 		params.put(CallContextKey.PARAM_EXTENSION, extension);
 		callContext.put(CallContextKey.SERVICE_PARAMS, params);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getRepositoryInfo(repositoryId, extension);
+		return super.getRepositoryInfo(repositoryId, extension);
 	}
 
 	@Override
@@ -88,10 +94,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 		params.put(CallContextKey.PARAM_SKIP_COUNT, skipCount);
 		params.put(CallContextKey.PARAM_EXTENSION, extension);
 		callContext.put(CallContextKey.SERVICE_PARAMS, params);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getTypeChildren(repositoryId, typeId, includePropertyDefinitions, maxItems,
-				skipCount, extension);
+		return super.getTypeChildren(repositoryId, typeId, includePropertyDefinitions, maxItems, skipCount, extension);
 	}
 
 	@Override
@@ -107,10 +112,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 		params.put(CallContextKey.PARAM_INCLUDE_PROPERTY_DEFINITIONS, includePropertyDefinitions);
 		params.put(CallContextKey.PARAM_EXTENSION, extension);
 		callContext.put(CallContextKey.SERVICE_PARAMS, params);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getTypeDescendants(repositoryId, typeId, depth, includePropertyDefinitions,
-				extension);
+		return super.getTypeDescendants(repositoryId, typeId, depth, includePropertyDefinitions, extension);
 	}
 
 	@Override
@@ -123,9 +127,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 		params.put(CallContextKey.PARAM_TYPE_ID, typeId);
 		params.put(CallContextKey.PARAM_EXTENSION, extension);
 		callContext.put(CallContextKey.SERVICE_PARAMS, params);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getTypeDefinition(repositoryId, typeId, extension);
+		return super.getTypeDefinition(repositoryId, typeId, extension);
 	}
 
 	@Override
@@ -138,9 +142,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 		params.put(CallContextKey.PARAM_TYPE, type);
 		params.put(CallContextKey.PARAM_EXTENSION, extension);
 		callContext.put(CallContextKey.SERVICE_PARAMS, params);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().createType(repositoryId, type, extension);
+		return super.createType(repositoryId, type, extension);
 	}
 
 	@Override
@@ -153,9 +157,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 		params.put(CallContextKey.PARAM_TYPE, type);
 		params.put(CallContextKey.PARAM_EXTENSION, extension);
 		callContext.put(CallContextKey.SERVICE_PARAMS, params);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().updateType(repositoryId, type, extension);
+		return super.updateType(repositoryId, type, extension);
 	}
 
 	@Override
@@ -168,9 +172,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 		params.put(CallContextKey.PARAM_TYPE_ID, typeId);
 		params.put(CallContextKey.PARAM_EXTENSION, extension);
 		callContext.put(CallContextKey.SERVICE_PARAMS, params);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().deleteType(repositoryId, typeId, extension);
+		super.deleteType(repositoryId, typeId, extension);
 	}
 
 	@Override
@@ -180,10 +184,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_CHILDREN);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getChildren(repositoryId, folderId, filter, orderBy, includeAllowableActions,
-				includeRelationships, renditionFilter, includePathSegment, maxItems, skipCount, extension);
+		return super.getChildren(repositoryId, folderId, filter, orderBy, includeAllowableActions, includeRelationships,
+				renditionFilter, includePathSegment, maxItems, skipCount, extension);
 	}
 
 	@Override
@@ -193,9 +197,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_DESCENDANTS);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getDescendants(repositoryId, folderId, depth, filter, includeAllowableActions,
+		return super.getDescendants(repositoryId, folderId, depth, filter, includeAllowableActions,
 				includeRelationships, renditionFilter, includePathSegment, extension);
 	}
 
@@ -206,10 +210,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_FOLDER_TREE);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getFolderTree(repositoryId, folderId, depth, filter, includeAllowableActions,
-				includeRelationships, renditionFilter, includePathSegment, extension);
+		return super.getFolderTree(repositoryId, folderId, depth, filter, includeAllowableActions, includeRelationships,
+				renditionFilter, includePathSegment, extension);
 	}
 
 	@Override
@@ -219,10 +223,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_OBJECT_PARENTS);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getObjectParents(repositoryId, objectId, filter, includeAllowableActions,
-				includeRelationships, renditionFilter, includeRelativePathSegment, extension);
+		return super.getObjectParents(repositoryId, objectId, filter, includeAllowableActions, includeRelationships,
+				renditionFilter, includeRelativePathSegment, extension);
 	}
 
 	@Override
@@ -230,9 +234,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_FOLDER_PARENT);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getFolderParent(repositoryId, folderId, filter, extension);
+		return super.getFolderParent(repositoryId, folderId, filter, extension);
 	}
 
 	@Override
@@ -242,9 +246,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_CHECKED_OUT_DOCS);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getCheckedOutDocs(repositoryId, folderId, filter, orderBy, includeAllowableActions,
+		return super.getCheckedOutDocs(repositoryId, folderId, filter, orderBy, includeAllowableActions,
 				includeRelationships, renditionFilter, maxItems, skipCount, extension);
 	}
 
@@ -255,10 +259,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CREATE_DOCUMENT);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().createDocument(repositoryId, properties, folderId, contentStream, versioningState,
-				policies, addAces, removeAces, extension);
+		return super.createDocument(repositoryId, properties, folderId, contentStream, versioningState, policies,
+				addAces, removeAces, extension);
 	}
 
 	@Override
@@ -268,10 +272,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CREATE_DOCUMENT_FROM_SOURCE);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().createDocumentFromSource(repositoryId, sourceId, properties, folderId,
-				versioningState, policies, addAces, removeAces, extension);
+		return super.createDocumentFromSource(repositoryId, sourceId, properties, folderId, versioningState, policies,
+				addAces, removeAces, extension);
 	}
 
 	@Override
@@ -280,10 +284,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CREATE_FOLDER);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().createFolder(repositoryId, properties, folderId, policies, addAces, removeAces,
-				extension);
+		return super.createFolder(repositoryId, properties, folderId, policies, addAces, removeAces, extension);
 	}
 
 	@Override
@@ -292,10 +295,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CREATE_RELATIONSHIP);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().createRelationship(repositoryId, properties, policies, addAces, removeAces,
-				extension);
+		return super.createRelationship(repositoryId, properties, policies, addAces, removeAces, extension);
 	}
 
 	@Override
@@ -304,10 +306,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CREATE_POLICY);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().createPolicy(repositoryId, properties, folderId, policies, addAces, removeAces,
-				extension);
+		return super.createPolicy(repositoryId, properties, folderId, policies, addAces, removeAces, extension);
 	}
 
 	@Override
@@ -316,10 +317,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CREATE_ITEM);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().createItem(repositoryId, properties, folderId, policies, addAces, removeAces,
-				extension);
+		return super.createItem(repositoryId, properties, folderId, policies, addAces, removeAces, extension);
 	}
 
 	@Override
@@ -327,9 +327,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_ALLOWABLE_ACTIONS);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getAllowableActions(repositoryId, objectId, extension);
+		return super.getAllowableActions(repositoryId, objectId, extension);
 	}
 
 	@Override
@@ -339,10 +339,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_OBJECT);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getObject(repositoryId, objectId, filter, includeAllowableActions,
-				includeRelationships, renditionFilter, includePolicyIds, includeAcl, extension);
+		return super.getObject(repositoryId, objectId, filter, includeAllowableActions, includeRelationships,
+				renditionFilter, includePolicyIds, includeAcl, extension);
 	}
 
 	@Override
@@ -350,9 +350,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_PROPERTIES);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getProperties(repositoryId, objectId, filter, extension);
+		return super.getProperties(repositoryId, objectId, filter, extension);
 	}
 
 	@Override
@@ -361,10 +361,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_RENDITIONS);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getRenditions(repositoryId, objectId, renditionFilter, maxItems, skipCount,
-				extension);
+		return super.getRenditions(repositoryId, objectId, renditionFilter, maxItems, skipCount, extension);
 	}
 
 	@Override
@@ -374,10 +373,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_OBJECT_BY_PATH);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getObjectByPath(repositoryId, path, filter, includeAllowableActions,
-				includeRelationships, renditionFilter, includePolicyIds, includeAcl, extension);
+		return super.getObjectByPath(repositoryId, path, filter, includeAllowableActions, includeRelationships,
+				renditionFilter, includePolicyIds, includeAcl, extension);
 	}
 
 	@Override
@@ -386,9 +385,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_CONTENT_STREAM);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getContentStream(repositoryId, objectId, streamId, offset, length, extension);
+		return super.getContentStream(repositoryId, objectId, streamId, offset, length, extension);
 	}
 
 	@Override
@@ -397,9 +396,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.UPDATE_PROPERTIES);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().updateProperties(repositoryId, objectId, changeToken, properties, extension);
+		super.updateProperties(repositoryId, objectId, changeToken, properties, extension);
 	}
 
 	@Override
@@ -409,10 +408,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.BULK_UPDATE_PROPERTIES);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().bulkUpdateProperties(repositoryId, objectIdsAndChangeTokens, properties,
-				addSecondaryTypeIds, removeSecondaryTypeIds, extension);
+		return super.bulkUpdateProperties(repositoryId, objectIdsAndChangeTokens, properties, addSecondaryTypeIds,
+				removeSecondaryTypeIds, extension);
 	}
 
 	@Override
@@ -421,9 +420,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.MOVE_OBJECT);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().moveObject(repositoryId, objectId, targetFolderId, sourceFolderId, extension);
+		super.moveObject(repositoryId, objectId, targetFolderId, sourceFolderId, extension);
 	}
 
 	@Override
@@ -431,9 +430,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.DELETE_OBJECT);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().deleteObject(repositoryId, objectId, allVersions, extension);
+		super.deleteObject(repositoryId, objectId, allVersions, extension);
 	}
 
 	@Override
@@ -442,10 +441,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.DELETE_TREE);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().deleteTree(repositoryId, folderId, allVersions, unfileObjects, continueOnFailure,
-				extension);
+		return super.deleteTree(repositoryId, folderId, allVersions, unfileObjects, continueOnFailure, extension);
 	}
 
 	@Override
@@ -454,10 +452,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.SET_CONTENT_STREAM);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().setContentStream(repositoryId, objectId, overwriteFlag, changeToken, contentStream,
-				extension);
+		super.setContentStream(repositoryId, objectId, overwriteFlag, changeToken, contentStream, extension);
 	}
 
 	@Override
@@ -466,9 +463,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.DELETE_CONTENT_STREAM);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().deleteContentStream(repositoryId, objectId, changeToken, extension);
+		super.deleteContentStream(repositoryId, objectId, changeToken, extension);
 	}
 
 	@Override
@@ -477,10 +474,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.APPEND_CONTENT_STREAM);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().appendContentStream(repositoryId, objectId, changeToken, contentStream, isLastChunk,
-				extension);
+		super.appendContentStream(repositoryId, objectId, changeToken, contentStream, isLastChunk, extension);
 	}
 
 	@Override
@@ -489,9 +485,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CHECK_OUT);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().checkOut(repositoryId, objectId, extension, contentCopied);
+		super.checkOut(repositoryId, objectId, extension, contentCopied);
 	}
 
 	@Override
@@ -499,9 +495,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CANCEL_CHECK_OUT);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().cancelCheckOut(repositoryId, objectId, extension);
+		super.cancelCheckOut(repositoryId, objectId, extension);
 	}
 
 	@Override
@@ -511,10 +507,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CHECK_IN);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().checkIn(repositoryId, objectId, major, properties, contentStream, checkinComment, policies,
-				addAces, removeAces, extension);
+		super.checkIn(repositoryId, objectId, major, properties, contentStream, checkinComment, policies, addAces,
+				removeAces, extension);
 	}
 
 	@Override
@@ -524,9 +520,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_OBJECT_OF_LATEST_VERSION);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getObjectOfLatestVersion(repositoryId, objectId, versionSeriesId, major, filter,
+		return super.getObjectOfLatestVersion(repositoryId, objectId, versionSeriesId, major, filter,
 				includeAllowableActions, includeRelationships, renditionFilter, includePolicyIds, includeAcl,
 				extension);
 	}
@@ -537,10 +533,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_PROPERTIES_OF_LATEST_VERSION);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getPropertiesOfLatestVersion(repositoryId, objectId, versionSeriesId, major, filter,
-				extension);
+		return super.getPropertiesOfLatestVersion(repositoryId, objectId, versionSeriesId, major, filter, extension);
 	}
 
 	@Override
@@ -549,10 +544,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_ALL_VERSIONS);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getAllVersions(repositoryId, objectId, versionSeriesId, filter,
-				includeAllowableActions, extension);
+		return super.getAllVersions(repositoryId, objectId, versionSeriesId, filter, includeAllowableActions,
+				extension);
 	}
 
 	@Override
@@ -562,10 +557,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.QUERY);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().query(repositoryId, statement, searchAllVersions, includeAllowableActions,
-				includeRelationships, renditionFilter, maxItems, skipCount, extension);
+		return super.query(repositoryId, statement, searchAllVersions, includeAllowableActions, includeRelationships,
+				renditionFilter, maxItems, skipCount, extension);
 	}
 
 	@Override
@@ -575,10 +570,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_CONTENT_CHANGES);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getContentChanges(repositoryId, changeLogToken, includeProperties, filter,
-				includePolicyIds, includeAcl, maxItems, extension);
+		return super.getContentChanges(repositoryId, changeLogToken, includeProperties, filter, includePolicyIds,
+				includeAcl, maxItems, extension);
 	}
 
 	@Override
@@ -587,9 +582,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.ADD_OBJECT_TO_FOLDER);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().addObjectToFolder(repositoryId, objectId, folderId, allVersions, extension);
+		super.addObjectToFolder(repositoryId, objectId, folderId, allVersions, extension);
 	}
 
 	@Override
@@ -598,9 +593,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.REMOVE_OBJECT_FROM_FOLDER);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().removeObjectFromFolder(repositoryId, objectId, folderId, extension);
+		super.removeObjectFromFolder(repositoryId, objectId, folderId, extension);
 	}
 
 	@Override
@@ -610,10 +605,10 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_OBJECT_RELATIONSHIPS);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getObjectRelationships(repositoryId, objectId, includeSubRelationshipTypes,
-				relationshipDirection, typeId, filter, includeAllowableActions, maxItems, skipCount, extension);
+		return super.getObjectRelationships(repositoryId, objectId, includeSubRelationshipTypes, relationshipDirection,
+				typeId, filter, includeAllowableActions, maxItems, skipCount, extension);
 	}
 
 	@Override
@@ -621,9 +616,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_ACL);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getAcl(repositoryId, objectId, onlyBasicPermissions, extension);
+		return super.getAcl(repositoryId, objectId, onlyBasicPermissions, extension);
 	}
 
 	@Override
@@ -632,9 +627,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.APPLY_ACL);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().applyAcl(repositoryId, objectId, addAces, removeAces, aclPropagation, extension);
+		return super.applyAcl(repositoryId, objectId, addAces, removeAces, aclPropagation, extension);
 	}
 
 	@Override
@@ -642,9 +637,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.APPLY_POLICY);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().applyPolicy(repositoryId, policyId, objectId, extension);
+		super.applyPolicy(repositoryId, policyId, objectId, extension);
 	}
 
 	@Override
@@ -652,9 +647,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.REMOVE_POLICY);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().removePolicy(repositoryId, policyId, objectId, extension);
+		super.removePolicy(repositoryId, policyId, objectId, extension);
 	}
 
 	@Override
@@ -663,9 +658,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_APPLIED_POLICIES);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getAppliedPolicies(repositoryId, objectId, filter, extension);
+		return super.getAppliedPolicies(repositoryId, objectId, filter, extension);
 	}
 
 	@Override
@@ -674,10 +669,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.CREATE);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().create(repositoryId, properties, folderId, contentStream, versioningState, policies,
-				extension);
+		return super.create(repositoryId, properties, folderId, contentStream, versioningState, policies, extension);
 	}
 
 	@Override
@@ -686,9 +680,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.DELETE_OBJECT_OR_CANCEL_CHECKOUT);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		getWrappedService().deleteObjectOrCancelCheckOut(repositoryId, objectId, allVersions, extension);
+		super.deleteObjectOrCancelCheckOut(repositoryId, objectId, allVersions, extension);
 	}
 
 	@Override
@@ -698,9 +692,9 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		// TODO: THERE ARE 2 ACLS Calls!! Check the difference!!
 		callContext.put(CallContextKey.SERVICE, CmisService.APPLY_ACL);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().applyAcl(repositoryId, objectId, aces, aclPropagation);
+		return super.applyAcl(repositoryId, objectId, aces, aclPropagation);
 	}
 
 	@Override
@@ -708,8 +702,13 @@ public class CallContextDecoratorInWrapper extends AbstractCmisServiceWrapper {
 
 		MutableCallContext callContext = (MutableCallContext) getCallContext();
 		callContext.put(CallContextKey.SERVICE, CmisService.GET_OBJECT_INFO);
-		setCallContext(callContext);
+		// setCallContext(callContext);
 
-		return getWrappedService().getObjectInfo(repositoryId, objectId);
+		return super.getObjectInfo(repositoryId, objectId);
+	}
+
+	@Override
+	public void close() {
+		super.close();
 	}
 }
