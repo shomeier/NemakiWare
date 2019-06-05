@@ -16,8 +16,8 @@
 	"controllableACL": false,
 	"typeMutability": {
 		"create": true,
-		"update": false,
-		"delete": false
+		"update": true,
+		"delete": true
 	},
 	"propertyDefinitions": {
 		"itest:part_of_speech": {

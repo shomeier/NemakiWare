@@ -15,9 +15,11 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import sho.cmis.server.nemaki.itest.util.SessionUtil;
 
+@ExtendWith({ SetUpRepository.class })
 public abstract class AbstractITest {
 
 	protected static Session session;
@@ -25,7 +27,7 @@ public abstract class AbstractITest {
 
 	@BeforeAll
 	public static void before() throws Exception {
-		session = SessionUtil.createCmisSession("itest", "admin", "admin");
+		session = SessionUtil.createCmisSession();
 		testFolderId = createTestFolder();
 	}
 

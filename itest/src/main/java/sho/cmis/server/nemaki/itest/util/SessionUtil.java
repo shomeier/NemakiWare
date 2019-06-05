@@ -13,6 +13,10 @@ import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
 public class SessionUtil {
 
+	public static Session createCmisSession() {
+		return SessionUtil.createCmisSession("itest", "admin", "admin");
+	}
+
 	public static Session createCmisSession(String repositoryId, String userId, String password) {
 		// System.setProperty("http.maxConnections", "500");
 

@@ -16,7 +16,7 @@
 	"controllableACL": false,
 	"typeMutability": {
 		"create": true,
-		"update": false,
-		"delete": false
+		"update": true,
+		"delete": true
 	}
 }
