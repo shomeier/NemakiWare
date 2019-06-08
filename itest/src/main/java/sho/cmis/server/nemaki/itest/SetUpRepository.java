@@ -6,12 +6,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
+import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -31,6 +39,8 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 	private static final String[] TYPE_DEFS = { "itest_document.json", "itest_secondary_marker.json",
 			"itest_secondary.json" };
 
+	public static String TEST_FOLDER_ID;
+
 	private Session session;
 
 	private List<String> typeDefIds = new ArrayList(TYPE_DEFS.length);
@@ -42,15 +52,8 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 			// Your "before all tests" startup logic goes here
 
 			session = SessionUtil.createCmisSession();
-			for (String jsonTypeDef : TYPE_DEFS) {
-
-				InputStream jsonStream = this.getClass().getResourceAsStream(TYPE_DEFS_FOLDER + jsonTypeDef);
-				System.out.println("jsonStream: " + jsonStream);
-				TypeDefinition typeDef = TypeUtils.readFromJSON(jsonStream);
-				ObjectType type = session.createType(typeDef);
-				LOG.info(MessageFormat.format("Created type with id {0}", type.getId()));
-				typeDefIds.add(type.getId());
-			}
+			createTypeDefs();
+			TEST_FOLDER_ID = createTestFolder();
 			// The following line registers a callback hook when the root test context is
 			// shut down
 			context.getRoot().getStore(GLOBAL).put("any unique name", this);
@@ -60,9 +63,42 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 	@Override
 	public void close() {
 		// Your "after all tests" logic goes here
+		deleteTypeDefs();
+		deleteTestFolder();
+	}
+
+	protected void createTypeDefs() throws IOException, JSONParseException {
+		for (String jsonTypeDef : TYPE_DEFS) {
+
+			InputStream jsonStream = this.getClass().getResourceAsStream(TYPE_DEFS_FOLDER + jsonTypeDef);
+			System.out.println("jsonStream: " + jsonStream);
+			TypeDefinition typeDef = TypeUtils.readFromJSON(jsonStream);
+			ObjectType type = session.createType(typeDef);
+			LOG.info(MessageFormat.format("Created type with id {0}", type.getId()));
+			typeDefIds.add(type.getId());
+		}
+	}
+
+	protected void deleteTypeDefs() {
 		for (String typeDefId : typeDefIds) {
 			session.deleteType(typeDefId);
 			LOG.info(MessageFormat.format("Deleted type with id {0}", typeDefId));
 		}
+	}
+
+	protected String createTestFolder() {
+		String rootFolderId = session.getRepositoryInfo().getRootFolderId();
+
+		Map<String, Object> map = new HashMap<>();
+		map.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
+		map.put(PropertyIds.PARENT_ID, rootFolderId);
+		map.put(PropertyIds.NAME, "testFolder_" + System.currentTimeMillis());
+		ObjectId result = session.createFolder(map, new ObjectIdImpl(rootFolderId));
+		return result.getId();
+	}
+
+	protected void deleteTestFolder() {
+		Folder folder = (Folder) session.getObject(TEST_FOLDER_ID);
+		folder.deleteTree(true, UnfileObject.DELETE, true);
 	}
 }

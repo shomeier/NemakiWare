@@ -1,28 +1,28 @@
 package sho.cmis.server.nemaki.itest.accuracy.service.object;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import sho.cmis.server.nemaki.itest.AbstractITest;
+import sho.cmis.server.nemaki.itest.ItestIds;
 
-public class CreateDocumentAccItest extends AbstractITest {
+public class UpdatePropertiesAccItest extends AbstractITest {
 
 	static String subTestFolderId;
 
@@ -40,27 +40,27 @@ public class CreateDocumentAccItest extends AbstractITest {
 	}
 
 	@Test
-	public void test_createDocument() {
+	public void test_updateProperties_multiValue() {
 		String testName = "testDocument";
 		String testContent = "testContent";
+
+		String testPropertyValue = "testValue";
+
 		String documentId = createItestDocument(testFolderId, testName, testContent);
-		assertNotNull(documentId);
 
-		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME);
-		CmisObject object = session.getObject(documentId, opCtx);
-		Document document = (Document) object;
-		List<Folder> parents = document.getParents();
-		assertTrue(parents.size() == 1);
-		Folder parentFolder = parents.get(0);
-		String parentFolderId = parentFolder.getId();
-		assertTrue(testFolderId.equals(parentFolderId));
+		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.CHANGE_TOKEN,
+				ItestIds.MULTI_VALUE_PROPERTY_ID);
+		Document document = (Document) session.getObject(documentId, opCtx);
 
-		String documentName = document.getName();
-		assertTrue(testName.equals(documentName));
+		Map<String, Object> props = new HashMap<>();
+		props.put(ItestIds.MULTI_VALUE_PROPERTY_ID, Collections.singletonList(testPropertyValue));
+		ObjectId updatedDocumentId = document.updateProperties(props, true);
 
-		ContentStream contentStream = document.getContentStream();
-		String contentString = new BufferedReader(new InputStreamReader(contentStream.getStream())).lines()
-				.collect(Collectors.joining("\n"));
-		assertTrue(testContent.equals(contentString));
+		CmisObject updatedDocument = session.getObject(updatedDocumentId, opCtx);
+
+		Property<Object> property = updatedDocument.getProperty(ItestIds.MULTI_VALUE_PROPERTY_ID);
+		String firstValue = (String) property.getFirstValue();
+		assertEquals(firstValue, testPropertyValue);
 	}
+
 }

@@ -26,13 +26,15 @@ public class QueryAccItest extends AbstractITest {
 
 	@BeforeAll
 	public static void before() throws Exception {
-		AbstractITest.before();
-		documentId = createDocument(testFolderId, documentName, documentContent);
+//		AbstractITest.before();
+		documentId = createItestDocument(testFolderId, documentName, documentContent);
 	}
 
 	@AfterAll
 	public static void after() throws Exception {
-		AbstractITest.after();
+//		AbstractITest.after();
+		session.delete(session.createObjectId(documentId));
+
 	}
 
 	@Test
