@@ -57,6 +57,19 @@ public class QueryAccItest extends AbstractITest {
 	}
 
 	@Test
+	public void test_query_equalsCmisName_useAlias() {
+
+		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME);
+		opCtx.setIncludeAllowableActions(true);
+		String statement = "SELECT D.cmis:name FROM cmis:document AS D WHERE D.cmis:name='" + documentName + "'";
+		ItemIterable<QueryResult> query = session.query(statement, false, opCtx);
+		assertEquals(1, query.getTotalNumItems());
+		QueryResult result = query.iterator().next();
+		PropertyData<Object> propName = result.getPropertyById(PropertyIds.NAME);
+		assertEquals(documentName, propName.getFirstValue());
+	}
+
+	@Test
 	public void test_query_secondaryObjects() {
 
 		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME,
@@ -70,7 +83,7 @@ public class QueryAccItest extends AbstractITest {
 		ObjectId updatedObjectId = object.updateProperties(props,
 				Collections.singletonList(ItestIds.PART_OF_SPEECH_SECONDARY_TYPE_ID), null, true);
 
-		//@// @formatter:off
+		// @formatter:off
 		String statement =
 				"SELECT P.itest:part_of_speech, D.cmis:objectId " +
 						"FROM itest:document AS D " +
