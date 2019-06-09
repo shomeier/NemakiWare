@@ -49,4 +49,23 @@ public class QueryAccItest extends AbstractITest {
 		PropertyData<Object> propName = result.getPropertyById(PropertyIds.NAME);
 		assertEquals(documentName, propName.getFirstValue());
 	}
+
+//	@Test
+//	public void test_query_secondaryObjects() {
+//
+//		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME);
+//		opCtx.setIncludeAllowableActions(true);
+//
+//		CmisObject object = session.getObject(documentId, opCtx);
+//
+//		Collections.singletonMap(key, value)
+//		object.updateProperties(properties, addSecondaryTypeIds, removeSecondaryTypeIds)
+//
+//		String statement = "SELECT cmis:name FROM cmis:document WHERE cmis:name='" + documentName + "'";
+//		ItemIterable<QueryResult> query = session.query(statement, false, opCtx);
+//		assertEquals(1, query.getTotalNumItems());
+//		QueryResult result = query.iterator().next();
+//		PropertyData<Object> propName = result.getPropertyById(PropertyIds.NAME);
+//		assertEquals(documentName, propName.getFirstValue());
+//	}
 }

@@ -36,8 +36,8 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 
 	private static final String TYPE_DEFS_FOLDER = "/type-definitions/";
 
-	private static final String[] TYPE_DEFS = { "itest_document.json", "itest_secondary_marker.json",
-			"itest_secondary.json" };
+	private static final String[] TYPE_DEFS = { "D_itest_document.json", "S_itest_secondary_marker.json",
+			"S_itest_part_of_speech.json" };
 
 	public static String TEST_FOLDER_ID;
 

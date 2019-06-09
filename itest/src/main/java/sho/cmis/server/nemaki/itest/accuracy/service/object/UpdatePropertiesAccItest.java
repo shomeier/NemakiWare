@@ -45,7 +45,7 @@ public class UpdatePropertiesAccItest extends AbstractITest {
 	public void test_updateProperties_multiValue() {
 		String testPropertyValue = "testValue";
 
-		String documentId = createItestDocument(testFolderId, "testDocument", testFolderId);
+		String documentId = createItestDocument(testFolderId, "updateProperties1", testFolderId);
 
 		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.CHANGE_TOKEN,
 				ItestIds.MULTI_VALUE_PROPERTY_ID);
@@ -66,7 +66,7 @@ public class UpdatePropertiesAccItest extends AbstractITest {
 	public void test_updateProperties_secondary() {
 		String testPartOfSpeech = "adverb";
 
-		String documentId = createItestDocument(testFolderId, "testDocument", testFolderId);
+		String documentId = createItestDocument(testFolderId, "updateProperties2", testFolderId);
 
 		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.CHANGE_TOKEN,
 				PropertyIds.SECONDARY_OBJECT_TYPE_IDS, ItestIds.PART_OF_SPEECH_SECONDARY_PROPERTY_ID);

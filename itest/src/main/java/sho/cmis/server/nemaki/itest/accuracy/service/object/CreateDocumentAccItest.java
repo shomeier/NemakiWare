@@ -41,7 +41,7 @@ public class CreateDocumentAccItest extends AbstractITest {
 
 	@Test
 	public void test_createDocument() {
-		String testName = "testDocument";
+		String testName = "createDocument1";
 		String testContent = "testContent";
 		String documentId = createItestDocument(testFolderId, testName, testContent);
 		assertNotNull(documentId);
