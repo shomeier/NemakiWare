@@ -73,12 +73,12 @@ public class UpdatePropertiesAccItest extends AbstractITest {
 		Document document = (Document) session.getObject(documentId, opCtx);
 
 		ObjectId updatedDocumentId = document.updateProperties(Collections.EMPTY_MAP,
-				Collections.singletonList(ItestIds.SECONDARY_TYPE_ID), Collections.EMPTY_LIST, true);
+				Collections.singletonList(ItestIds.PART_OF_SPEECH_SECONDARY_TYPE_ID), Collections.EMPTY_LIST, true);
 
 		CmisObject object = session.getObject(updatedDocumentId, opCtx);
 		List<SecondaryType> secondaryTypes = object.getSecondaryTypes();
 		assertEquals(1, secondaryTypes.size());
-		assertEquals(ItestIds.SECONDARY_TYPE_ID, secondaryTypes.get(0).getId());
+		assertEquals(ItestIds.PART_OF_SPEECH_SECONDARY_TYPE_ID, secondaryTypes.get(0).getId());
 
 		Map<String, Object> props = new HashMap<>();
 		props.put(ItestIds.PART_OF_SPEECH_SECONDARY_PROPERTY_ID, testPartOfSpeech);
