@@ -74,23 +74,6 @@
 			"queryable": true,
 			"orderable": true,
 			"openChoice": false
-		},
-		"itest:multi_string": {
-			"defaultValue": "default",
-			"id": "itest:multi_string",
-			"localName": "itest:multi_string",
-			"localNamespace": "sho\/model\/itest",
-			"displayName": "itest:multi_string",
-			"queryName": "itest:multi_string",
-			"description": "itest:multi_string",
-			"propertyType": "string",
-			"cardinality": "multi",
-			"updatability": "readwrite",
-			"inherited": false,
-			"required": true,
-			"queryable": true,
-			"orderable": false,
-			"openChoice": false
 		}
 	}
 }
