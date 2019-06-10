@@ -251,7 +251,7 @@ public class SolrPredicateWalker {
 		}
 
 		// Build a statement
-		String field = solrUtil.getPropertyNameInSolr(repositoryId, solrUtil.convertToString(colNode));
+		String field = solrUtil.getPropertyNameInSolr(repositoryId, colRef);
 		String pattern = translatePattern((String) rVal); // Solr wildcard
 															// expression
 
@@ -276,7 +276,7 @@ public class SolrPredicateWalker {
 		// Build a statement
 		// Combine queries with "OR" because Solr doesn't have "IN" syntax
 		BooleanQuery.Builder q = new BooleanQuery.Builder();
-		String field = solrUtil.getPropertyNameInSolr(repositoryId, colRef.getPropertyQueryName().toString());
+		String field = solrUtil.getPropertyNameInSolr(repositoryId, colRef);
 		List<?> list = (List<?>) walkExpr(listNode);
 		for (Object elm : list) {
 			Term t = new Term(field, elm.toString());

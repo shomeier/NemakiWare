@@ -67,7 +67,7 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 	@Override
 	public void close() {
 		// Your "after all tests" logic goes here
-		deleteTypeDefs();
+//		deleteTypeDefs();
 //		cleanRepo();
 //		deleteTestFolder();
 	}
@@ -105,6 +105,19 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 			} else {
 				cmisObject.delete(true);
 			}
+		}
+
+		ItemIterable<ObjectType> docChildren = session.getTypeChildren("cmis:document", false);
+		for (ObjectType docType : docChildren) {
+			session.deleteType(docType.getId());
+		}
+		ItemIterable<ObjectType> folChildren = session.getTypeChildren("cmis:folder", false);
+		for (ObjectType folType : folChildren) {
+			session.deleteType(folType.getId());
+		}
+		ItemIterable<ObjectType> secChildren = session.getTypeChildren("cmis:secondary", false);
+		for (ObjectType secType : secChildren) {
+			session.deleteType(secType.getId());
 		}
 
 	}

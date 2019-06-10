@@ -429,6 +429,14 @@ public class Registration implements Runnable {
 	 */
 	private void buildDynamicParamMap(Map<String, Object> map, CmisObject object) {
 		Map<String, PropertyDefinition<?>> propDefs = object.getType().getPropertyDefinitions();
+
+		// merge secondary type defs
+		List<SecondaryType> secondaryTypes = object.getSecondaryTypes();
+		for (SecondaryType secondaryType : secondaryTypes) {
+			Map<String, PropertyDefinition<?>> propertyDefinitions = secondaryType.getPropertyDefinitions();
+			propDefs.putAll(propertyDefinitions);
+		}
+
 		Map<String, PropertyDefinition<?>> basePropDefs = object.getBaseType().getPropertyDefinitions();
 		logger.info("Build Dynamic Param");
 		for (String propId : propDefs.keySet()) {
@@ -451,8 +459,10 @@ public class Registration implements Runnable {
 					for (SecondaryType sec : secs) {
 						Map<String, PropertyDefinition<?>> secondaryPropDefs = sec.getPropertyDefinitions();
 						// Secondary specific property
+
 						if (secondaryPropDefs.containsKey(propId)) {
-							String type = propPrefix + sec.getQueryName() + Constant.SEPARATOR + propId;
+							String type = propPrefix + sec.getQueryName().replace(":", "_") + Constant.SEPARATOR
+									+ propId.replace(":", "_");
 							map.put(type, propValue);
 							isSecondary = true;
 							break;

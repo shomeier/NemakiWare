@@ -36,7 +36,10 @@ import javax.ws.rs.core.Response;
 
 import org.antlr.runtime.tree.Tree;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
+import org.apache.chemistry.opencmis.server.support.query.ColumnReference;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -113,23 +116,80 @@ public class SolrUtil {
 	 * @param cmisColName
 	 * @return
 	 */
-	public String getPropertyNameInSolr(String repositoryId, String cmisColName) {
-
+	public String getPropertyNameInSolr(String repositoryId, String propertyId) {
 		// TODO: secondary types
-		String val = map.get(cmisColName);
-		NemakiPropertyDefinitionCore pd = typeService.getPropertyDefinitionCoreByPropertyId(repositoryId, cmisColName);
+		String val = map.get(propertyId);
+		NemakiPropertyDefinitionCore pd = typeService.getPropertyDefinitionCoreByPropertyId(repositoryId, propertyId);
 		if (val == null) {
-			if (pd.getPropertyType().equals(PropertyType.DATETIME)) {
-				val = "dynamicDate.property." + cmisColName;
-			} else {
-				// case for STRING
-//				val = "dynamixc.property." + cmisColName.replace(":", "\\:").replace("\\\\:", "\\:");
-				val = "dynamic.property." + cmisColName.replace(":", "_");
-			}
+			val = getDynamicPropertyNameInSolr(propertyId, pd.getPropertyType());
+
+//			if (pd.getPropertyType().equals(PropertyType.DATETIME)) {
+//				val = "dynamicDate.property." + propertyId;
+//			} else {
+//				// case for STRING
+//				// val = "dynamixc.property." + cmisColName.replace(":", "\\:").replace("\\\\:",
+//				// "\\:");
+//				val = "dynamic.property." + propertyId.replace(":", "_");
+//			}
 
 		}
 
 		return val;
+	}
+
+	private String getDynamicPropertyNameInSolr(String propertyId, PropertyType propertyType) {
+		if (propertyType.equals(PropertyType.DATETIME)) {
+			return "dynamicDate.property." + propertyId;
+		} else {
+			// case for STRING
+			// val = "dynamixc.property." + cmisColName.replace(":", "\\:").replace("\\\\:",
+			// "\\:");
+			return "dynamic.property." + propertyId.replace(":", "_");
+		}
+	}
+
+	public String getPropertyNameInSolr(String repositoryId, ColumnReference colRef) {
+
+//		return getPropertyNameInSolr(repositoryId, propertyQueryName);
+
+		StringBuilder retVal = new StringBuilder();
+
+		TypeDefinition typeDefinition = colRef.getTypeDefinition();
+
+		if (typeDefinition.getBaseTypeId().equals(BaseTypeId.CMIS_SECONDARY)) {
+
+			// secondary types must be prefixed by the query name of ots type definition
+			retVal.append(typeDefinition.getQueryName()).append(".");
+		}
+
+		retVal.append(colRef.getPropertyQueryName());
+
+		return getDynamicPropertyNameInSolr(retVal.toString(), colRef.getPropertyDefinition().getPropertyType());
+
+//		String colName = cmisColName;
+//
+//		// remove table name/alias prefix (for example the 'W.' in W.cmis:objectId)
+//		String[] split = cmisColName.split("\\w*\\.");
+//		if (split.length == 2) {
+//			colName = split[1];
+//		}
+//
+//		// TODO: secondary types
+//		String val = map.get(colName);
+//		NemakiPropertyDefinitionCore pd = typeService.getPropertyDefinitionCoreByPropertyId(repositoryId, colName);
+//		if (val == null) {
+//			if (pd.getPropertyType().equals(PropertyType.DATETIME)) {
+//				val = "dynamicDate.property." + colName;
+//			} else {
+//				// case for STRING
+//				// val = "dynamixc.property." + cmisColName.replace(":", "\\:").replace("\\\\:",
+//				// "\\:");
+//				val = "dynamic.property." + colName.replace(":", "_");
+//			}
+//
+//		}
+//
+//		return val;
 	}
 
 	public String convertToString(Tree propertyNode) {
@@ -160,10 +220,11 @@ public class SolrUtil {
 		Response response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 		log.info("44444");
 
-//		Client client = Client.create();
-//		// TODO Regardless a slash on the last, build the correct URL
-//		WebResource webResource = client.resource(url
-//				+ "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
+		// Client client = Client.create();
+		// // TODO Regardless a slash on the last, build the correct URL
+		// WebResource webResource = client.resource(url
+		// + "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" +
+		// repositoryId);
 
 		String xml = response.readEntity(String.class);
 		// String xml = webResource.accept("application/xml").get(String.class);
@@ -190,10 +251,11 @@ public class SolrUtil {
 		Response response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 		log.info("44444");
 
-//		Client client = Client.create();
-//		// TODO Regardless a slash on the last, build the correct URL
-//		WebResource webResource = client.resource(url
-//				+ "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" + repositoryId);
+		// Client client = Client.create();
+		// // TODO Regardless a slash on the last, build the correct URL
+		// WebResource webResource = client.resource(url
+		// + "admin/cores?core=nemaki&action=index&tracking=AUTO&repositoryId=" +
+		// repositoryId);
 
 		String xml = response.readEntity(String.class);
 		// String xml = webResource.accept("application/xml").get(String.class);
@@ -214,7 +276,7 @@ public class SolrUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		log.info("Solr URL:" + url);
+		// log.info("Solr URL:" + url);
 		return url;
 	}
 
