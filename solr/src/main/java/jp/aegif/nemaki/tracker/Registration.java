@@ -120,10 +120,10 @@ public class Registration implements Runnable {
 		AbstractUpdateRequest req = null;
 		Map<String, Object> map = buildParamMap(obj);
 		switch (obj.getBaseTypeId()) {
-//		case CMIS_RELATIONSHIP:
-//            return;
-//		case CMIS_ITEM:
-//			return;
+		// case CMIS_RELATIONSHIP:
+		// return;
+		// case CMIS_ITEM:
+		// return;
 		case CMIS_DOCUMENT:
 			if (fulltextEnabled) {
 				String mimeType = (String) map.get(Constant.FIELD_CONTENT_MIMETYPE);
@@ -432,9 +432,11 @@ public class Registration implements Runnable {
 
 		// merge secondary type defs
 		List<SecondaryType> secondaryTypes = object.getSecondaryTypes();
-		for (SecondaryType secondaryType : secondaryTypes) {
-			Map<String, PropertyDefinition<?>> propertyDefinitions = secondaryType.getPropertyDefinitions();
-			propDefs.putAll(propertyDefinitions);
+		if (secondaryTypes != null) {
+			for (SecondaryType secondaryType : secondaryTypes) {
+				Map<String, PropertyDefinition<?>> propertyDefinitions = secondaryType.getPropertyDefinitions();
+				propDefs.putAll(propertyDefinitions);
+			}
 		}
 
 		Map<String, PropertyDefinition<?>> basePropDefs = object.getBaseType().getPropertyDefinitions();
