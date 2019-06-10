@@ -117,21 +117,10 @@ public class SolrUtil {
 	 * @return
 	 */
 	public String getPropertyNameInSolr(String repositoryId, String propertyId) {
-		// TODO: secondary types
 		String val = map.get(propertyId);
 		NemakiPropertyDefinitionCore pd = typeService.getPropertyDefinitionCoreByPropertyId(repositoryId, propertyId);
 		if (val == null) {
 			val = getDynamicPropertyNameInSolr(propertyId, pd.getPropertyType());
-
-//			if (pd.getPropertyType().equals(PropertyType.DATETIME)) {
-//				val = "dynamicDate.property." + propertyId;
-//			} else {
-//				// case for STRING
-//				// val = "dynamixc.property." + cmisColName.replace(":", "\\:").replace("\\\\:",
-//				// "\\:");
-//				val = "dynamic.property." + propertyId.replace(":", "_");
-//			}
-
 		}
 
 		return val;
@@ -141,16 +130,11 @@ public class SolrUtil {
 		if (propertyType.equals(PropertyType.DATETIME)) {
 			return "dynamicDate.property." + propertyId;
 		} else {
-			// case for STRING
-			// val = "dynamixc.property." + cmisColName.replace(":", "\\:").replace("\\\\:",
-			// "\\:");
 			return "dynamic.property." + propertyId.replace(":", "_");
 		}
 	}
 
 	public String getPropertyNameInSolr(String repositoryId, ColumnReference colRef) {
-
-//		return getPropertyNameInSolr(repositoryId, propertyQueryName);
 
 		StringBuilder retVal = new StringBuilder();
 
@@ -160,36 +144,11 @@ public class SolrUtil {
 
 			// secondary types must be prefixed by the query name of ots type definition
 			retVal.append(typeDefinition.getQueryName()).append(".");
+			retVal.append(colRef.getPropertyQueryName());
+			return getDynamicPropertyNameInSolr(retVal.toString(), colRef.getPropertyDefinition().getPropertyType());
 		}
 
-		retVal.append(colRef.getPropertyQueryName());
-
-		return getDynamicPropertyNameInSolr(retVal.toString(), colRef.getPropertyDefinition().getPropertyType());
-
-//		String colName = cmisColName;
-//
-//		// remove table name/alias prefix (for example the 'W.' in W.cmis:objectId)
-//		String[] split = cmisColName.split("\\w*\\.");
-//		if (split.length == 2) {
-//			colName = split[1];
-//		}
-//
-//		// TODO: secondary types
-//		String val = map.get(colName);
-//		NemakiPropertyDefinitionCore pd = typeService.getPropertyDefinitionCoreByPropertyId(repositoryId, colName);
-//		if (val == null) {
-//			if (pd.getPropertyType().equals(PropertyType.DATETIME)) {
-//				val = "dynamicDate.property." + colName;
-//			} else {
-//				// case for STRING
-//				// val = "dynamixc.property." + cmisColName.replace(":", "\\:").replace("\\\\:",
-//				// "\\:");
-//				val = "dynamic.property." + colName.replace(":", "_");
-//			}
-//
-//		}
-//
-//		return val;
+		return getPropertyNameInSolr(repositoryId, colRef.getPropertyQueryName());
 	}
 
 	public String convertToString(Tree propertyNode) {

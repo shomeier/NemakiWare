@@ -222,10 +222,10 @@ public class SolrPredicateWalker {
 	private HashMap<String, String> walkCompareInternal(Tree leftNode, Tree rightNode) {
 		HashMap<String, String> map = new HashMap<String, String>();
 
-		String left = solrUtil.convertToString(leftNode);
 		String right = walkExpr(rightNode).toString();
 
-		map.put(FLD, ClientUtils.escapeQueryChars(solrUtil.getPropertyNameInSolr(repositoryId, left)));
+		map.put(FLD, ClientUtils
+				.escapeQueryChars(solrUtil.getPropertyNameInSolr(repositoryId, getColumnReference(leftNode))));
 		map.put(CND, right);
 		return map;
 	}
