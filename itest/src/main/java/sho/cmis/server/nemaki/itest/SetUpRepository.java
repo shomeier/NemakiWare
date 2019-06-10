@@ -10,11 +10,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
+import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
@@ -41,7 +45,7 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 
 	public static String TEST_FOLDER_ID;
 
-	private Session session;
+	private Session session = SessionUtil.createCmisSession();
 
 	private List<String> typeDefIds = new ArrayList(TYPE_DEFS.length);
 
@@ -50,8 +54,8 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 		if (!started) {
 			started = true;
 			// Your "before all tests" startup logic goes here
+			cleanRepo();
 
-			session = SessionUtil.createCmisSession();
 			createTypeDefs();
 			TEST_FOLDER_ID = createTestFolder();
 			// The following line registers a callback hook when the root test context is
@@ -64,7 +68,8 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 	public void close() {
 		// Your "after all tests" logic goes here
 		deleteTypeDefs();
-		deleteTestFolder();
+//		cleanRepo();
+//		deleteTestFolder();
 	}
 
 	protected void createTypeDefs() throws IOException, JSONParseException {
@@ -84,6 +89,24 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 			session.deleteType(typeDefId);
 			LOG.info(MessageFormat.format("Deleted type with id {0}", typeDefId));
 		}
+	}
+
+	protected void cleanRepo() {
+		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME);
+		opCtx.setIncludeAllowableActions(true);
+		Folder rootFolder = session.getRootFolder(opCtx);
+		ItemIterable<CmisObject> children = rootFolder.getChildren(opCtx);
+		for (CmisObject cmisObject : children) {
+			if (cmisObject instanceof Folder) {
+				Folder folder = ((Folder) cmisObject);
+				if (!folder.getName().startsWith(".")) {
+					folder.deleteTree(true, UnfileObject.DELETE, true);
+				}
+			} else {
+				cmisObject.delete(true);
+			}
+		}
+
 	}
 
 	protected String createTestFolder() {
