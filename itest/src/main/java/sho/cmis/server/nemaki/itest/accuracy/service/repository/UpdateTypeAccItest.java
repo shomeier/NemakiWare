@@ -36,4 +36,18 @@ public class UpdateTypeAccItest extends AbstractITest {
 
 		assertTrue(propertyDefinitions.containsKey(ItestIds.UPDATE_ADDED_PROPERTY_ID));
 	}
+
+	@Test
+	public void test_updateType_updatedExistingProperty() throws Exception {
+
+		TypeDefinition typeDef = AbstractITest.getTypeDefFromJson(ItestEnv.TYPE_DEF_UPDATE_EXISTING_PROPERTY);
+		ObjectType updatedType = session.updateType(typeDef);
+		assertNotNull(updatedType);
+
+		updatedType = session.getTypeDefinition(ItestIds.DOCUMENT_TYPE_ID);
+		assertNotNull(updatedType);
+		Map<String, PropertyDefinition<?>> propertyDefinitions = updatedType.getPropertyDefinitions();
+
+		assertTrue(propertyDefinitions.containsKey(ItestIds.UPDATE_EXISTING_PROPERTY_ID));
+	}
 }

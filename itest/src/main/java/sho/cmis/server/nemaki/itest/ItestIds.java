@@ -7,4 +7,5 @@ public class ItestIds {
 	public static String MULTI_VALUE_PROPERTY_ID = "itest:multi_string";
 
 	public static String UPDATE_ADDED_PROPERTY_ID = "itest:update_add_property";
+	public static String UPDATE_EXISTING_PROPERTY_ID = "itest:multi_string_updated";
 }

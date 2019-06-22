@@ -14,6 +14,8 @@ public final class ItestEnv {
 	public static final String TYPE_DEF_UPDATE = TYPE_DEF_DOCUMENT;
 	public static final String TYPE_DEF_UPDATE_ADD_PROPERTY = TYPE_DEFS_UPDATE_FOLDER
 			+ "/D_itest_document_update_add_property.json";
+	public static final String TYPE_DEF_UPDATE_EXISTING_PROPERTY = TYPE_DEFS_UPDATE_FOLDER
+			+ "/D_itest_document_update_existing_property.json";
 
 	public static final String[] TYPE_DEFS = { TYPE_DEF_DOCUMENT, TYPE_DEF_SEC_MARKER, TYPE_DEF_SEC_POS };
 }
