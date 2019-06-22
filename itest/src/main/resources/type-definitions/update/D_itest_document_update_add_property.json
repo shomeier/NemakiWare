@@ -39,6 +39,24 @@
 			"queryable": true,
 			"orderable": false,
 			"openChoice": true
+		},
+		"itest:update_add_property": {
+			"defaultValue": [ "defaultValue"
+			],
+			"id": "itest:update_add_property",
+			"localName": "itest:update_add_property",
+			"localNamespace": "http:\/\/www.aegif.jp\/Nemaki",
+			"displayName": "UpdateAddProperty",
+			"queryName": "itest:update_add_property",
+			"description": "itest:update_add_property",
+			"propertyType": "string",
+			"cardinality": "single",
+			"updatability": "readwrite",
+			"inherited": false,
+			"required": false,
+			"queryable": true,
+			"orderable": true,
+			"openChoice": false
 		}
 	}
 }

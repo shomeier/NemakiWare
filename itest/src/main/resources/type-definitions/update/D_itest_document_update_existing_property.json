@@ -22,15 +22,15 @@
 	"versionable": true,
 	"contentStreamAllowed": "allowed",
 	"propertyDefinitions": {
-		"itest:multi_string": {
+		"itest:multi_string_updated": {
 			"defaultValue": [ "defaultValue"
 			],
-			"id": "itest:multi_string",
-			"localName": "itest:multi_string",
+			"id": "itest:multi_string_updated",
+			"localName": "itest:multi_string_updated",
 			"localNamespace": "http:\/\/www.aegif.jp\/Nemaki",
-			"displayName": "MultiString",
-			"queryName": "itest:multi_string",
-			"description": "itest:multi_string",
+			"displayName": "MultiStringUpdated",
+			"queryName": "itest:multi_string_updated",
+			"description": "itest:multi_string_updated",
 			"propertyType": "string",
 			"cardinality": "multi",
 			"updatability": "readwrite",
