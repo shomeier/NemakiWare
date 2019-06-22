@@ -38,16 +38,11 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 
 	private static boolean started = false;
 
-	private static final String TYPE_DEFS_FOLDER = "/type-definitions/";
-
-	private static final String[] TYPE_DEFS = { "D_itest_document.json", "S_itest_secondary_marker.json",
-			"S_itest_part_of_speech.json" };
-
 	public static String TEST_FOLDER_ID;
 
 	private Session session = SessionUtil.createCmisSession();
 
-	private List<String> typeDefIds = new ArrayList(TYPE_DEFS.length);
+	private List<String> typeDefIds = new ArrayList(ItestEnv.TYPE_DEFS.length);
 
 	@Override
 	public void beforeAll(ExtensionContext context) throws IOException, JSONParseException {
@@ -73,10 +68,9 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 	}
 
 	protected void createTypeDefs() throws IOException, JSONParseException {
-		for (String jsonTypeDef : TYPE_DEFS) {
+		for (String jsonTypeDef : ItestEnv.TYPE_DEFS) {
 
-			InputStream jsonStream = this.getClass().getResourceAsStream(TYPE_DEFS_FOLDER + jsonTypeDef);
-			System.out.println("jsonStream: " + jsonStream);
+			InputStream jsonStream = this.getClass().getResourceAsStream(jsonTypeDef);
 			TypeDefinition typeDef = TypeUtils.readFromJSON(jsonStream);
 			ObjectType type = session.createType(typeDef);
 			LOG.info(MessageFormat.format("Created type with id {0}", type.getId()));

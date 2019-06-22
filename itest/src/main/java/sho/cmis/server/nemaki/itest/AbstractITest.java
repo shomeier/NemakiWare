@@ -1,13 +1,16 @@
 package sho.cmis.server.nemaki.itest;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
+import org.apache.chemistry.opencmis.client.util.TypeUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
+import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
@@ -65,5 +68,10 @@ public abstract class AbstractITest {
 		map.put(PropertyIds.NAME, name);
 		ObjectId result = session.createFolder(map, new ObjectIdImpl(parentId));
 		return result.getId();
+	}
+
+	protected static TypeDefinition getTypeDefFromJson(String resourceName) throws Exception {
+		InputStream jsonStream = AbstractITest.class.getResourceAsStream(resourceName);
+		return TypeUtils.readFromJSON(jsonStream);
 	}
 }
