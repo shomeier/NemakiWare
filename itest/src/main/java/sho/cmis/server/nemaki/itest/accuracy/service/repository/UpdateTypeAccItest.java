@@ -1,6 +1,5 @@
 package sho.cmis.server.nemaki.itest.accuracy.service.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,10 +29,11 @@ public class UpdateTypeAccItest extends AbstractITest {
 		TypeDefinition typeDef = AbstractITest.getTypeDefFromJson(ItestEnv.TYPE_DEF_UPDATE_ADD_PROPERTY);
 		ObjectType updatedType = session.updateType(typeDef);
 		assertNotNull(updatedType);
+
+		updatedType = session.getTypeDefinition(ItestIds.DOCUMENT_TYPE_ID);
+		assertNotNull(updatedType);
 		Map<String, PropertyDefinition<?>> propertyDefinitions = updatedType.getPropertyDefinitions();
 
-		// we expect two property definitions now
-		assertEquals(2, propertyDefinitions.size());
 		assertTrue(propertyDefinitions.containsKey(ItestIds.UPDATE_ADDED_PROPERTY_ID));
 	}
 }

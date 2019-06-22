@@ -212,12 +212,15 @@ public class RepositoryServiceImpl implements RepositoryService, InitializingBea
 						? new ArrayList<String>()
 						: existingType.getProperties();
 
-				String propNodeId = typeService.getPropertyDefinitionCoreByPropertyId(repositoryId, key).getId();
-				if (existingPropertyNodeIds.contains(propNodeId)) {
+				NemakiPropertyDefinitionCore oldNemakiPropDef = typeService
+						.getPropertyDefinitionCoreByPropertyId(repositoryId, key);
+				if (oldNemakiPropDef != null && existingPropertyNodeIds.contains(oldNemakiPropDef.getId())) {
+//				String propNodeId = typeService.getPropertyDefinitionCoreByPropertyId(repositoryId, key).getId();
+//				if (existingPropertyNodeIds.contains(propNodeId)) {
 					// update
 					PropertyDefinition<?> oldPropDef = typeManager
 							.getTypeDefinition(repositoryId, existingType.getTypeId()).getPropertyDefinitions()
-							.get(propNodeId);
+							.get(oldNemakiPropDef.getId());
 					exceptionService.constraintUpdatePropertyDefinition(propDef, oldPropDef);
 					exceptionService.constraintQueryName(propDef);
 					exceptionService.constraintPropertyDefinition(type, propDef);
@@ -252,12 +255,16 @@ public class RepositoryServiceImpl implements RepositoryService, InitializingBea
 	private NemakiTypeDefinition setNemakiTypeDefinitionAttributes(String repositoryId, TypeDefinition typeDefinition) {
 		NemakiTypeDefinition ntd = new NemakiTypeDefinition();
 
+		ntd.setTypeId(typeDefinition.getId());
+
 		// To avoid the conflict of typeId, add suffix
-		if (typeManager.getTypeById(repositoryId, typeDefinition.getId()) == null) {
-			ntd.setTypeId(typeDefinition.getId());
-		} else {
-			ntd.setTypeId(typeDefinition.getId() + "_" + String.valueOf(System.currentTimeMillis()));
-		}
+//		if (typeManager.getTypeById(repositoryId, typeDefinition.getId()) == null) {
+//			ntd.setTypeId(typeDefinition.getId());
+//		} else {
+//			ntd.setTypeId(typeDefinition.getId() + "_" + String.valueOf(System.currentTimeMillis()));
+//		}
+
+		ntd.setId(typeDefinition.getId());
 		ntd.setLocalName(typeDefinition.getLocalName());
 		ntd.setLocalNameSpace(typeDefinition.getLocalNamespace());
 		ntd.setQueryName(typeDefinition.getQueryName());
