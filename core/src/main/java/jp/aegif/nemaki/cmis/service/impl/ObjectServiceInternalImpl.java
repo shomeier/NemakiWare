@@ -60,7 +60,10 @@ public class ObjectServiceInternalImpl implements jp.aegif.nemaki.cmis.service.O
 						deleteWithParent);
 			} else if (content.isFolder()) {
 				List<Content> children = contentService.getChildren(repositoryId, objectId);
-				if (!CollectionUtils.isEmpty(children)) {
+
+				// deleteWithParent is only true when calling from deleteTree service ...
+				// ... in this case we also delete all children and deescendants
+				if (!CollectionUtils.isEmpty(children) && (!deleteWithParent)) {
 					exceptionService.constraint(objectId,
 							"deleteObject method is invoked on a folder containing objects.");
 				}

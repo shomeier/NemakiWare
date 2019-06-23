@@ -1,11 +1,13 @@
 package sho.cmis.server.nemaki.itest;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
@@ -89,27 +91,6 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 				continue;
 			}
 		}
-
-		// ItemIterable<ObjectType> docChildren =
-		// session.getTypeChildren("cmis:document", false);
-		// for (ObjectType docType : docChildren) {
-		// session.deleteType(docType.getId());
-		// }
-		// ItemIterable<ObjectType> itemChildren = session.getTypeChildren("cmis:item",
-		// false);
-		// for (ObjectType itemType : itemChildren) {
-		// session.deleteType(itemType.getId());
-		// }
-		// ItemIterable<ObjectType> folChildren = session.getTypeChildren("cmis:folder",
-		// false);
-		// for (ObjectType folType : folChildren) {
-		// session.deleteType(folType.getId());
-		// }
-		// ItemIterable<ObjectType> secChildren =
-		// session.getTypeChildren("cmis:secondary", false);
-		// for (ObjectType secType : secChildren) {
-		// session.deleteType(secType.getId());
-		// }
 	}
 
 	protected void cleanRepo() throws Exception {
@@ -121,7 +102,9 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 			if (cmisObject instanceof Folder) {
 				Folder folder = ((Folder) cmisObject);
 				if (!folder.getName().startsWith(".")) {
-					folder.deleteTree(true, UnfileObject.DELETE, true);
+					List<String> failedToDelete = folder.deleteTree(true, UnfileObject.DELETE, false);
+					assertTrue(failedToDelete.isEmpty(), "Could not delete all objects in repository");
+					LOG.info(MessageFormat.format("Deleted folder with name {0}", folder.getName()));
 				}
 			} else {
 				cmisObject.delete(true);
