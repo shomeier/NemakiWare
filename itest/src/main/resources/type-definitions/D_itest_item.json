@@ -1,0 +1,42 @@
+{
+	"id": "D:itest:item",
+	"localName": "itest:item",
+	"localNamespace": "sho\/model\/itest",
+	"displayName": "itest:item",
+	"queryName": "itest:item",
+	"description": "D:itest:item",
+	"baseId": "cmis:item",
+	"parentId": "cmis:item",
+	"creatable": true,
+	"fileable": true,
+	"queryable": true,
+	"fulltextIndexed": true,
+	"includedInSupertypeQuery": true,
+	"controllablePolicy": false,
+	"controllableACL": true,
+	"typeMutability": {
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"propertyDefinitions": {
+		"itest:single_string": {
+			"defaultValue": [ "defaultValue"
+			],
+			"id": "itest:single_string",
+			"localName": "itest:single_string",
+			"localNamespace": "http:\/\/www.aegif.jp\/Nemaki",
+			"displayName": "SingleString",
+			"queryName": "itest:single_string",
+			"description": "itest:single_string",
+			"propertyType": "string",
+			"cardinality": "single",
+			"updatability": "readwrite",
+			"inherited": false,
+			"required": false,
+			"queryable": true,
+			"orderable": true,
+			"openChoice": true
+		}
+	}
+}

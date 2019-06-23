@@ -24,38 +24,25 @@ public abstract class AbstractITest {
 	protected static Session session = SessionUtil.createCmisSession();;
 	protected static String testFolderId = SetUpRepository.TEST_FOLDER_ID;
 
-//	@BeforeAll
-//	public static void before() throws Exception {
-//		session = SessionUtil.createCmisSession();
-//		testFolderId = SetUpRepository.TEST_FOLDER_ID;
-//	}
-//
-//	@AfterAll
-//	public static void after() throws Exception {
-//		Folder folder = (Folder) session.getObject(testFolderId);
-//		folder.deleteTree(true, UnfileObject.DELETE, true);
-//	}
-//
-//	protected static String createTestFolder() {
-//		String rootFolderId = session.getRepositoryInfo().getRootFolderId();
-//
-//		Map<String, Object> map = new HashMap<>();
-//		map.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
-//		map.put(PropertyIds.PARENT_ID, rootFolderId);
-//		map.put(PropertyIds.NAME, "testFolder_" + System.currentTimeMillis());
-//		ObjectId result = session.createFolder(map, new ObjectIdImpl(rootFolderId));
-//		return result.getId();
-//	}
-
-	protected static String createItestDocument(String parentId, String name, String string) {
+	protected static String createItestDocument(String parentId, String name, String content) {
 		Map<String, Object> map = new HashMap<>();
-		map.put(PropertyIds.OBJECT_TYPE_ID, "D:itest:document");
+		map.put(PropertyIds.OBJECT_TYPE_ID, ItestIds.DOCUMENT_TYPE_ID);
 		map.put(PropertyIds.NAME, name);
 
-		ContentStream contentStream = new ContentStreamImpl(name, "text/plain", string);
+		ContentStream contentStream = new ContentStreamImpl(name, "text/plain", content);
 
 		ObjectId objectId = session.createDocument(map, session.createObjectId(parentId), contentStream,
 				VersioningState.MAJOR);
+
+		return objectId.getId();
+	}
+
+	protected static String createItestItem(String parentId, String name) {
+		Map<String, Object> map = new HashMap<>();
+		map.put(PropertyIds.OBJECT_TYPE_ID, ItestIds.ITEM_TYPE_ID);
+		map.put(PropertyIds.NAME, name);
+
+		ObjectId objectId = session.createItem(map, session.createObjectId(parentId));
 
 		return objectId.getId();
 	}

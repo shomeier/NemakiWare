@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
@@ -24,6 +22,7 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.impl.json.parser.JSONParseException;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -42,10 +41,8 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 
 	private Session session = SessionUtil.createCmisSession();
 
-	private List<String> typeDefIds = new ArrayList(ItestEnv.TYPE_DEFS.length);
-
 	@Override
-	public void beforeAll(ExtensionContext context) throws IOException, JSONParseException {
+	public void beforeAll(ExtensionContext context) throws Exception {
 		if (!started) {
 			started = true;
 			// Your "before all tests" startup logic goes here
@@ -62,9 +59,9 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 	@Override
 	public void close() {
 		// Your "after all tests" logic goes here
-//		deleteTypeDefs();
-//		cleanRepo();
-//		deleteTestFolder();
+		// deleteTypeDefs();
+		// cleanRepo();
+		// deleteTestFolder();
 	}
 
 	protected void createTypeDefs() throws IOException, JSONParseException {
@@ -74,18 +71,48 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 			TypeDefinition typeDef = TypeUtils.readFromJSON(jsonStream);
 			ObjectType type = session.createType(typeDef);
 			LOG.info(MessageFormat.format("Created type with id {0}", type.getId()));
-			typeDefIds.add(type.getId());
+			// typeDefIds.add(type.getId());
 		}
 	}
 
-	protected void deleteTypeDefs() {
-		for (String typeDefId : typeDefIds) {
-			session.deleteType(typeDefId);
-			LOG.info(MessageFormat.format("Deleted type with id {0}", typeDefId));
+	protected void deleteTypeDefs() throws Exception {
+		for (String jsonTypeDef : ItestEnv.TYPE_DEFS) {
+
+			InputStream jsonStream = this.getClass().getResourceAsStream(jsonTypeDef);
+			TypeDefinition typeDef = TypeUtils.readFromJSON(jsonStream);
+
+			try {
+				session.getTypeDefinition(typeDef.getId());
+				session.deleteType(typeDef.getId());
+				LOG.info(MessageFormat.format("Deleted type with id {0}", typeDef.getId()));
+			} catch (CmisObjectNotFoundException e) {
+				continue;
+			}
 		}
+
+		// ItemIterable<ObjectType> docChildren =
+		// session.getTypeChildren("cmis:document", false);
+		// for (ObjectType docType : docChildren) {
+		// session.deleteType(docType.getId());
+		// }
+		// ItemIterable<ObjectType> itemChildren = session.getTypeChildren("cmis:item",
+		// false);
+		// for (ObjectType itemType : itemChildren) {
+		// session.deleteType(itemType.getId());
+		// }
+		// ItemIterable<ObjectType> folChildren = session.getTypeChildren("cmis:folder",
+		// false);
+		// for (ObjectType folType : folChildren) {
+		// session.deleteType(folType.getId());
+		// }
+		// ItemIterable<ObjectType> secChildren =
+		// session.getTypeChildren("cmis:secondary", false);
+		// for (ObjectType secType : secChildren) {
+		// session.deleteType(secType.getId());
+		// }
 	}
 
-	protected void cleanRepo() {
+	protected void cleanRepo() throws Exception {
 		OperationContext opCtx = OperationContextUtils.createMinimumOperationContext(PropertyIds.NAME);
 		opCtx.setIncludeAllowableActions(true);
 		Folder rootFolder = session.getRootFolder(opCtx);
@@ -101,19 +128,7 @@ public class SetUpRepository implements BeforeAllCallback, ExtensionContext.Stor
 			}
 		}
 
-		ItemIterable<ObjectType> docChildren = session.getTypeChildren("cmis:document", false);
-		for (ObjectType docType : docChildren) {
-			session.deleteType(docType.getId());
-		}
-		ItemIterable<ObjectType> folChildren = session.getTypeChildren("cmis:folder", false);
-		for (ObjectType folType : folChildren) {
-			session.deleteType(folType.getId());
-		}
-		ItemIterable<ObjectType> secChildren = session.getTypeChildren("cmis:secondary", false);
-		for (ObjectType secType : secChildren) {
-			session.deleteType(secType.getId());
-		}
-
+		deleteTypeDefs();
 	}
 
 	protected String createTestFolder() {
