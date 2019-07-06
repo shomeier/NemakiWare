@@ -30,12 +30,15 @@ public interface Constant {
 	String FIELD_IS_CHECKEDOUT = "is_checkedout";
 	String FIELD_CHECKEDOUT_BY = "checkedout_by";
 	String FIELD_CHECKEDOUT_ID = "checkedout_id";
-	String FIELD_CHECKIN_COMMENT = "checkein_comment";
+	String FIELD_CHECKIN_COMMENT = "checkin_comment";
 	String FIELD_VERSION_LABEL = "version_label";
 	String FIELD_VERSION_SERIES_ID = "version_series_id";
 
 	String FIELD_PARENT_ID = "parent_id";
 	String FIELD_PATH = "path";
+
+	String FIELD_SOURCE_ID = "source_id";
+	String FIELD_TARGET_ID = "target_id";
 
 	String FIELD_TOKEN = "change_token";
 

@@ -373,6 +373,10 @@ public class Registration implements Runnable {
 		case CMIS_FOLDER:
 			map.put(Constant.FIELD_PARENT_ID, object.getPropertyValue(PropertyIds.PARENT_ID));
 			map.put(Constant.FIELD_PATH, object.getPropertyValue(PropertyIds.PATH));
+			break;
+		case CMIS_RELATIONSHIP:
+			map.put(Constant.FIELD_SOURCE_ID, object.getPropertyValue(PropertyIds.SOURCE_ID));
+			map.put(Constant.FIELD_TARGET_ID, object.getPropertyValue(PropertyIds.TARGET_ID));
 		default:
 			return map;
 		}
