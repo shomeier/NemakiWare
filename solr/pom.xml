@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -17,6 +18,7 @@
 
 	<properties>
 		<java-version>1.8</java-version>
+		<jetty.version>9.4.18.v20190429</jetty.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.apache.chemistry.opencmis.version>1.1.0</org.apache.chemistry.opencmis.version>
 		<org.apache.solr.version>8.0.0</org.apache.solr.version>
@@ -27,40 +29,22 @@
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-core</artifactId>
 			<version>${org.apache.solr.version}</version>
-			<!--
-			<exclusions>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
-			-->
+			<!-- <exclusions> <exclusion> <groupId>log4j</groupId> <artifactId>log4j</artifactId>
+				</exclusion> </exclusions> -->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
 			<version>${org.apache.solr.version}</version>
-			<!--
-			<exclusions>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
-			-->
+			<!-- <exclusions> <exclusion> <groupId>log4j</groupId> <artifactId>log4j</artifactId>
+				</exclusion> </exclusions> -->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-cell</artifactId>
 			<version>${org.apache.solr.version}</version>
-			<!--
-			<exclusions>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
-			-->
+			<!-- <exclusions> <exclusion> <groupId>log4j</groupId> <artifactId>log4j</artifactId>
+				</exclusion> </exclusions> -->
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
@@ -206,9 +190,9 @@
 			</plugin>
 
 			<plugin>
-				  <groupId>org.eclipse.jetty</groupId>
-				  <artifactId>jetty-maven-plugin</artifactId>
-				  <version>9.4.18.v20190429</version>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
 				<configuration>
 					<scanIntervalSeconds>1</scanIntervalSeconds>
 					<stopPort>9968</stopPort>
@@ -217,16 +201,37 @@
 						<contextPath>/solr</contextPath>
 						<tempDirectory>./tmp</tempDirectory>
 					</webAppConfig>
+					<jettyXml>
+						src/main/etc/jetty.xml
+					</jettyXml>
+					<!--
+					<contextXml>src/main/contexts/solr-jetty-context.xml</contextXml>
+					-->
 					<!-- <connectors> -->
-						<!-- <httpConnector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector"> -->
-						<httpConnector>
-							<port>8983</port>
-						</httpConnector>
+					<!-- <httpConnector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector"> -->
+					<httpConnector> <port>8983</port> </httpConnector>
 					<!-- </connectors> -->
 					<scanTargets>
 						<scanTarget>src/main/webapp</scanTarget>
 					</scanTargets>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>io.dropwizard.metrics</groupId>
+						<artifactId>metrics-jetty9</artifactId>
+						<version>4.1.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-rewrite</artifactId>
+						<version>${jetty.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-deploy</artifactId>
+						<version>${jetty.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
