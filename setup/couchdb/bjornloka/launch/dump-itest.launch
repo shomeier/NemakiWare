@@ -10,7 +10,7 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="jp.aegif.nemaki.bjornloka.Dump"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="http://127.0.0.1:5984&#10;itest&#10;${project_loc:bjornloka}/initial_import/itest_init.dump"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="http://127.0.0.1:5984&#10;itest&#10;${project_loc:bjornloka}/initial_import/itest_init.dump&#10;true"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="bjornloka"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 </launchConfiguration>
