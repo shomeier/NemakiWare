@@ -1,6 +1,5 @@
 <configuration>
-	<appender name="STDOUT"
-		class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
 				%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
@@ -8,8 +7,7 @@
 		</layout>
 	</appender>
 
-	<appender name="STDOUT_LOGSTASH"
-		class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="STDOUT_LOGSTASH" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
 			<fieldNames>
 				<version>[ignore]</version>
@@ -20,29 +18,24 @@
 		</encoder>
 	</appender>
 
-	<property name="LOG_FILE"
-		value="${catalina.home}/logs/nemakicore.log" />
+	<property name="LOG_FILE" value="${catalina.home:-./}/logs/nemakicore.log" />
 
-	<appender name="FILE"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
 				%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
 			</Pattern>
 		</layout>
 		<file>${LOG_FILE}</file>
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${LOG_FILE}.%d.gz</fileNamePattern>
 			<maxHistory>14</maxHistory>
 		</rollingPolicy>
 	</appender>
 
-	<appender name="FILE_LOGSTASH"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="FILE_LOGSTASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_FILE}</file>
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${LOG_FILE}.%d.gz</fileNamePattern>
 			<maxHistory>14</maxHistory>
 		</rollingPolicy>
