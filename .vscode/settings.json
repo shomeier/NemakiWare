@@ -1,0 +1,10 @@
+{
+  "maven.view": "flat",
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "maven.terminal.customEnv": [
+    {
+      "environmentVariable": "MAVEN_OPTS", // variable name	            "environmentVariable": "MAVEN_OPTS",               // variable name
+      "value": "-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n" // value	            "value": "-Xms1024m -Xmx4096m"                     // value
+    }
+  ]
+}
