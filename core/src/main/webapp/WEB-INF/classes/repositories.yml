@@ -11,3 +11,6 @@ repositories:
   - id: lingo
     name: lingo
     archive: lingo_closet
+  - id: rm
+    name: rm
+    archive: rm_closet
